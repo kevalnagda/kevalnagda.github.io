@@ -31,7 +31,7 @@ github_username:  kevalnagda
 minimal_mistakes_skin: "dark"
 
 # Build settings
-theme: minimal-mistakes-jekyll
+remote_theme: "mmistakes/minimal-mistakes@4.21.0"
 plugins:
   - jekyll-feed
   - jekyll-include-cache
