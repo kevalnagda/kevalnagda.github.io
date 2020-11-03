@@ -1,1 +1,87 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-03T11:26:40+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html">&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Check out the Jekyll docs for more info on how to get the most out of Jekyll. File all bugs/feature requests at Jekyll’s GitHub repo. If you have questions, you can ask them on Jekyll Talk.</summary></entry></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-03T20:37:55+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-docker&quot;&gt;What is Docker?&lt;/h2&gt;
+
+&lt;p&gt;Docker is a software tool that helps you build, distribute, deploy and run applications inside an isolated sandbox called container.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-use-docker-over-vitual-machine&quot;&gt;Why use Docker over Vitual Machine?&lt;/h2&gt;
+
+&lt;p&gt;Docker uses containers for all of its operations and containers consume user space of an operating system. In simple terms, container is just a set of processes that are isolated from the rest of the system.&lt;/p&gt;
+
+&lt;p&gt;However, a Virtual Machine (VM) consumes user space as well as kernel space of an operating system for all of its operations. Each VM consists of an operating system and apps. Internally VMs utilize virtualized hardware, but share system hardware resources from the host operating system.&lt;/p&gt;
+
+&lt;h2 id=&quot;terminology&quot;&gt;Terminology&lt;/h2&gt;
+
+&lt;p&gt;There is a bunch of Docker-specific jargon associated with the Docker ecosystem. So let’s understand some important terms.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Docker Image:&lt;/strong&gt; A blueprint of the application that helps us run containers.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Docker Container:&lt;/strong&gt; Created from Docker image to run applications.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Docker Daemon:&lt;/strong&gt; Background service running on host operating system that manages building, running and distribution of Docker Containers.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Docker Client:&lt;/strong&gt; A command line tool that allows user to interact with the Docker Daemon.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Docker Hub:&lt;/strong&gt; A pool of all available Docker Images where one can host their own Docker Images in the registries and pull other users’ Docker Images.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;The &lt;em&gt;getting started&lt;/em&gt; guide on Docker website has detailed instructions for setting up Docker on &lt;a href=&quot;https://docs.docker.com/docker-for-mac/install/&quot;&gt;Mac&lt;/a&gt;, &lt;a href=&quot;https://docs.docker.com/engine/install/ubuntu/&quot;&gt;Linux&lt;/a&gt; and &lt;a href=&quot;https://docs.docker.com/docker-for-windows/install/&quot;&gt;Windows&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Installation can be verified by running the following command:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/hello-world.png&quot; alt=&quot;docker run hello-world&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;playing-with-busybox&quot;&gt;Playing with Busybox&lt;/h2&gt;
+
+&lt;p&gt;To get our hands dirty, let’s run a &lt;a href=&quot;https://en.wikipedia.org/wiki/BusyBox&quot;&gt;Busybox&lt;/a&gt; container on our system to understand &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;To get started, we first need to pull the busybox image from the Docker registry.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/busybox-image.png&quot; alt=&quot;docker pull busybox&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker pull&lt;/code&gt; command fetches the required image and stores it to our system.&lt;/p&gt;
+
+&lt;p&gt;To view a list of all images on your system, use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker images&lt;/code&gt; command as follows:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-images.png&quot; alt=&quot;docker images&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we can run a Docker container based on this image by executing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command in the terminal.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-run.png&quot; alt=&quot;docker run busybox&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However, we see no output. Why? Well, when we perform &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command in terminal, the Docker Client finds the image (busybox in our case)m loads up a container and then runs a commands in that container. While executing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command above we did not provide any command and thus, the container ran an empty command and exited.&lt;/p&gt;
+
+&lt;p&gt;We should try and echo something from the container.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-echo.png&quot; alt=&quot;docker run busybox echo &amp;quot;Busybox says hi&amp;quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Okay good, we see the echo message. Now to view a list of all the running/active containers we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker ps&lt;/code&gt; command. However, we have no running containers and this command would result in a blank output. A more useful and powerful variant of this is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker ps -a&lt;/code&gt; command which shows us a list of all the containers, be it in running  or exited state.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-ps.png&quot; alt=&quot;docker ps -a&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It also possible for one to execute more than one command in a container. Running the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-it&lt;/code&gt; flag provides us with an interactive tty (TeleTYpewriter) which allows us to execute as many commands we want in a container.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-it.png&quot; alt=&quot;docker run -it busybox sh&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now everytime we execute the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command, a new container is created which stays in the system storage if not removed. Thus, it is important to clean up the space by removing unwanted containers using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker rm&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-rm.png&quot; alt=&quot;docker rm&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Deleting containers by copypasting container IDs can be tedious at times and thus, you can delete a bunch of containers in single go by -&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-rm-ps.png&quot; alt=&quot;docker rm $(docker ps -a -q -f status=exited)&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-q&lt;/code&gt; flag is used to return only numeric IDs and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-f&lt;/code&gt; flag filters output based on the conditions provided (in our case containers with status equal to exited).&lt;/p&gt;
+
+&lt;p&gt;Similarly, images can also be deleted using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker rmi&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-rmi.png&quot; alt=&quot;docker rmi&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;There is more to Docker than just a bunch of basic commands covered above. However, I hope this blog got you interested in the Docker.&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docker-curriculum.com/&quot;&gt;Docker for beginners&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"></summary></entry></feed>

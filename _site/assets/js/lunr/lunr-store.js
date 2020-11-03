@@ -1,6 +1,6 @@
 var store = [{
         "title": "Getting started with Docker",
-        "excerpt":"Check out the Jekyll docs for more info on how to get the most out of Jekyll. File all bugs/feature requests at Jekyll’s GitHub repo. If you have questions, you can ask them on Jekyll Talk.   ","categories": ["jekyll","update"],
+        "excerpt":"What is Docker? Docker is a software tool that helps you build, distribute, deploy and run applications inside an isolated sandbox called container. Why use Docker over Vitual Machine? Docker uses containers for all of its operations and containers consume user space of an operating system. In simple terms, container...","categories": ["jekyll","update"],
         "tags": [],
         "url": "http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html",
         "teaser": null

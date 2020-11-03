@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Getting started with Docker - Home</title>
-<meta name="description" content="Check out the Jekyll docs for more info on how to get the most out of Jekyll. File all bugs/feature requests at Jekyll’s GitHub repo. If you have questions, you can ask them on Jekyll Talk.">
+<meta name="description" content="">
 
 
 
@@ -21,7 +21,7 @@
 <meta property="og:url" content="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html">
 
 
-  <meta property="og:description" content="Check out the Jekyll docs for more info on how to get the most out of Jekyll. File all bugs/feature requests at Jekyll’s GitHub repo. If you have questions, you can ask them on Jekyll Talk.">
+  <meta property="og:description" content="">
 
 
 
@@ -231,7 +231,7 @@
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Getting started with Docker">
-    <meta itemprop="description" content="Check out the Jekyll docs for more info on how to get the most out of Jekyll. File all bugs/feature requests at Jekyll’s GitHub repo. If you have questions, you can ask them on Jekyll Talk.">
+    <meta itemprop="description" content="">
     <meta itemprop="datePublished" content="2020-11-02T18:30:08+05:30">
     
 
@@ -260,7 +260,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          less than 1 minute read
+          3 minute read
         
       </span>
     
@@ -272,7 +272,93 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+        <p><img src="/assets/img/docker/docker-image.jpeg" alt="Docker" /></p>
+
+<h2 id="what-is-docker">What is Docker?</h2>
+
+<p>Docker is a software tool that helps you build, distribute, deploy and run applications inside an isolated sandbox called container.</p>
+
+<h2 id="why-use-docker-over-vitual-machine">Why use Docker over Vitual Machine?</h2>
+
+<p>Docker uses containers for all of its operations and containers consume user space of an operating system. In simple terms, container is just a set of processes that are isolated from the rest of the system.</p>
+
+<p>However, a Virtual Machine (VM) consumes user space as well as kernel space of an operating system for all of its operations. Each VM consists of an operating system and apps. Internally VMs utilize virtualized hardware, but share system hardware resources from the host operating system.</p>
+
+<h2 id="terminology">Terminology</h2>
+
+<p>There is a bunch of Docker-specific jargon associated with the Docker ecosystem. So let’s understand some important terms.</p>
+
+<ol>
+  <li><strong>Docker Image:</strong> A blueprint of the application that helps us run containers.</li>
+  <li><strong>Docker Container:</strong> Created from Docker image to run applications.</li>
+  <li><strong>Docker Daemon:</strong> Background service running on host operating system that manages building, running and distribution of Docker Containers.</li>
+  <li><strong>Docker Client:</strong> A command line tool that allows user to interact with the Docker Daemon.</li>
+  <li><strong>Docker Hub:</strong> A pool of all available Docker Images where one can host their own Docker Images in the registries and pull other users’ Docker Images.</li>
+</ol>
+
+<h2 id="installation">Installation</h2>
+
+<p>The <em>getting started</em> guide on Docker website has detailed instructions for setting up Docker on <a href="https://docs.docker.com/docker-for-mac/install/">Mac</a>, <a href="https://docs.docker.com/engine/install/ubuntu/">Linux</a> and <a href="https://docs.docker.com/docker-for-windows/install/">Windows</a>.</p>
+
+<p>Installation can be verified by running the following command:</p>
+
+<p><img src="/assets/img/docker/hello-world.png" alt="docker run hello-world" /></p>
+
+<h2 id="playing-with-busybox">Playing with Busybox</h2>
+
+<p>To get our hands dirty, let’s run a <a href="https://en.wikipedia.org/wiki/BusyBox">Busybox</a> container on our system to understand <code class="language-plaintext highlighter-rouge">docker run</code> command.</p>
+
+<p>To get started, we first need to pull the busybox image from the Docker registry.</p>
+
+<p><img src="/assets/img/docker/busybox-image.png" alt="docker pull busybox" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">docker pull</code> command fetches the required image and stores it to our system.</p>
+
+<p>To view a list of all images on your system, use <code class="language-plaintext highlighter-rouge">docker images</code> command as follows:</p>
+
+<p><img src="/assets/img/docker/docker-images.png" alt="docker images" /></p>
+
+<p>Now we can run a Docker container based on this image by executing <code class="language-plaintext highlighter-rouge">docker run</code> command in the terminal.</p>
+
+<p><img src="/assets/img/docker/docker-run.png" alt="docker run busybox" /></p>
+
+<p>However, we see no output. Why? Well, when we perform <code class="language-plaintext highlighter-rouge">docker run</code> command in terminal, the Docker Client finds the image (busybox in our case)m loads up a container and then runs a commands in that container. While executing the <code class="language-plaintext highlighter-rouge">docker run</code> command above we did not provide any command and thus, the container ran an empty command and exited.</p>
+
+<p>We should try and echo something from the container.</p>
+
+<p><img src="/assets/img/docker/docker-echo.png" alt="docker run busybox echo &quot;Busybox says hi&quot;" /></p>
+
+<p>Okay good, we see the echo message. Now to view a list of all the running/active containers we use <code class="language-plaintext highlighter-rouge">docker ps</code> command. However, we have no running containers and this command would result in a blank output. A more useful and powerful variant of this is the <code class="language-plaintext highlighter-rouge">docker ps -a</code> command which shows us a list of all the containers, be it in running  or exited state.</p>
+
+<p><img src="/assets/img/docker/docker-ps.png" alt="docker ps -a" /></p>
+
+<p>It also possible for one to execute more than one command in a container. Running the <code class="language-plaintext highlighter-rouge">docker run</code> command with <code class="language-plaintext highlighter-rouge">-it</code> flag provides us with an interactive tty (TeleTYpewriter) which allows us to execute as many commands we want in a container.</p>
+
+<p><img src="/assets/img/docker/docker-it.png" alt="docker run -it busybox sh" /></p>
+
+<p>Now everytime we execute the <code class="language-plaintext highlighter-rouge">docker run</code> command, a new container is created which stays in the system storage if not removed. Thus, it is important to clean up the space by removing unwanted containers using <code class="language-plaintext highlighter-rouge">docker rm</code> command.</p>
+
+<p><img src="/assets/img/docker/docker-rm.png" alt="docker rm" /></p>
+
+<p>Deleting containers by copypasting container IDs can be tedious at times and thus, you can delete a bunch of containers in single go by -</p>
+
+<p><img src="/assets/img/docker/docker-rm-ps.png" alt="docker rm $(docker ps -a -q -f status=exited)" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">-q</code> flag is used to return only numeric IDs and <code class="language-plaintext highlighter-rouge">-f</code> flag filters output based on the conditions provided (in our case containers with status equal to exited).</p>
+
+<p>Similarly, images can also be deleted using the <code class="language-plaintext highlighter-rouge">docker rmi</code> command.</p>
+
+<p><img src="/assets/img/docker/docker-rmi.png" alt="docker rmi" /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>There is more to Docker than just a bunch of basic commands covered above. However, I hope this blog got you interested in the Docker.</p>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li><a href="https://docker-curriculum.com/">Docker for beginners</a></li>
+</ol>
 
 
         
