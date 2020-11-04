@@ -15,7 +15,7 @@ Docker is a software tool that helps you build, distribute, deploy and run appli
 
 Docker uses containers for all of its operations and containers consume user space of an operating system. In simple terms, container is just a set of processes that are isolated from the rest of the system.
 
-However, a Virtual Machine (VM) consumes user space as well as kernel space of an operating system for all of its operations. Each VM consists of an operating system and apps. Internally VMs utilize virtualized hardware, but share system hardware resources from the host operating system.
+However, a Virtual Machine (VM) consumes user space as well as kernel space of an operating system for all of its operations. Each VM consists of an operating system and apps. Internally VMs use virtualized hardware, but share system hardware resources from the host operating system.
 
 ## Terminology
 
@@ -53,9 +53,9 @@ Now we can run a Docker container based on this image by executing `docker run` 
 
 ![docker run busybox](/assets/img/docker/docker-run.png)
 
-However, we see no output. Why? Well, when we perform `docker run` command in terminal, the Docker Client finds the image (busybox in our case)m loads up a container and then runs a commands in that container. While executing the `docker run` command above we did not provide any command and thus, the container ran an empty command and exited.
+However, we see no output. Why? Well, when we perform `docker run` command in terminal, the Docker Client finds the image (busybox in our case)m loads up a container and then runs a commands in that container. While executing the `docker run` command above we did not give any command and thus, the container ran an empty command and exited.
 
-We should try and echo something from the container.
+We should try to echo something from the container.
 
 ![docker run busybox echo "Busybox says hi"](/assets/img/docker/docker-echo.png)
 
