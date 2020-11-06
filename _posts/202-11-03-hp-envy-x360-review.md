@@ -1,13 +1,13 @@
 ---
 layout: single
-title:  "HP Envy x360 review"
+title:  "HP Envy x360 13 review"
 date:   2020-11-03 13:30:08 +0530
 categories: jekyll update
 ---
 
-![](/assets/img/envyx360/laptop.jpg)
-
 The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.
+
+![](/assets/img/envyx360/laptop.jpg)
 
 ## Case
 
@@ -37,7 +37,7 @@ CPU performance is excellent considering that Ryzen 5 4500U is AMD's budget-to-m
 
 One major disadvantage one might come across is that the Envy x360 13 model comes with a soldered RAM and is not upgradeable. RAM is soldered at 8 GB to 16 GB of DDR4-3200, but the memory runs in dual-channel mode.
 
-Coming to the storage, my model consists of 256 GB Toshiba SSD which is a good option for budget NVMe drives. The more expensive Samsung PM981 series can offer over two to three times the sequential writes offered by our Toshiba SSD.
+Coming to the storage, my model consists of 512 GB Toshiba SSD which is a good option for budget NVMe drives. The more expensive Samsung PM981 series can offer over two to three times the sequential writes offered by our Toshiba SSD.
 
 Battery life is interestingly long despite the small 51 Wh Internal battery. The battery runs for almost 10-12 hours for normal tasks before automatic shutdown which is much better than the Apple MacBook Pro 13. It takes about 1.5 to 2 hours to completely charge the with the AC adapter. The model even comes with a USB-C port and can be charged via that too.
 

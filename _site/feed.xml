@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-05T17:31:30+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/jekyll/update/2020/11/04/WSL.html" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/04/WSL</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/04/WSL.html">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-06T11:45:26+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -63,72 +63,51 @@
 
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10&quot;&gt;Windows Subsystem for Linux Installation Guide for Windows 10&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. To check your version and build number, select Windows logo key + R, type winver, select OK. Enable Virtual Machine feature dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version wsl --set-default-version 2 Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">HP Envy x360 review</title><link href="http://localhost:4000/jekyll/update/2020/11/03/HP-Envy-x360-review.html" rel="alternate" type="text/html" title="HP Envy x360 review" /><published>2020-11-03T13:30:08+05:30</published><updated>2020-11-03T13:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/03/HP-Envy-x360-review</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/03/HP-Envy-x360-review.html">&lt;p&gt;&lt;img src=&quot;/assets/img/envyx360/laptop.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. To check your version and build number, select Windows logo key + R, type winver, select OK. Enable Virtual Machine feature dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version wsl --set-default-version 2 Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">HP Envy x360 13 review</title><link href="http://localhost:4000/hp-envy-x360-review" rel="alternate" type="text/html" title="HP Envy x360 13 review" /><published>2020-11-03T13:30:08+05:30</published><updated>2020-11-03T13:30:08+05:30</updated><id>http://localhost:4000/hp-envy-x360-review</id><content type="html" xml:base="http://localhost:4000/hp-envy-x360-review">&lt;p&gt;The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.&lt;/p&gt;
 
-&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/envyx360/laptop.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability.&lt;/p&gt;
+&lt;h2 id=&quot;case&quot;&gt;Case&lt;/h2&gt;
 
-&lt;p&gt;In this tutorial we aim to install WSL 2 instead of WSL.&lt;/p&gt;
+&lt;p&gt;The Envy x360 is built with a metal chassis material with texture and build quality similar to the one used in 2019 Spectre x360 13 models. The lid is flexible enough to be twisted, however, the rigidity of hinges are likely to teeter over time and thus, could have been better.&lt;/p&gt;
 
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+&lt;p&gt;The 2020 version of Envy x360 13 is much smaller compared to the 2019 version. The weight 1.3kg remains almost the same as the new design is slightly thicker than the former ones. However, the model is light and compact enough for its use in tablet mode.&lt;/p&gt;
 
-&lt;h4 id=&quot;enable-the-windows-subsystem-for-linux&quot;&gt;Enable the Windows Subsystem for Linux&lt;/h4&gt;
+&lt;h2 id=&quot;input&quot;&gt;Input&lt;/h2&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The keyboard typing experience is relatively good and key positioning is much better compared to other laptops. Keys like Caps Lock, Mute, Microphone, Power and Camera have individual LED indicators on them which lets you know if those keys toggled on or off. Also, the keyboard consists of two levels of white backlighting which helps you to recognize the key in a dark environment.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The touchpad is again slightly larger than the one on the 2019 Spectre x360 13. Cursor movements feel a bit of lagging, but in turn, provides good precision control. Feedback on the integrated click could have been better.&lt;/p&gt;
 
-&lt;h4 id=&quot;check-system-requriements&quot;&gt;Check system requriements&lt;/h4&gt;
+&lt;h2 id=&quot;display&quot;&gt;Display&lt;/h2&gt;
 
-&lt;p&gt;There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found &lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10#requirements&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The Envy x360 13’s touch -screen display measures 13.3 inches diagonally, common screen size for ultraportables. It’s only available in full HD i.e. 1,920 by 1,080-pixel resolution, where a 4K resolution or OLED display option which could have been much better. Response time is average with crisp contrast and colours with 60Hz refresh rate panel.&lt;/p&gt;
 
-&lt;p&gt;To check your version and build number, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Windows logo key + R&lt;/code&gt;, type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;winver&lt;/code&gt;, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;HP offers three brightness options at the configuration: 300 nits, 400 nits, and 1000 nits based on personal preference and the environment of use. Brightness is evenly distributed across the screen, however a light-moderate uneven backlight bleeding along the bottom edge may be observed in some cases.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The model comes with an HP MPP2.0 stylus/pen, but cannot be stored on the laptop itself. A stylus can be very useful in the tablet mode or where a direct interaction to the screen is required. However, I feel touchscreen response is much better and faster as compared to the stylus.&lt;/p&gt;
 
-&lt;h4 id=&quot;enable-virtual-machine-feature&quot;&gt;Enable Virtual Machine feature&lt;/h4&gt;
+&lt;h2 id=&quot;performance&quot;&gt;Performance&lt;/h2&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;HP offers a wide range of options in processor selection. One can have 4/4 core/thread Ryzen 3 4300U, 6/6 core/thread Ryzen 5 4500U or 8/8 core/thread Ryzen 7 7400U in the AMD category. It also provides a 4/8 core/thread i7 -1065G7 option for Intel users. The model comes with integrated Radeon RX Vega or Iris Plus graphics and no other discrete GPU options.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;CPU performance is excellent considering that Ryzen 5 4500U is AMD’s budget-to-midrange offering. Additionally, multi-thread performance is about 10-15 percent faster than the pricier Intel Core i7-1065G7 model.&lt;/p&gt;
 
-&lt;h4 id=&quot;download-and-run-the-linux-kernel-update-package&quot;&gt;Download and run the Linux kernel update package&lt;/h4&gt;
+&lt;p&gt;One major disadvantage one might come across is that the Envy x360 13 model comes with a soldered RAM and is not upgradeable. RAM is soldered at 8 GB to 16 GB of DDR4-3200, but the memory runs in dual-channel mode.&lt;/p&gt;
 
-&lt;p&gt;Download the latest package from &lt;a href=&quot;https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi&quot;&gt;WSL2 Linux kernal update package for x64 machines&lt;/a&gt; and run it.&lt;/p&gt;
+&lt;p&gt;Coming to the storage, my model consists of 512 GB Toshiba SSD which is a good option for budget NVMe drives. The more expensive Samsung PM981 series can offer over two to three times the sequential writes offered by our Toshiba SSD.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Battery life is interestingly long despite the small 51 Wh Internal battery. The battery runs for almost 10-12 hours for normal tasks before automatic shutdown which is much better than the Apple MacBook Pro 13. It takes about 1.5 to 2 hours to completely charge the with the AC adapter. The model even comes with a USB-C port and can be charged via that too.&lt;/p&gt;
 
-&lt;h4 id=&quot;set-wsl-2-as-your-default-version&quot;&gt;Set WSL 2 as your default version&lt;/h4&gt;
+&lt;h2 id=&quot;final-verdict&quot;&gt;Final Verdict&lt;/h2&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wsl --set-default-version 2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;install-linux-distribution&quot;&gt;Install Linux distribution&lt;/h4&gt;
-
-&lt;p&gt;Install your favourite Linux distro from Microsoft Store.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;setting-up-new-distribution&quot;&gt;Setting up new distribution&lt;/h4&gt;
-
-&lt;p&gt;On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Yay!! You’re good to go. Developers can further can setup &lt;a href=&quot;https://code.visualstudio.com/docs/remote/wsl&quot;&gt;Visual Studio Code Remote&lt;/a&gt; to edit files and develop applications on WSL from Windows.&lt;/p&gt;
+&lt;p&gt;The AMD backed 2020 Envy x360 13 looks and performs very well for the relatively low price its available for. Some hardware limitations may prevent it from being the best convertible model out there. Nevertheless, there is no other model that balances performance, weight, build quality and price better than the 2020 Envy x360 13 at the moment.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10&quot;&gt;Windows Subsystem for Linux Installation Guide for Windows 10&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"></summary></entry><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.notebookcheck.net/2020-HP-Envy-x360-13-Convertible-2-in-1-Review-Ryzen-5-Beats-a-Core-i7.477589.0.html&quot;&gt;2020 HP Envy x360 13&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.</summary></entry><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/getting-started-with-docker" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/getting-started-with-docker">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-docker&quot;&gt;What is Docker?&lt;/h2&gt;
 
