@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-04T15:06:06+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/jekyll/update/2020/11/04/WSL.html" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/04/WSL</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/04/WSL.html">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-05T17:31:30+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/jekyll/update/2020/11/04/WSL.html" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/04/WSL</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/04/WSL.html">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -10,17 +10,25 @@
 
 &lt;h4 id=&quot;enable-the-windows-subsystem-for-linux&quot;&gt;Enable the Windows Subsystem for Linux&lt;/h4&gt;
 
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;&lt;img src=&quot;/assets/img/wsl/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;check-system-requriements&quot;&gt;Check system requriements&lt;/h4&gt;
 
 &lt;p&gt;There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found &lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10#requirements&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
+&lt;p&gt;To check your version and build number, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Windows logo key + R&lt;/code&gt;, type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;winver&lt;/code&gt;, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
 &lt;p&gt;&lt;img src=&quot;/assets/img/wsl/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;enable-virtual-machine-feature&quot;&gt;Enable Virtual Machine feature&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/3.png&quot; alt=&quot;dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;download-and-run-the-linux-kernel-update-package&quot;&gt;Download and run the Linux kernel update package&lt;/h4&gt;
 
@@ -30,7 +38,10 @@
 
 &lt;h4 id=&quot;set-wsl-2-as-your-default-version&quot;&gt;Set WSL 2 as your default version&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/5.png&quot; alt=&quot;wsl --set-default-version 2&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wsl --set-default-version 2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;install-linux-distribution&quot;&gt;Install Linux distribution&lt;/h4&gt;
 
@@ -52,7 +63,72 @@
 
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10&quot;&gt;Windows Subsystem for Linux Installation Guide for Windows 10&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. Enable Virtual Machine feature Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. To check your version and build number, select Windows logo key + R, type winver, select OK. Enable Virtual Machine feature dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version wsl --set-default-version 2 Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">HP Envy x360 review</title><link href="http://localhost:4000/jekyll/update/2020/11/03/HP-Envy-x360-review.html" rel="alternate" type="text/html" title="HP Envy x360 review" /><published>2020-11-03T13:30:08+05:30</published><updated>2020-11-03T13:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/03/HP-Envy-x360-review</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/03/HP-Envy-x360-review.html">&lt;p&gt;&lt;img src=&quot;/assets/img/envyx360/laptop.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability.&lt;/p&gt;
+
+&lt;p&gt;In this tutorial we aim to install WSL 2 instead of WSL.&lt;/p&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;h4 id=&quot;enable-the-windows-subsystem-for-linux&quot;&gt;Enable the Windows Subsystem for Linux&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;check-system-requriements&quot;&gt;Check system requriements&lt;/h4&gt;
+
+&lt;p&gt;There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found &lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10#requirements&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To check your version and build number, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Windows logo key + R&lt;/code&gt;, type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;winver&lt;/code&gt;, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;enable-virtual-machine-feature&quot;&gt;Enable Virtual Machine feature&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;download-and-run-the-linux-kernel-update-package&quot;&gt;Download and run the Linux kernel update package&lt;/h4&gt;
+
+&lt;p&gt;Download the latest package from &lt;a href=&quot;https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi&quot;&gt;WSL2 Linux kernal update package for x64 machines&lt;/a&gt; and run it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;set-wsl-2-as-your-default-version&quot;&gt;Set WSL 2 as your default version&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wsl --set-default-version 2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;install-linux-distribution&quot;&gt;Install Linux distribution&lt;/h4&gt;
+
+&lt;p&gt;Install your favourite Linux distro from Microsoft Store.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;setting-up-new-distribution&quot;&gt;Setting up new distribution&lt;/h4&gt;
+
+&lt;p&gt;On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Yay!! You’re good to go. Developers can further can setup &lt;a href=&quot;https://code.visualstudio.com/docs/remote/wsl&quot;&gt;Visual Studio Code Remote&lt;/a&gt; to edit files and develop applications on WSL from Windows.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10&quot;&gt;Windows Subsystem for Linux Installation Guide for Windows 10&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"></summary></entry><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2020/11/02/getting-started-with-docker.html">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-docker&quot;&gt;What is Docker?&lt;/h2&gt;
 
