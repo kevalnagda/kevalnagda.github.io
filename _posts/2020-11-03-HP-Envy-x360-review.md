@@ -25,7 +25,7 @@ The touchpad is again slightly larger than the one on the 2019 Spectre x360 13. 
 
 The Envy x360 13's touch -screen display measures 13.3 inches diagonally, common screen size for ultraportables. It's only available in full HD i.e. 1,920 by 1,080-pixel resolution, where a 4K resolution or OLED display option which could have been much better. Response time is average with crisp contrast and colours with 60Hz refresh rate panel.
 
-HP offers three brightness options at the configuration: 300 nits, 400 nits, and 1000 nits based on personal preference and the environment of use. Brightness is evenly distributed across the screen, however alight-moderate uneven backlight bleeding along the bottom edge may be observed in some cases.
+HP offers three brightness options at the configuration: 300 nits, 400 nits, and 1000 nits based on personal preference and the environment of use. Brightness is evenly distributed across the screen, however a light-moderate uneven backlight bleeding along the bottom edge may be observed in some cases.
 
 The model comes with an HP MPP2.0 stylus/pen, but cannot be stored on the laptop itself. A stylus can be very useful in the tablet mode or where a direct interaction to the screen is required. However, I feel touchscreen response is much better and faster as compared to the stylus.
 
@@ -47,4 +47,6 @@ The AMD backed 2020 Envy x360 13 looks and performs very well for the relatively
 
 ## Reference 
 
-1. [2020 HP Envy x360 13]: https://www.notebookcheck.net/2020-HP-Envy-x360-13-Convertible-2-in-1-Review-Ryzen-5-Beats-a-Core-i7.477589.0.html
+1. [2020 HP Envy x360 13]
+
+ [2020 HP Envy x360 13]: https://www.notebookcheck.net/2020-HP-Envy-x360-13-Convertible-2-in-1-Review-Ryzen-5-Beats-a-Core-i7.477589.0.html
