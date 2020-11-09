@@ -22,4 +22,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/dockerfile",
         "teaser": null
+      },{
+        "title": "Dockerfile best practices",
+        "excerpt":"Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/dockerfile-best-practices",
+        "teaser": null
       }]

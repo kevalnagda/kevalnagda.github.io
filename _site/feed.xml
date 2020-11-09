@@ -1,4 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-09T17:13:35+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-09T20:54:50+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Dockerfile best practices</title><link href="http://localhost:4000/dockerfile-best-practices" rel="alternate" type="text/html" title="Dockerfile best practices" /><published>2020-11-05T13:30:08+05:30</published><updated>2020-11-05T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile-best-practices</id><content type="html" xml:base="http://localhost:4000/dockerfile-best-practices">&lt;p&gt;Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.&lt;/p&gt;
+
+&lt;h2 id=&quot;minimize-the-number-of-steps-in-the-dockerfile&quot;&gt;Minimize the number of steps in the Dockerfile&lt;/h2&gt;
+
+&lt;p&gt;Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance.
+Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step.&lt;/p&gt;
+
+&lt;h2 id=&quot;start-your-dockerfile-with-the-steps-that-are-least-likely-to-change&quot;&gt;Start your Dockerfile with the steps that are least likely to change&lt;/h2&gt;
+
+&lt;p&gt;This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Install the tools needed to build your application.&lt;/li&gt;
+  &lt;li&gt;Install all the required dependencies, libraries and packages.&lt;/li&gt;
+  &lt;li&gt;Finally, build your application.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;a-fairly-straightforward-approach-to-building-dockerfiles-in-an-iterative-manner-would-be-as-follows&quot;&gt;A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows:&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-pick-the-right-base-image&quot;&gt;1. Pick the right base image&lt;/h3&gt;
+
+&lt;p&gt;Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python&lt;/code&gt; as their base image instead of selecting a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ubuntu&lt;/code&gt; base image and installing dependencies on top of it.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-go-to-the-shell-and-build-your-environment&quot;&gt;2. Go to the shell and build your environment&lt;/h3&gt;
+
+&lt;p&gt;Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode.&lt;/p&gt;
+
+&lt;p&gt;Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-add-the-steps-to-your-dockerfile-and-build-your-image&quot;&gt;3. Add the steps to your Dockerfile and build your image&lt;/h3&gt;
+
+&lt;p&gt;Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time.&lt;/p&gt;
+
+&lt;p&gt;This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps.&lt;/p&gt;
+
+&lt;h3 id=&quot;4-repeat-steps-2-and-3&quot;&gt;4. Repeat steps 2 and 3&lt;/h3&gt;
+
+&lt;p&gt;You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://docs.docker.com/engine/reference/builder/&quot;&gt;Dockerfile reference&lt;/a&gt; is a good place to look for common Dockerfile syntax, warnings and documentation.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.docker.com/engine/reference/builder/&quot;&gt;Dockerfile reference&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step. Start your Dockerfile with the steps that are least likely to change This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows: Install the tools needed to build your application. Install all the required dependencies, libraries and packages. Finally, build your application. A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows: 1. Pick the right base image Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it. 2. Go to the shell and build your environment Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode. Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately. 3. Add the steps to your Dockerfile and build your image Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time. This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps. 4. Repeat steps 2 and 3 You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected. Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation. References Dockerfile reference Dockerfile tutorial by example</summary></entry><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
