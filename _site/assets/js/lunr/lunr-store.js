@@ -16,4 +16,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/WSL",
         "teaser": null
+      },{
+        "title": "Dockerfile tutorial",
+        "excerpt":"Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. Why would you want to use a Dockerfile? Well, there are times when existing docker images don’t satisfy your project needs and you want to do things...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/dockerfile",
+        "teaser": null
       }]

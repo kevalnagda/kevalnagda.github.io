@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-06T11:45:26+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-09T17:13:35+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -63,7 +63,162 @@
 
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10&quot;&gt;Windows Subsystem for Linux Installation Guide for Windows 10&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. To check your version and build number, select Windows logo key + R, type winver, select OK. Enable Virtual Machine feature dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version wsl --set-default-version 2 Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">HP Envy x360 13 review</title><link href="http://localhost:4000/hp-envy-x360-review" rel="alternate" type="text/html" title="HP Envy x360 13 review" /><published>2020-11-03T13:30:08+05:30</published><updated>2020-11-03T13:30:08+05:30</updated><id>http://localhost:4000/hp-envy-x360-review</id><content type="html" xml:base="http://localhost:4000/hp-envy-x360-review">&lt;p&gt;The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.&lt;/p&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. To check your version and build number, select Windows logo key + R, type winver, select OK. Enable Virtual Machine feature dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version wsl --set-default-version 2 Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-would-you-want-to-use-a-dockerfile&quot;&gt;Why would you want to use a Dockerfile?&lt;/h2&gt;
+
+&lt;p&gt;Well, there are times when existing docker images don’t satisfy your project needs and you want to do things differently. Docker helps you achieve this in an easy way, by just writing a Dockerfile!&lt;/p&gt;
+
+&lt;h2 id=&quot;lets-dive-in&quot;&gt;Let’s dive in&lt;/h2&gt;
+
+&lt;p&gt;We are aware that the available alpine image does not contain git, curl and vim installed by default. Thus, for learning purposes we create a new custom image based on alpine which contains git, curl and vim.&lt;/p&gt;
+
+&lt;h3 id=&quot;1-create-a-dockerfile&quot;&gt;1. Create a Dockerfile&lt;/h3&gt;
+
+&lt;p&gt;First of all, create an empty directory and an empty file inside that directory with the file name &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;touch Dockerfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;2-define-a-base-image&quot;&gt;2. Define a base image&lt;/h3&gt;
+
+&lt;p&gt;Every Dockerfile must start with a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM&lt;/code&gt; command. You can create an image from scratch, however there are a bunch of base images available which you can directly use by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM alpine:3.4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;3-add-instructions-to-install-packages&quot;&gt;3. Add instructions to install packages&lt;/h3&gt;
+
+&lt;p&gt;Here we use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in Dockerfile to execute commands and install required packages.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RUN apk update
+RUN apk add git
+RUN apk add vim
+RUN apk add curl
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; It is ideal to execute multiple commands in a single &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; command as each instruction in Dockerfile creates an intermediary container.&lt;/p&gt;
+
+&lt;p&gt;An efficient approach to the example would be as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RUN apk update &amp;amp;&amp;amp; \
+    apk add git &amp;amp;&amp;amp; \
+    apk add vim &amp;amp;&amp;amp; \
+    apk add curl
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;4-building-the-image&quot;&gt;4. Building the image&lt;/h3&gt;
+
+&lt;p&gt;You can build an image with the help of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command which automatically builds an image with nametag provided after &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-t&lt;/code&gt; flag as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;user_name&amp;gt;/&amp;lt;image_name&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build -t kevalnagda/apline-smart:1.0 .
+Sending build context to Docker daemon  2.048kB
+Step 1/5 : FROM alpine:3.4
+3.4: Pulling from library/alpine
+c1e54eec4b57: Pull complete 
+Digest: sha256:b733d4a32c4da6a00a84df2ca32791bb03df95400243648d8c539e7b4cce329c
+Status: Downloaded newer image for alpine:3.4
+ ---&amp;gt; b7c5ffe56db7
+Step 2/5 : RUN apk update
+ ---&amp;gt; Running in 42d39c87ae89
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/community/x86_64/APKINDEX.tar.gz
+v3.4.6-316-g63ea6d0 [http://dl-cdn.alpinelinux.org/alpine/v3.4/main]
+v3.4.6-160-g14ad2a3 [http://dl-cdn.alpinelinux.org/alpine/v3.4/community]
+OK: 5973 distinct packages available
+Removing intermediate container 42d39c87ae89
+ ---&amp;gt; e5872a7d6fe7
+Step 3/5 : RUN apk add git
+ ---&amp;gt; Running in 335a8120b6b8
+(1/6) Installing ca-certificates (20161130-r0)
+(2/6) Installing libssh2 (1.7.0-r0)
+(3/6) Installing libcurl (7.60.0-r1)
+(4/6) Installing expat (2.2.0-r1)
+(5/6) Installing pcre (8.38-r1)
+(6/6) Installing git (2.8.6-r0)
+Executing busybox-1.24.2-r14.trigger
+Executing ca-certificates-20161130-r0.trigger
+OK: 22 MiB in 17 packages
+Removing intermediate container 335a8120b6b8
+ ---&amp;gt; ef8d1eda0212
+Step 4/5 : RUN apk add vim
+ ---&amp;gt; Running in 48948ba27f5e
+(1/5) Installing lua5.2-libs (5.2.4-r2)
+(2/5) Installing ncurses-terminfo-base (6.0_p20171125-r0)
+(3/5) Installing ncurses-terminfo (6.0_p20171125-r0)
+(4/5) Installing ncurses-libs (6.0_p20171125-r0)
+(5/5) Installing vim (7.4.1831-r3)
+Executing busybox-1.24.2-r14.trigger
+OK: 54 MiB in 22 packages
+Removing intermediate container 48948ba27f5e
+ ---&amp;gt; 614ca6706e18
+Step 5/5 : RUN apk add curl
+ ---&amp;gt; Running in cccca59dceac
+(1/1) Installing curl (7.60.0-r1)
+Executing busybox-1.24.2-r14.trigger
+OK: 54 MiB in 23 packages
+Removing intermediate container cccca59dceac
+ ---&amp;gt; 7f6efe76a85e
+Successfully built 7f6efe76a85e
+Successfully tagged kevalnagda/apline-smart:1.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can check the new image by executing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker images&lt;/code&gt; command as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+kevalnagda/apline-smart   1.0                 7f6efe76a85e        4 minutes ago       48.7MB
+alpine                    3.4                 b7c5ffe56db7        21 months ago       4.82MB
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you look at the output of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command, you would notice that there are 5 steps, namely Step 1/5, Step 2/5, Step 3/5 and so on…&lt;/p&gt;
+
+&lt;p&gt;The reason for this is that docker builds images by executing the instructions mentioned in the Dockerfile one at a time. Another thing to note here is that with every step in the build process, Docker will create an intermediary image for that particular step. This is called image layering and its main advantage lies in image caching.&lt;/p&gt;
+
+&lt;p&gt;If you were to rebuild the image, you would notice that the build was faster as compared to the build before that since the build was done from the cache. This behaviour makes our life a lot easier.&lt;/p&gt;
+
+&lt;h2 id=&quot;dockerfile-instructions&quot;&gt;Dockerfile instructions&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-from&quot;&gt;1. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;Let’s set a base image in the Dockerfile. The instruction is in the form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM &amp;lt;base_image&amp;gt;[:tag]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-run&quot;&gt;2. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;Let’s you run commands and it’s one of the most used instructions in Dockerfile.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction has two forms, where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN &amp;lt;command&amp;gt;&lt;/code&gt; is called the shell form and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]&lt;/code&gt; is called the exec form.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-copy&quot;&gt;3. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COPY&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;Helps you copy files and directories to your Docker image. The instruction is in the form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COPY &amp;lt;src&amp;gt; &amp;lt;dest&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;4-add&quot;&gt;4. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;Helps you add files and directories to your Docker image. The instruction is in the form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD &amp;lt;src&amp;gt; &amp;lt;dest&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; The main difference between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COPY&lt;/code&gt; command is that the former one is more advanced and has additional features like pulling files from url sources, recognizing and handling a lot more file formats than the later one.&lt;/p&gt;
+
+&lt;h3 id=&quot;5-env&quot;&gt;5. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENV&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;Let’s you define environment variables in Dockerfile.&lt;/p&gt;
+
+&lt;h3 id=&quot;6-workdir&quot;&gt;6. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WORKDIR&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;A way to define the working directory for your project.&lt;/p&gt;
+
+&lt;h3 id=&quot;7-expose&quot;&gt;7. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EXPOSE&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;It informs you about the exposed ports your application is listening on.&lt;/p&gt;
+
+&lt;h3 id=&quot;8-cmd&quot;&gt;8. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;It lets you specify which component is to be run by your image on execution of the container. The format is given as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;, ...]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;One important thing to note here is that there should only be &lt;strong&gt;one &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt; instruction&lt;/strong&gt; in a Dockerfile. If more than one &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt; instruction is present then only the last one will be used during execution.&lt;/p&gt;
+
+&lt;h3 id=&quot;9-entrypoint&quot;&gt;9. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt;:&lt;/h3&gt;
+&lt;p&gt;When the main executable is used in this instruction then the parameters provided in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt; instruction will be added as parameters to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction. Example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ENTRYPOINT [&quot;git&quot;]
+CMD [&quot;--help&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.</summary></entry><entry><title type="html">HP Envy x360 13 review</title><link href="http://localhost:4000/hp-envy-x360-review" rel="alternate" type="text/html" title="HP Envy x360 13 review" /><published>2020-11-03T13:30:08+05:30</published><updated>2020-11-03T13:30:08+05:30</updated><id>http://localhost:4000/hp-envy-x360-review</id><content type="html" xml:base="http://localhost:4000/hp-envy-x360-review">&lt;p&gt;The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/envyx360/laptop.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 

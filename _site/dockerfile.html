@@ -1,0 +1,515 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Dockerfile tutorial - Home</title>
+<meta name="description" content="Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="Dockerfile tutorial">
+<meta property="og:url" content="http://localhost:4000/dockerfile">
+
+
+  <meta property="og:description" content="Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-11-04T13:30:08+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/dockerfile">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name"></h3>
+    
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Dockerfile tutorial">
+    <meta itemprop="description" content="Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.">
+    <meta itemprop="datePublished" content="2020-11-04T13:30:08+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Dockerfile tutorial
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-11-04T13:30:08+05:30">November 4, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.</p>
+
+<h2 id="why-would-you-want-to-use-a-dockerfile">Why would you want to use a Dockerfile?</h2>
+
+<p>Well, there are times when existing docker images don’t satisfy your project needs and you want to do things differently. Docker helps you achieve this in an easy way, by just writing a Dockerfile!</p>
+
+<h2 id="lets-dive-in">Let’s dive in</h2>
+
+<p>We are aware that the available alpine image does not contain git, curl and vim installed by default. Thus, for learning purposes we create a new custom image based on alpine which contains git, curl and vim.</p>
+
+<h3 id="1-create-a-dockerfile">1. Create a Dockerfile</h3>
+
+<p>First of all, create an empty directory and an empty file inside that directory with the file name <code class="language-plaintext highlighter-rouge">Dockerfile</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>touch Dockerfile
+</code></pre></div></div>
+
+<h3 id="2-define-a-base-image">2. Define a base image</h3>
+
+<p>Every Dockerfile must start with a <code class="language-plaintext highlighter-rouge">FROM</code> command. You can create an image from scratch, however there are a bunch of base images available which you can directly use by using the <code class="language-plaintext highlighter-rouge">FROM</code> command.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM alpine:3.4
+</code></pre></div></div>
+
+<h3 id="3-add-instructions-to-install-packages">3. Add instructions to install packages</h3>
+
+<p>Here we use the <code class="language-plaintext highlighter-rouge">RUN</code> instruction in Dockerfile to execute commands and install required packages.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apk update
+RUN apk add git
+RUN apk add vim
+RUN apk add curl
+</code></pre></div></div>
+
+<p><strong>NOTE:</strong> It is ideal to execute multiple commands in a single <code class="language-plaintext highlighter-rouge">RUN</code> command as each instruction in Dockerfile creates an intermediary container.</p>
+
+<p>An efficient approach to the example would be as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apk update &amp;&amp; \
+    apk add git &amp;&amp; \
+    apk add vim &amp;&amp; \
+    apk add curl
+</code></pre></div></div>
+
+<h3 id="4-building-the-image">4. Building the image</h3>
+
+<p>You can build an image with the help of <code class="language-plaintext highlighter-rouge">docker build</code> command which automatically builds an image with nametag provided after <code class="language-plaintext highlighter-rouge">-t</code> flag as <code class="language-plaintext highlighter-rouge">&lt;user_name&gt;/&lt;image_name&gt;</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker build -t kevalnagda/apline-smart:1.0 .
+Sending build context to Docker daemon  2.048kB
+Step 1/5 : FROM alpine:3.4
+3.4: Pulling from library/alpine
+c1e54eec4b57: Pull complete 
+Digest: sha256:b733d4a32c4da6a00a84df2ca32791bb03df95400243648d8c539e7b4cce329c
+Status: Downloaded newer image for alpine:3.4
+ ---&gt; b7c5ffe56db7
+Step 2/5 : RUN apk update
+ ---&gt; Running in 42d39c87ae89
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/community/x86_64/APKINDEX.tar.gz
+v3.4.6-316-g63ea6d0 [http://dl-cdn.alpinelinux.org/alpine/v3.4/main]
+v3.4.6-160-g14ad2a3 [http://dl-cdn.alpinelinux.org/alpine/v3.4/community]
+OK: 5973 distinct packages available
+Removing intermediate container 42d39c87ae89
+ ---&gt; e5872a7d6fe7
+Step 3/5 : RUN apk add git
+ ---&gt; Running in 335a8120b6b8
+(1/6) Installing ca-certificates (20161130-r0)
+(2/6) Installing libssh2 (1.7.0-r0)
+(3/6) Installing libcurl (7.60.0-r1)
+(4/6) Installing expat (2.2.0-r1)
+(5/6) Installing pcre (8.38-r1)
+(6/6) Installing git (2.8.6-r0)
+Executing busybox-1.24.2-r14.trigger
+Executing ca-certificates-20161130-r0.trigger
+OK: 22 MiB in 17 packages
+Removing intermediate container 335a8120b6b8
+ ---&gt; ef8d1eda0212
+Step 4/5 : RUN apk add vim
+ ---&gt; Running in 48948ba27f5e
+(1/5) Installing lua5.2-libs (5.2.4-r2)
+(2/5) Installing ncurses-terminfo-base (6.0_p20171125-r0)
+(3/5) Installing ncurses-terminfo (6.0_p20171125-r0)
+(4/5) Installing ncurses-libs (6.0_p20171125-r0)
+(5/5) Installing vim (7.4.1831-r3)
+Executing busybox-1.24.2-r14.trigger
+OK: 54 MiB in 22 packages
+Removing intermediate container 48948ba27f5e
+ ---&gt; 614ca6706e18
+Step 5/5 : RUN apk add curl
+ ---&gt; Running in cccca59dceac
+(1/1) Installing curl (7.60.0-r1)
+Executing busybox-1.24.2-r14.trigger
+OK: 54 MiB in 23 packages
+Removing intermediate container cccca59dceac
+ ---&gt; 7f6efe76a85e
+Successfully built 7f6efe76a85e
+Successfully tagged kevalnagda/apline-smart:1.0
+</code></pre></div></div>
+
+<p>We can check the new image by executing the <code class="language-plaintext highlighter-rouge">docker images</code> command as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+kevalnagda/apline-smart   1.0                 7f6efe76a85e        4 minutes ago       48.7MB
+alpine                    3.4                 b7c5ffe56db7        21 months ago       4.82MB
+</code></pre></div></div>
+
+<p>If you look at the output of the <code class="language-plaintext highlighter-rouge">docker build</code> command, you would notice that there are 5 steps, namely Step 1/5, Step 2/5, Step 3/5 and so on…</p>
+
+<p>The reason for this is that docker builds images by executing the instructions mentioned in the Dockerfile one at a time. Another thing to note here is that with every step in the build process, Docker will create an intermediary image for that particular step. This is called image layering and its main advantage lies in image caching.</p>
+
+<p>If you were to rebuild the image, you would notice that the build was faster as compared to the build before that since the build was done from the cache. This behaviour makes our life a lot easier.</p>
+
+<h2 id="dockerfile-instructions">Dockerfile instructions</h2>
+
+<h3 id="1-from">1. <code class="language-plaintext highlighter-rouge">FROM</code>:</h3>
+<p>Let’s set a base image in the Dockerfile. The instruction is in the form of <code class="language-plaintext highlighter-rouge">FROM &lt;base_image&gt;[:tag]</code>.</p>
+
+<h3 id="2-run">2. <code class="language-plaintext highlighter-rouge">RUN</code>:</h3>
+<p>Let’s you run commands and it’s one of the most used instructions in Dockerfile.</p>
+
+<p><code class="language-plaintext highlighter-rouge">RUN</code> instruction has two forms, where <code class="language-plaintext highlighter-rouge">RUN &lt;command&gt;</code> is called the shell form and <code class="language-plaintext highlighter-rouge">RUN ["executable", "param1", "param2"]</code> is called the exec form.</p>
+
+<h3 id="3-copy">3. <code class="language-plaintext highlighter-rouge">COPY</code>:</h3>
+<p>Helps you copy files and directories to your Docker image. The instruction is in the form of <code class="language-plaintext highlighter-rouge">COPY &lt;src&gt; &lt;dest&gt;</code>.</p>
+
+<h3 id="4-add">4. <code class="language-plaintext highlighter-rouge">ADD</code>:</h3>
+<p>Helps you add files and directories to your Docker image. The instruction is in the form of <code class="language-plaintext highlighter-rouge">ADD &lt;src&gt; &lt;dest&gt;</code>.</p>
+
+<p><strong>NOTE:</strong> The main difference between <code class="language-plaintext highlighter-rouge">ADD</code> and <code class="language-plaintext highlighter-rouge">COPY</code> command is that the former one is more advanced and has additional features like pulling files from url sources, recognizing and handling a lot more file formats than the later one.</p>
+
+<h3 id="5-env">5. <code class="language-plaintext highlighter-rouge">ENV</code>:</h3>
+<p>Let’s you define environment variables in Dockerfile.</p>
+
+<h3 id="6-workdir">6. <code class="language-plaintext highlighter-rouge">WORKDIR</code>:</h3>
+<p>A way to define the working directory for your project.</p>
+
+<h3 id="7-expose">7. <code class="language-plaintext highlighter-rouge">EXPOSE</code>:</h3>
+<p>It informs you about the exposed ports your application is listening on.</p>
+
+<h3 id="8-cmd">8. <code class="language-plaintext highlighter-rouge">CMD</code>:</h3>
+<p>It lets you specify which component is to be run by your image on execution of the container. The format is given as <code class="language-plaintext highlighter-rouge">CMD ["executable", "param1", "param2", ...]</code>.</p>
+
+<p>One important thing to note here is that there should only be <strong>one <code class="language-plaintext highlighter-rouge">CMD</code> instruction</strong> in a Dockerfile. If more than one <code class="language-plaintext highlighter-rouge">CMD</code> instruction is present then only the last one will be used during execution.</p>
+
+<h3 id="9-entrypoint">9. <code class="language-plaintext highlighter-rouge">ENTRYPOINT</code>:</h3>
+<p>When the main executable is used in this instruction then the parameters provided in <code class="language-plaintext highlighter-rouge">CMD</code> instruction will be added as parameters to the <code class="language-plaintext highlighter-rouge">ENTRYPOINT</code> instruction. Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ENTRYPOINT ["git"]
+CMD ["--help"]
+</code></pre></div></div>
+
+<h2 id="references">References</h2>
+
+<p><a href="https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/">Dockerfile tutorial by example</a></p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-04T13:30:08+05:30">November 4, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Dockerfile+tutorial%20http%3A%2F%2Flocalhost%3A4000%2Fdockerfile" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fdockerfile" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fdockerfile" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/WSL" class="pagination--pager" title="Windows Subsystem for Linux (WSL)
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
