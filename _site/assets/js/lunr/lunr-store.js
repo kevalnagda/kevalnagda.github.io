@@ -34,4 +34,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/conda-in-dockerfile",
         "teaser": null
+      },{
+        "title": "How to build a Flask app with WSGI and Nginx",
+        "excerpt":"In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn. Introduction Gunicorn Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks. Nginx Nginx is an open-source HTTP web server, mail...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/flask-app-with-wsgi-and-nginx",
+        "teaser": null
       }]

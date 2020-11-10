@@ -193,6 +193,29 @@
 
       <section class="page__content" itemprop="text">
         
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#installation">Installation</a>
+    <ul>
+      <li><a href="#enable-the-windows-subsystem-for-linux">Enable the Windows Subsystem for Linux</a></li>
+      <li><a href="#check-system-requriements">Check system requriements</a></li>
+      <li><a href="#enable-virtual-machine-feature">Enable Virtual Machine feature</a></li>
+      <li><a href="#download-and-run-the-linux-kernel-update-package">Download and run the Linux kernel update package</a></li>
+      <li><a href="#set-wsl-2-as-your-default-version">Set WSL 2 as your default version</a></li>
+      <li><a href="#install-linux-distribution">Install Linux distribution</a></li>
+      <li><a href="#setting-up-new-distribution">Setting up new distribution</a></li>
+    </ul>
+  </li>
+  <li><a href="#conclusion">Conclusion</a></li>
+  <li><a href="#reference">Reference</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
         <p>WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!</p>
 
 <h2 id="introduction">Introduction</h2>
@@ -203,14 +226,14 @@
 
 <h2 id="installation">Installation</h2>
 
-<h4 id="enable-the-windows-subsystem-for-linux">Enable the Windows Subsystem for Linux</h4>
+<h3 id="enable-the-windows-subsystem-for-linux">Enable the Windows Subsystem for Linux</h3>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 </code></pre></div></div>
 
 <p><img src="/assets/img/wsl/1.png" alt="" /></p>
 
-<h4 id="check-system-requriements">Check system requriements</h4>
+<h3 id="check-system-requriements">Check system requriements</h3>
 
 <p>There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10#requirements">here</a>.</p>
 
@@ -218,33 +241,33 @@
 
 <p><img src="/assets/img/wsl/2.png" alt="" /></p>
 
-<h4 id="enable-virtual-machine-feature">Enable Virtual Machine feature</h4>
+<h3 id="enable-virtual-machine-feature">Enable Virtual Machine feature</h3>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 </code></pre></div></div>
 
 <p><img src="/assets/img/wsl/3.png" alt="" /></p>
 
-<h4 id="download-and-run-the-linux-kernel-update-package">Download and run the Linux kernel update package</h4>
+<h3 id="download-and-run-the-linux-kernel-update-package">Download and run the Linux kernel update package</h3>
 
 <p>Download the latest package from <a href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi">WSL2 Linux kernal update package for x64 machines</a> and run it.</p>
 
 <p><img src="/assets/img/wsl/4.png" alt="" /></p>
 
-<h4 id="set-wsl-2-as-your-default-version">Set WSL 2 as your default version</h4>
+<h3 id="set-wsl-2-as-your-default-version">Set WSL 2 as your default version</h3>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wsl --set-default-version 2
 </code></pre></div></div>
 
 <p><img src="/assets/img/wsl/5.png" alt="" /></p>
 
-<h4 id="install-linux-distribution">Install Linux distribution</h4>
+<h3 id="install-linux-distribution">Install Linux distribution</h3>
 
 <p>Install your favourite Linux distro from Microsoft Store.</p>
 
 <p><img src="/assets/img/wsl/6.png" alt="" /></p>
 
-<h4 id="setting-up-new-distribution">Setting up new distribution</h4>
+<h3 id="setting-up-new-distribution">Setting up new distribution</h3>
 
 <p>On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster.</p>
 

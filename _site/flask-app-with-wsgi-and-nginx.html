@@ -1,0 +1,566 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>How to build a Flask app with WSGI and Nginx - Home</title>
+<meta name="description" content="In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.  Introduction  Gunicorn  Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks.  Nginx  Nginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration.  Why use Gunicorn and Nginx with Flask?  Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests.  Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost.  Build the Flask app  1. Update and install local packages  First of all, update your local package index and then install the required packages as follows:  # Update the local package index $ sudo apt-get update   # Install dependencies $ sudo apt install python3-pip python3-dev python3-venv nginx   2. Create a virtual environment  Now, we create a virtual environment env for the Python project using venv module.  python3 -m venv env   We activate the environment env as follows:  source env/bin/activate   3. Install Python dependencies  Next, we install Flask and Gunicorn.  pip3 install flask gunicorn requests   4. Create the movie quotes app  We create a file app.py with the following content in it:  import requests from flask import Flask, render_template app = Flask(__name__)   @app.route(&#39;/&#39;) def movieapp():    url = &quot;http://movie-quotes-2.herokuapp.com/api/v1/quotes/random&quot;       response = requests.get(url).json()      return render_template(&quot;index.html&quot;, film=response[&#39;film&#39;], quote=response[&#39;content&#39;])   if __name__ == &#39;__main__&#39;:    app.run(debug=False, host=&#39;0.0.0.0&#39;)   Now, create a templates folder with index.html file in it to be used as a template for our flask application. Below is the sample index.html file which can be modified as per your requirements.  &lt;html&gt;   &lt;head&gt;    &lt;style type=&quot;text/css&quot;&gt;        body {            background: black;            color: white;        }          div.container {            max-width: 500px;            margin: 100px auto;            border: 20px solid white;            padding: 10px;            text-align: center;        }          h2 {            text-transform: uppercase;        }    &lt;/style&gt; &lt;/head&gt;   &lt;body&gt;    &lt;div class=&quot;container&quot;&gt;        &lt;h2&gt;Quote of the day&lt;/h2&gt;        &lt;hr&gt;        &lt;h3&gt;FILM: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;        &lt;h3&gt;QUOTE: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;           &lt;/div&gt; &lt;/body&gt;   &lt;/html&gt;   5.Testing the app  Before moving ahead, we test the flask app and make sure everything is working fine.  (env) $ python3 app.py * Serving Flask app &quot;app&quot; (lazy loading) * Environment: production   WARNING: This is a development server. Do not use it in a production deployment.   Use a production WSGI server instead. * Debug mode: off * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)   The result should be visible if you visit http://localhost:5000. When you are finished press Ctrl+C in your terminal window to exit the application server.  Add WSGI to the app  1. Create WSGI entry point  We create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application.  Create wsgi.py file in the same directory as app.py, import the Flask instance from our application and run it as follows:  from app import app   if __name__ == &#39;__main__&#39;:    app.run()   2. Test Gunicorn’s ability  We now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above.  Note: The WSGI file name is written without .py extension.  So the syntax is gunicorn &lt;WSGI_module&gt;:&lt;callable_name&gt;.  (env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app [2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4 [2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725) [2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync [2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728   When you visit http://localhost:5000, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint.  When you are finished press Ctrl+C in your terminal window to exit the application server.  3. Create WSGI socket  The communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as app.py as follows:  (env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app [2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4 [2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854) [2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync [2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857 [2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858 [2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859   By adding --workers 3 we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it.  If you notice, an app.sock file will be automatically created in the project folder upon execution of the above command.  Configure Nginx  1. Create an Nginx configuration file  Gunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file.  Let the Gunicorn server run, open a new terminal and execute ls /etc/nginx/ command. In the output you would get a list Nginx configuration along with two important directories:     sites-available: contains configuration files for all of your possible applications.   sites-enabled: contains links to the configuration files that Nginx will actually read and run.   Now, create a new server block configuration file app in /etc/nginx/sites-available/ directory.  (env) $ nano /etc/nginx/sites-available/app   Next, we add the following code into the configuration file and save it.  server {    listen 80;      location / {        include proxy_params;        proxy_pass http://unix:/home/movieapp/app.sock;    } }   Here, we open up a server block and define it to listen for requests on port 80.  We also add a location block that matches every request. In this block, we include proxy_params file that specifies some general proxy parameters and passes the requests to the socket we defined using the proxy_pass directive.  2. Enable Nginx server block  We need to link the file to the sites-enabled directory to enable the Nginx server block. The syntax for linking the file is as follows:  ln -s &lt;source_file&gt; &lt;destination_file&gt;   Actual code will look like:  ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/   3. Check for errors in Nginx configuration file  we can check syntax errors in Nginx configuration file by executing the nginx -t command as follows:  (env) $ nginx -t nginx: the configuration file /etc/nginx/nginx.conf syntax is ok nginx: configuration file /etc/nginx/nginx.conf test is successful   If there are no errors, we restart the Nginx process to read our new config file.  systemctl restart nginx   4. Adjust firewall  The final step we need to take care of is adjusting the firewall to allow access to the Nginx server:  (env) $ sudo ufw allow &#39;Nginx Full&#39; Skipping adding existing rule Skipping adding existing rule (v6)   You can visit http://localhost:80 to view your running flask application.  References  Deploy flask app with Nginx using Gunicorn">
+
+
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="How to build a Flask app with WSGI and Nginx">
+<meta property="og:url" content="http://localhost:4000/flask-app-with-wsgi-and-nginx">
+
+
+  <meta property="og:description" content="In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.  Introduction  Gunicorn  Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks.  Nginx  Nginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration.  Why use Gunicorn and Nginx with Flask?  Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests.  Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost.  Build the Flask app  1. Update and install local packages  First of all, update your local package index and then install the required packages as follows:  # Update the local package index $ sudo apt-get update   # Install dependencies $ sudo apt install python3-pip python3-dev python3-venv nginx   2. Create a virtual environment  Now, we create a virtual environment env for the Python project using venv module.  python3 -m venv env   We activate the environment env as follows:  source env/bin/activate   3. Install Python dependencies  Next, we install Flask and Gunicorn.  pip3 install flask gunicorn requests   4. Create the movie quotes app  We create a file app.py with the following content in it:  import requests from flask import Flask, render_template app = Flask(__name__)   @app.route(&#39;/&#39;) def movieapp():    url = &quot;http://movie-quotes-2.herokuapp.com/api/v1/quotes/random&quot;       response = requests.get(url).json()      return render_template(&quot;index.html&quot;, film=response[&#39;film&#39;], quote=response[&#39;content&#39;])   if __name__ == &#39;__main__&#39;:    app.run(debug=False, host=&#39;0.0.0.0&#39;)   Now, create a templates folder with index.html file in it to be used as a template for our flask application. Below is the sample index.html file which can be modified as per your requirements.  &lt;html&gt;   &lt;head&gt;    &lt;style type=&quot;text/css&quot;&gt;        body {            background: black;            color: white;        }          div.container {            max-width: 500px;            margin: 100px auto;            border: 20px solid white;            padding: 10px;            text-align: center;        }          h2 {            text-transform: uppercase;        }    &lt;/style&gt; &lt;/head&gt;   &lt;body&gt;    &lt;div class=&quot;container&quot;&gt;        &lt;h2&gt;Quote of the day&lt;/h2&gt;        &lt;hr&gt;        &lt;h3&gt;FILM: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;        &lt;h3&gt;QUOTE: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;           &lt;/div&gt; &lt;/body&gt;   &lt;/html&gt;   5.Testing the app  Before moving ahead, we test the flask app and make sure everything is working fine.  (env) $ python3 app.py * Serving Flask app &quot;app&quot; (lazy loading) * Environment: production   WARNING: This is a development server. Do not use it in a production deployment.   Use a production WSGI server instead. * Debug mode: off * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)   The result should be visible if you visit http://localhost:5000. When you are finished press Ctrl+C in your terminal window to exit the application server.  Add WSGI to the app  1. Create WSGI entry point  We create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application.  Create wsgi.py file in the same directory as app.py, import the Flask instance from our application and run it as follows:  from app import app   if __name__ == &#39;__main__&#39;:    app.run()   2. Test Gunicorn’s ability  We now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above.  Note: The WSGI file name is written without .py extension.  So the syntax is gunicorn &lt;WSGI_module&gt;:&lt;callable_name&gt;.  (env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app [2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4 [2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725) [2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync [2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728   When you visit http://localhost:5000, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint.  When you are finished press Ctrl+C in your terminal window to exit the application server.  3. Create WSGI socket  The communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as app.py as follows:  (env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app [2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4 [2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854) [2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync [2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857 [2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858 [2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859   By adding --workers 3 we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it.  If you notice, an app.sock file will be automatically created in the project folder upon execution of the above command.  Configure Nginx  1. Create an Nginx configuration file  Gunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file.  Let the Gunicorn server run, open a new terminal and execute ls /etc/nginx/ command. In the output you would get a list Nginx configuration along with two important directories:     sites-available: contains configuration files for all of your possible applications.   sites-enabled: contains links to the configuration files that Nginx will actually read and run.   Now, create a new server block configuration file app in /etc/nginx/sites-available/ directory.  (env) $ nano /etc/nginx/sites-available/app   Next, we add the following code into the configuration file and save it.  server {    listen 80;      location / {        include proxy_params;        proxy_pass http://unix:/home/movieapp/app.sock;    } }   Here, we open up a server block and define it to listen for requests on port 80.  We also add a location block that matches every request. In this block, we include proxy_params file that specifies some general proxy parameters and passes the requests to the socket we defined using the proxy_pass directive.  2. Enable Nginx server block  We need to link the file to the sites-enabled directory to enable the Nginx server block. The syntax for linking the file is as follows:  ln -s &lt;source_file&gt; &lt;destination_file&gt;   Actual code will look like:  ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/   3. Check for errors in Nginx configuration file  we can check syntax errors in Nginx configuration file by executing the nginx -t command as follows:  (env) $ nginx -t nginx: the configuration file /etc/nginx/nginx.conf syntax is ok nginx: configuration file /etc/nginx/nginx.conf test is successful   If there are no errors, we restart the Nginx process to read our new config file.  systemctl restart nginx   4. Adjust firewall  The final step we need to take care of is adjusting the firewall to allow access to the Nginx server:  (env) $ sudo ufw allow &#39;Nginx Full&#39; Skipping adding existing rule Skipping adding existing rule (v6)   You can visit http://localhost:80 to view your running flask application.  References  Deploy flask app with Nginx using Gunicorn">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-11-10T00:00:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/flask-app-with-wsgi-and-nginx">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to build a Flask app with WSGI and Nginx">
+    <meta itemprop="description" content="In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.IntroductionGunicornGunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks.NginxNginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration.Why use Gunicorn and Nginx with Flask?Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests.Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost.Build the Flask app1. Update and install local packagesFirst of all, update your local package index and then install the required packages as follows:# Update the local package index$ sudo apt-get update # Install dependencies$ sudo apt install python3-pip python3-dev python3-venv nginx2. Create a virtual environmentNow, we create a virtual environment env for the Python project using venv module.python3 -m venv envWe activate the environment env as follows:source env/bin/activate3. Install Python dependenciesNext, we install Flask and Gunicorn.pip3 install flask gunicorn requests4. Create the movie quotes appWe create a file app.py with the following content in it:import requestsfrom flask import Flask, render_templateapp = Flask(__name__) @app.route(&#39;/&#39;)def movieapp():   url = &quot;http://movie-quotes-2.herokuapp.com/api/v1/quotes/random&quot;      response = requests.get(url).json()    return render_template(&quot;index.html&quot;, film=response[&#39;film&#39;], quote=response[&#39;content&#39;]) if __name__ == &#39;__main__&#39;:   app.run(debug=False, host=&#39;0.0.0.0&#39;)Now, create a templates folder with index.html file in it to be used as a template for our flask application. Below is the sample index.html file which can be modified as per your requirements.&lt;html&gt; &lt;head&gt;   &lt;style type=&quot;text/css&quot;&gt;       body {           background: black;           color: white;       }        div.container {           max-width: 500px;           margin: 100px auto;           border: 20px solid white;           padding: 10px;           text-align: center;       }        h2 {           text-transform: uppercase;       }   &lt;/style&gt;&lt;/head&gt; &lt;body&gt;   &lt;div class=&quot;container&quot;&gt;       &lt;h2&gt;Quote of the day&lt;/h2&gt;       &lt;hr&gt;       &lt;h3&gt;FILM: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;       &lt;h3&gt;QUOTE: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;          &lt;/div&gt;&lt;/body&gt; &lt;/html&gt;5.Testing the appBefore moving ahead, we test the flask app and make sure everything is working fine.(env) $ python3 app.py* Serving Flask app &quot;app&quot; (lazy loading)* Environment: production  WARNING: This is a development server. Do not use it in a production deployment.  Use a production WSGI server instead.* Debug mode: off* Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)The result should be visible if you visit http://localhost:5000. When you are finished press Ctrl+C in your terminal window to exit the application server.Add WSGI to the app1. Create WSGI entry pointWe create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application.Create wsgi.py file in the same directory as app.py, import the Flask instance from our application and run it as follows:from app import app if __name__ == &#39;__main__&#39;:   app.run()2. Test Gunicorn’s abilityWe now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above.Note: The WSGI file name is written without .py extension.So the syntax is gunicorn &lt;WSGI_module&gt;:&lt;callable_name&gt;.(env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app[2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4[2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725)[2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync[2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728When you visit http://localhost:5000, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint.When you are finished press Ctrl+C in your terminal window to exit the application server.3. Create WSGI socketThe communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as app.py as follows:(env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app[2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4[2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854)[2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync[2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857[2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858[2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859By adding --workers 3 we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it.If you notice, an app.sock file will be automatically created in the project folder upon execution of the above command.Configure Nginx1. Create an Nginx configuration fileGunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file.Let the Gunicorn server run, open a new terminal and execute ls /etc/nginx/ command. In the output you would get a list Nginx configuration along with two important directories:  sites-available: contains configuration files for all of your possible applications.  sites-enabled: contains links to the configuration files that Nginx will actually read and run.Now, create a new server block configuration file app in /etc/nginx/sites-available/ directory.(env) $ nano /etc/nginx/sites-available/appNext, we add the following code into the configuration file and save it.server {   listen 80;    location / {       include proxy_params;       proxy_pass http://unix:/home/movieapp/app.sock;   }}Here, we open up a server block and define it to listen for requests on port 80.We also add a location block that matches every request. In this block, we include proxy_params file that specifies some general proxy parameters and passes the requests to the socket we defined using the proxy_pass directive.2. Enable Nginx server blockWe need to link the file to the sites-enabled directory to enable the Nginx server block. The syntax for linking the file is as follows:ln -s &lt;source_file&gt; &lt;destination_file&gt;Actual code will look like:ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/3. Check for errors in Nginx configuration filewe can check syntax errors in Nginx configuration file by executing the nginx -t command as follows:(env) $ nginx -tnginx: the configuration file /etc/nginx/nginx.conf syntax is oknginx: configuration file /etc/nginx/nginx.conf test is successfulIf there are no errors, we restart the Nginx process to read our new config file.systemctl restart nginx4. Adjust firewallThe final step we need to take care of is adjusting the firewall to allow access to the Nginx server:(env) $ sudo ufw allow &#39;Nginx Full&#39;Skipping adding existing ruleSkipping adding existing rule (v6)You can visit http://localhost:80 to view your running flask application.ReferencesDeploy flask app with Nginx using Gunicorn">
+    <meta itemprop="datePublished" content="2020-11-10T00:00:00+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">How to build a Flask app with WSGI and Nginx
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-11-10T00:00:00+05:30">November 10, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#introduction">Introduction</a>
+    <ul>
+      <li><a href="#gunicorn">Gunicorn</a></li>
+      <li><a href="#nginx">Nginx</a></li>
+      <li><a href="#why-use-gunicorn-and-nginx-with-flask">Why use Gunicorn and Nginx with Flask?</a></li>
+    </ul>
+  </li>
+  <li><a href="#build-the-flask-app">Build the Flask app</a>
+    <ul>
+      <li><a href="#1-update-and-install-local-packages">1. Update and install local packages</a></li>
+      <li><a href="#2-create-a-virtual-environment">2. Create a virtual environment</a></li>
+      <li><a href="#3-install-python-dependencies">3. Install Python dependencies</a></li>
+      <li><a href="#4-create-the-movie-quotes-app">4. Create the movie quotes app</a></li>
+      <li><a href="#5testing-the-app">5.Testing the app</a></li>
+    </ul>
+  </li>
+  <li><a href="#add-wsgi-to-the-app">Add WSGI to the app</a>
+    <ul>
+      <li><a href="#1-create-wsgi-entry-point">1. Create WSGI entry point</a></li>
+      <li><a href="#2-test-gunicorns-ability">2. Test Gunicorn’s ability</a></li>
+      <li><a href="#3-create-wsgi-socket">3. Create WSGI socket</a></li>
+    </ul>
+  </li>
+  <li><a href="#configure-nginx">Configure Nginx</a>
+    <ul>
+      <li><a href="#1-create-an-nginx-configuration-file">1. Create an Nginx configuration file</a></li>
+      <li><a href="#2-enable-nginx-server-block">2. Enable Nginx server block</a></li>
+      <li><a href="#3-check-for-errors-in-nginx-configuration-file">3. Check for errors in Nginx configuration file</a></li>
+      <li><a href="#4-adjust-firewall">4. Adjust firewall</a></li>
+    </ul>
+  </li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<h3 id="gunicorn">Gunicorn</h3>
+
+<p>Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks.</p>
+
+<h3 id="nginx">Nginx</h3>
+
+<p>Nginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration.</p>
+
+<h3 id="why-use-gunicorn-and-nginx-with-flask">Why use Gunicorn and Nginx with Flask?</h3>
+
+<p>Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests.</p>
+
+<p>Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost.</p>
+
+<h2 id="build-the-flask-app">Build the Flask app</h2>
+
+<h3 id="1-update-and-install-local-packages">1. Update and install local packages</h3>
+
+<p>First of all, update your local package index and then install the required packages as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Update the local package index
+$ sudo apt-get update
+ 
+# Install dependencies
+$ sudo apt install python3-pip python3-dev python3-venv nginx
+</code></pre></div></div>
+
+<h3 id="2-create-a-virtual-environment">2. Create a virtual environment</h3>
+
+<p>Now, we create a virtual environment <code class="language-plaintext highlighter-rouge">env</code> for the Python project using <code class="language-plaintext highlighter-rouge">venv</code> module.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 -m venv env
+</code></pre></div></div>
+
+<p>We activate the environment <code class="language-plaintext highlighter-rouge">env</code> as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source env/bin/activate
+</code></pre></div></div>
+
+<h3 id="3-install-python-dependencies">3. Install Python dependencies</h3>
+
+<p>Next, we install Flask and Gunicorn.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip3 install flask gunicorn requests
+</code></pre></div></div>
+
+<h3 id="4-create-the-movie-quotes-app">4. Create the movie quotes app</h3>
+
+<p>We create a file <code class="language-plaintext highlighter-rouge">app.py</code> with the following content in it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import requests
+from flask import Flask, render_template
+app = Flask(__name__)
+ 
+@app.route('/')
+def movieapp():
+   url = "http://movie-quotes-2.herokuapp.com/api/v1/quotes/random"   
+   response = requests.get(url).json()
+ 
+   return render_template("index.html", film=response['film'], quote=response['content'])
+ 
+if __name__ == '__main__':
+   app.run(debug=False, host='0.0.0.0')
+</code></pre></div></div>
+
+<p>Now, create a <code class="language-plaintext highlighter-rouge">templates</code> folder with <code class="language-plaintext highlighter-rouge">index.html</code> file in it to be used as a template for our flask application. Below is the sample <code class="language-plaintext highlighter-rouge">index.html</code> file which can be modified as per your requirements.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;html&gt;
+ 
+&lt;head&gt;
+   &lt;style type="text/css"&gt;
+       body {
+           background: black;
+           color: white;
+       }
+ 
+       div.container {
+           max-width: 500px;
+           margin: 100px auto;
+           border: 20px solid white;
+           padding: 10px;
+           text-align: center;
+       }
+ 
+       h2 {
+           text-transform: uppercase;
+       }
+   &lt;/style&gt;
+&lt;/head&gt;
+ 
+&lt;body&gt;
+   &lt;div class="container"&gt;
+       &lt;h2&gt;Quote of the day&lt;/h2&gt;
+       &lt;hr&gt;
+       &lt;h3&gt;FILM: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;
+       &lt;h3&gt;QUOTE: &lt;/h3&gt;&lt;h4&gt; &lt;/h4&gt;       
+   &lt;/div&gt;
+&lt;/body&gt;
+ 
+&lt;/html&gt;
+</code></pre></div></div>
+
+<h3 id="5testing-the-app">5.Testing the app</h3>
+
+<p>Before moving ahead, we test the flask app and make sure everything is working fine.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(env) $ python3 app.py
+* Serving Flask app "app" (lazy loading)
+* Environment: production
+  WARNING: This is a development server. Do not use it in a production deployment.
+  Use a production WSGI server instead.
+* Debug mode: off
+* Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+</code></pre></div></div>
+
+<p>The result should be visible if you visit <code class="language-plaintext highlighter-rouge">http://localhost:5000</code>. When you are finished press <code class="language-plaintext highlighter-rouge">Ctrl+C</code> in your terminal window to exit the application server.</p>
+
+<h2 id="add-wsgi-to-the-app">Add WSGI to the app</h2>
+
+<h3 id="1-create-wsgi-entry-point">1. Create WSGI entry point</h3>
+
+<p>We create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application.</p>
+
+<p>Create <code class="language-plaintext highlighter-rouge">wsgi.py</code> file in the same directory as <code class="language-plaintext highlighter-rouge">app.py</code>, import the Flask instance from our application and run it as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from app import app
+ 
+if __name__ == '__main__':
+   app.run()
+</code></pre></div></div>
+
+<h3 id="2-test-gunicorns-ability">2. Test Gunicorn’s ability</h3>
+
+<p>We now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above.</p>
+
+<p><strong>Note:</strong> The WSGI file name is written without <code class="language-plaintext highlighter-rouge">.py</code> extension.</p>
+
+<p>So the syntax is <code class="language-plaintext highlighter-rouge">gunicorn &lt;WSGI_module&gt;:&lt;callable_name&gt;</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app
+[2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4
+[2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725)
+[2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync
+[2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728
+</code></pre></div></div>
+
+<p>When you visit <code class="language-plaintext highlighter-rouge">http://localhost:5000</code>, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint.</p>
+
+<p>When you are finished press <code class="language-plaintext highlighter-rouge">Ctrl+C</code> in your terminal window to exit the application server.</p>
+
+<h3 id="3-create-wsgi-socket">3. Create WSGI socket</h3>
+
+<p>The communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as <code class="language-plaintext highlighter-rouge">app.py</code> as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app
+[2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4
+[2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854)
+[2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync
+[2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857
+[2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858
+[2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859
+</code></pre></div></div>
+
+<p>By adding <code class="language-plaintext highlighter-rouge">--workers 3</code> we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it.</p>
+
+<p>If you notice, an <code class="language-plaintext highlighter-rouge">app.sock</code> file will be automatically created in the project folder upon execution of the above command.</p>
+
+<h2 id="configure-nginx">Configure Nginx</h2>
+
+<h3 id="1-create-an-nginx-configuration-file">1. Create an Nginx configuration file</h3>
+
+<p>Gunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file.</p>
+
+<p>Let the Gunicorn server run, open a new terminal and execute <code class="language-plaintext highlighter-rouge">ls /etc/nginx/</code> command. In the output you would get a list Nginx configuration along with two important directories:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sites-available</code>: contains configuration files for all of your possible applications.</li>
+  <li><code class="language-plaintext highlighter-rouge">sites-enabled</code>: contains links to the configuration files that Nginx will actually read and run.</li>
+</ul>
+
+<p>Now, create a new server block configuration file <code class="language-plaintext highlighter-rouge">app</code> in <code class="language-plaintext highlighter-rouge">/etc/nginx/sites-available/</code> directory.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(env) $ nano /etc/nginx/sites-available/app
+</code></pre></div></div>
+
+<p>Next, we add the following code into the configuration file and save it.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>server {
+   listen 80;
+ 
+   location / {
+       include proxy_params;
+       proxy_pass http://unix:/home/movieapp/app.sock;
+   }
+}
+</code></pre></div></div>
+
+<p>Here, we open up a <code class="language-plaintext highlighter-rouge">server</code> block and define it to listen for requests on port <code class="language-plaintext highlighter-rouge">80</code>.</p>
+
+<p>We also add a <code class="language-plaintext highlighter-rouge">location</code> block that matches every request. In this block, we include <code class="language-plaintext highlighter-rouge">proxy_params</code> file that specifies some general proxy parameters and passes the requests to the socket we defined using the <code class="language-plaintext highlighter-rouge">proxy_pass</code> directive.</p>
+
+<h3 id="2-enable-nginx-server-block">2. Enable Nginx server block</h3>
+
+<p>We need to link the file to the <code class="language-plaintext highlighter-rouge">sites-enabled</code> directory to enable the Nginx server block. The syntax for linking the file is as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ln -s &lt;source_file&gt; &lt;destination_file&gt;
+</code></pre></div></div>
+
+<p>Actual code will look like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/
+</code></pre></div></div>
+
+<h3 id="3-check-for-errors-in-nginx-configuration-file">3. Check for errors in Nginx configuration file</h3>
+
+<p>we can check syntax errors in Nginx configuration file by executing the <code class="language-plaintext highlighter-rouge">nginx -t</code> command as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(env) $ nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+</code></pre></div></div>
+
+<p>If there are no errors, we restart the Nginx process to read our new config file.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl restart nginx
+</code></pre></div></div>
+
+<h3 id="4-adjust-firewall">4. Adjust firewall</h3>
+
+<p>The final step we need to take care of is adjusting the firewall to allow access to the Nginx server:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(env) $ sudo ufw allow 'Nginx Full'
+Skipping adding existing rule
+Skipping adding existing rule (v6)
+</code></pre></div></div>
+
+<p>You can visit <code class="language-plaintext highlighter-rouge">http://localhost:80</code> to view your running flask application.</p>
+
+<h2 id="references">References</h2>
+
+<p><a href="https://medium.com/faun/deploy-flask-app-with-nginx-using-gunicorn-7fda4f50066a">Deploy flask app with Nginx using Gunicorn</a></p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-10T00:00:00+05:30">November 10, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=How+to+build+a+Flask+app+with+WSGI+and+Nginx%20http%3A%2F%2Flocalhost%3A4000%2Fflask-app-with-wsgi-and-nginx" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fflask-app-with-wsgi-and-nginx" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fflask-app-with-wsgi-and-nginx" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/conda-in-dockerfile" class="pagination--pager" title="Conda in Dockerfile
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
