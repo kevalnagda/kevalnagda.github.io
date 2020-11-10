@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "How to build a Flask app with WSGI and Nginx"
-date: 2020-11-10 00:00:00 +530
+date: 2020-11-10 12:00:00 +530
 categories: jekyll update
 ---
  
@@ -261,7 +261,10 @@ Skipping adding existing rule (v6)
 ```
  
 You can visit `http://localhost:80` to view your running flask application.
- 
+
+![]
+(/assets/img/flaskapp/1.png)
+
 ## References
  
 [Deploy flask app with Nginx using Gunicorn]
