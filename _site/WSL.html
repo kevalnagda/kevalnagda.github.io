@@ -13,6 +13,11 @@
 <meta name="description" content="WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!  Introduction  WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability.  In this tutorial we aim to install WSL 2 instead of WSL.  Installation  Enable the Windows Subsystem for Linux  dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart     Check system requriements  There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here.  To check your version and build number, select Windows logo key + R, type winver, select OK.    Enable Virtual Machine feature  dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart     Download and run the Linux kernel update package  Download the latest package from WSL2 Linux kernal update package for x64 machines and run it.    Set WSL 2 as your default version  wsl --set-default-version 2     Install Linux distribution  Install your favourite Linux distro from Microsoft Store.    Setting up new distribution  On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster.    Conclusion  Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows.  Reference     Windows Subsystem for Linux Installation Guide for Windows 10">
 
 
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
@@ -153,8 +158,13 @@
 
   <div class="author__content">
     
-      <h3 class="author__name" itemprop="name"></h3>
+      <h3 class="author__name" itemprop="name">Keval Nagda</h3>
     
+    
+      <div class="author__bio" itemprop="description">
+        <p>My website</p>
+
+      </div>
     
   </div>
 
@@ -372,7 +382,7 @@
 ">Previous</a>
     
     
-      <a href="/dockerfile" class="pagination--pager" title="Dockerfile tutorial
+      <a href="/dockerfile-best-practices" class="pagination--pager" title="Dockerfile best practices
 ">Next</a>
     
   </nav>

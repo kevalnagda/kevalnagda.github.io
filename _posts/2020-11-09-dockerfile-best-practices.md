@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Dockerfile best practices"
-date: 2020-11-05 13:30:08 +0530
+date: 2020-11-09 13:30:08 +0530
 categories: jekyll update
 ---
  
@@ -48,8 +48,7 @@ You might need to repeat steps 2 and 3 several times in order to thoroughly buil
  
 ## References
  
-1. [Dockerfile reference]
-2. [Dockerfile tutorial by example]
+[Dockerfile tutorial by example]
  
 [Dockerfile reference]: https://docs.docker.com/engine/reference/builder/
 [Dockerfile tutorial by example]: https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/

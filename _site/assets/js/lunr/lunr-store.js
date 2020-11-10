@@ -17,15 +17,15 @@ var store = [{
         "url": "http://localhost:4000/WSL",
         "teaser": null
       },{
-        "title": "Dockerfile tutorial",
-        "excerpt":"Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. Why would you want to use a Dockerfile? Well, there are times when existing docker images don’t satisfy your project needs and you want to do things...","categories": ["jekyll","update"],
-        "tags": [],
-        "url": "http://localhost:4000/dockerfile",
-        "teaser": null
-      },{
         "title": "Dockerfile best practices",
         "excerpt":"Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile...","categories": ["jekyll","update"],
         "tags": [],
         "url": "http://localhost:4000/dockerfile-best-practices",
+        "teaser": null
+      },{
+        "title": "Dockerfile tutorial",
+        "excerpt":"Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. Why would you want to use a Dockerfile? Well, there are times when existing docker images don’t satisfy your project needs and you want to do things...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/dockerfile",
         "teaser": null
       }]

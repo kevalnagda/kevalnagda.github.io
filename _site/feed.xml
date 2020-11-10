@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-09T20:54:50+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Dockerfile best practices</title><link href="http://localhost:4000/dockerfile-best-practices" rel="alternate" type="text/html" title="Dockerfile best practices" /><published>2020-11-05T13:30:08+05:30</published><updated>2020-11-05T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile-best-practices</id><content type="html" xml:base="http://localhost:4000/dockerfile-best-practices">&lt;p&gt;Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-10T10:31:42+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">Dockerfile best practices</title><link href="http://localhost:4000/dockerfile-best-practices" rel="alternate" type="text/html" title="Dockerfile best practices" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile-best-practices</id><content type="html" xml:base="http://localhost:4000/dockerfile-best-practices">&lt;p&gt;Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.&lt;/p&gt;
 
 &lt;h2 id=&quot;minimize-the-number-of-steps-in-the-dockerfile&quot;&gt;Minimize the number of steps in the Dockerfile&lt;/h2&gt;
 
@@ -45,75 +45,7 @@ Also, combining several steps into one line tends to create a single intermediar
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.docker.com/engine/reference/builder/&quot;&gt;Dockerfile reference&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step. Start your Dockerfile with the steps that are least likely to change This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows: Install the tools needed to build your application. Install all the required dependencies, libraries and packages. Finally, build your application. A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows: 1. Pick the right base image Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it. 2. Go to the shell and build your environment Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode. Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately. 3. Add the steps to your Dockerfile and build your image Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time. This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps. 4. Repeat steps 2 and 3 You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected. Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation. References Dockerfile reference Dockerfile tutorial by example</summary></entry><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
-
-&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
-
-&lt;p&gt;WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability.&lt;/p&gt;
-
-&lt;p&gt;In this tutorial we aim to install WSL 2 instead of WSL.&lt;/p&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;h4 id=&quot;enable-the-windows-subsystem-for-linux&quot;&gt;Enable the Windows Subsystem for Linux&lt;/h4&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;check-system-requriements&quot;&gt;Check system requriements&lt;/h4&gt;
-
-&lt;p&gt;There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found &lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10#requirements&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;To check your version and build number, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Windows logo key + R&lt;/code&gt;, type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;winver&lt;/code&gt;, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;enable-virtual-machine-feature&quot;&gt;Enable Virtual Machine feature&lt;/h4&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;download-and-run-the-linux-kernel-update-package&quot;&gt;Download and run the Linux kernel update package&lt;/h4&gt;
-
-&lt;p&gt;Download the latest package from &lt;a href=&quot;https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi&quot;&gt;WSL2 Linux kernal update package for x64 machines&lt;/a&gt; and run it.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;set-wsl-2-as-your-default-version&quot;&gt;Set WSL 2 as your default version&lt;/h4&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wsl --set-default-version 2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;install-linux-distribution&quot;&gt;Install Linux distribution&lt;/h4&gt;
-
-&lt;p&gt;Install your favourite Linux distro from Microsoft Store.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;setting-up-new-distribution&quot;&gt;Setting up new distribution&lt;/h4&gt;
-
-&lt;p&gt;On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Yay!! You’re good to go. Developers can further can setup &lt;a href=&quot;https://code.visualstudio.com/docs/remote/wsl&quot;&gt;Visual Studio Code Remote&lt;/a&gt; to edit files and develop applications on WSL from Windows.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10&quot;&gt;Windows Subsystem for Linux Installation Guide for Windows 10&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. To check your version and build number, select Windows logo key + R, type winver, select OK. Enable Virtual Machine feature dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version wsl --set-default-version 2 Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step. Start your Dockerfile with the steps that are least likely to change This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows: Install the tools needed to build your application. Install all the required dependencies, libraries and packages. Finally, build your application. A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows: 1. Pick the right base image Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it. 2. Go to the shell and build your environment Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode. Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately. 3. Add the steps to your Dockerfile and build your image Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time. This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps. 4. Repeat steps 2 and 3 You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected. Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation. References Dockerfile tutorial by example</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
 
 &lt;h2 id=&quot;why-would-you-want-to-use-a-dockerfile&quot;&gt;Why would you want to use a Dockerfile?&lt;/h2&gt;
 
@@ -268,7 +200,72 @@ CMD [&quot;--help&quot;]
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.</summary></entry><entry><title type="html">HP Envy x360 13 review</title><link href="http://localhost:4000/hp-envy-x360-review" rel="alternate" type="text/html" title="HP Envy x360 13 review" /><published>2020-11-03T13:30:08+05:30</published><updated>2020-11-03T13:30:08+05:30</updated><id>http://localhost:4000/hp-envy-x360-review</id><content type="html" xml:base="http://localhost:4000/hp-envy-x360-review">&lt;p&gt;The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.</summary></entry><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability.&lt;/p&gt;
+
+&lt;p&gt;In this tutorial we aim to install WSL 2 instead of WSL.&lt;/p&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;h4 id=&quot;enable-the-windows-subsystem-for-linux&quot;&gt;Enable the Windows Subsystem for Linux&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;check-system-requriements&quot;&gt;Check system requriements&lt;/h4&gt;
+
+&lt;p&gt;There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found &lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10#requirements&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To check your version and build number, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Windows logo key + R&lt;/code&gt;, type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;winver&lt;/code&gt;, select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OK&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;enable-virtual-machine-feature&quot;&gt;Enable Virtual Machine feature&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;download-and-run-the-linux-kernel-update-package&quot;&gt;Download and run the Linux kernel update package&lt;/h4&gt;
+
+&lt;p&gt;Download the latest package from &lt;a href=&quot;https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi&quot;&gt;WSL2 Linux kernal update package for x64 machines&lt;/a&gt; and run it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;set-wsl-2-as-your-default-version&quot;&gt;Set WSL 2 as your default version&lt;/h4&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wsl --set-default-version 2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;install-linux-distribution&quot;&gt;Install Linux distribution&lt;/h4&gt;
+
+&lt;p&gt;Install your favourite Linux distro from Microsoft Store.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;setting-up-new-distribution&quot;&gt;Setting up new distribution&lt;/h4&gt;
+
+&lt;p&gt;On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/wsl/7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Yay!! You’re good to go. Developers can further can setup &lt;a href=&quot;https://code.visualstudio.com/docs/remote/wsl&quot;&gt;Visual Studio Code Remote&lt;/a&gt; to edit files and develop applications on WSL from Windows.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/wsl/install-win10&quot;&gt;Windows Subsystem for Linux Installation Guide for Windows 10&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?! Introduction WSL has two different versions namely WSL and WSL 2 where the later one has better overall performance and usability. In this tutorial we aim to install WSL 2 instead of WSL. Installation Enable the Windows Subsystem for Linux dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart Check system requriements There are specific system requirements that need to be fulfilled in order to run WSL 2. A detailed description can be found here. To check your version and build number, select Windows logo key + R, type winver, select OK. Enable Virtual Machine feature dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart Download and run the Linux kernel update package Download the latest package from WSL2 Linux kernal update package for x64 machines and run it. Set WSL 2 as your default version wsl --set-default-version 2 Install Linux distribution Install your favourite Linux distro from Microsoft Store. Setting up new distribution On launching the new Linux distribution, a console window will open and perform some setup operations under the hood for the first time. Subsequent launches should be faster. Conclusion Yay!! You’re good to go. Developers can further can setup Visual Studio Code Remote to edit files and develop applications on WSL from Windows. Reference Windows Subsystem for Linux Installation Guide for Windows 10</summary></entry><entry><title type="html">HP Envy x360 13 review</title><link href="http://localhost:4000/hp-envy-x360-review" rel="alternate" type="text/html" title="HP Envy x360 13 review" /><published>2020-11-03T13:30:08+05:30</published><updated>2020-11-03T13:30:08+05:30</updated><id>http://localhost:4000/hp-envy-x360-review</id><content type="html" xml:base="http://localhost:4000/hp-envy-x360-review">&lt;p&gt;The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/envyx360/laptop.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
@@ -312,7 +309,7 @@ CMD [&quot;--help&quot;]
 
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.notebookcheck.net/2020-HP-Envy-x360-13-Convertible-2-in-1-Review-Ryzen-5-Beats-a-Core-i7.477589.0.html&quot;&gt;2020 HP Envy x360 13&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.</summary></entry><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/getting-started-with-docker" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/getting-started-with-docker">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
+&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.</summary></entry><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/getting-started-with-docker" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/getting-started-with-docker">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-docker&quot;&gt;What is Docker?&lt;/h2&gt;
 
@@ -467,4 +464,4 @@ root@Keval:/home/keval#
 
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://docker-curriculum.com/&quot;&gt;Docker for beginners&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"></summary></entry></feed>
+&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html"></summary></entry></feed>

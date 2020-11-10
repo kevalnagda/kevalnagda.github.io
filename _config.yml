@@ -29,7 +29,11 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 permalink: /:title
 twitter_username: jekyllrb
 github_username:  kevalnagda
-minimal_mistakes_skin: "neon"
+minimal_mistakes_skin: "contrast"
+
+author:
+  name: "Keval Nagda"
+  bio: "My website"
 
 # Build settings
 remote_theme: "mmistakes/minimal-mistakes@4.21.0"
@@ -45,7 +49,7 @@ defaults:
     values:
       layout: single
       show_date: true
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: true
       share: true

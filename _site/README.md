@@ -1,2 +1,3 @@
-# kevalnagda.github.io
-Website
+# My website
+
+Jekyll website for blogs.

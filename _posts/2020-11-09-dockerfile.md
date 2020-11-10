@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Dockerfile tutorial"
-date: 2020-11-04 13:30:08 +0530
+date: 2020-11-09 13:30:08 +0530
 categories: jekyll update
 ---
 
