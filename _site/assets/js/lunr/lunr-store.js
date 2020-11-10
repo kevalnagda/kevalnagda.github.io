@@ -28,4 +28,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/dockerfile",
         "teaser": null
+      },{
+        "title": "Conda in Dockerfile",
+        "excerpt":"Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/conda-in-dockerfile",
+        "teaser": null
       }]

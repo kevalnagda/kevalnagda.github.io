@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Conda in Dockerfile"
-date: 2020-11-10 00:30:08 +0530
+date: 2020-11-10 00:00:00 +0530
 categories: jekyll update
 ---
 Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.

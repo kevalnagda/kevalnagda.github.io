@@ -1,0 +1,528 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Conda in Dockerfile - Home</title>
+<meta name="description" content="Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.  Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.  Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment.  name: env channels:    - conda-forge dependencies:    - python=3.6    - flask   Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.  environment.yml is similar to the requirements.txt used by virtual environment venv module.  A simple Python program  Write a simple Python program to test the Conda environment activation.  import flask   print(&quot;Flask import successful!&quot;)   First attempt  Following the standard approach, our first iteration of the Dockerfile looks like:  # Define base image FROM continuumio/miniconda3   # Set working directory for the project WORKDIR /app   # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml   # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot;   # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]   Following is the result when we try building the Docker image  Step 5/9 : RUN conda activate env ---&gt; Running in e33a2dcd4d99   CommandNotFoundError: Your shell has not been properly configured to use &#39;conda activate&#39;. To initialize your shell, run      $ conda init &lt;SHELL_NAME&gt;   The command &#39;/bin/sh -c conda activate env&#39; returned a non-zero code: 1   We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.  Second attempt  We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &lt;command&gt; to execute instructions but we require a bash shell to run the conda init bash command.  To tackle this, we override the default shell by adding the following to the Dockerfile:  SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]   Our updated Dockerfile should look as follows:  # Define base image FROM continuumio/miniconda3   # Set working directory for the project WORKDIR /app   # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]   # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml   # Initialize conda in the bash config files RUN conda init bash   # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot;   # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]   Building the Docker image again gives us the following result:  Step 9/11 : RUN python -c &quot;import flask&quot; ---&gt; Running in ea831eb42ff6 Traceback (most recent call last):  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt; ModuleNotFoundError: No module named &#39;flask&#39; The command &#39;/bin/bash --login -c python -c &quot;import flask&quot;&#39; returned a non-zero code: 1   So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation.  Third attempt  Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.  This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container.  The final resort to this problem is by using conda run -n env &lt;command&gt; instruction which actually runs &lt;command&gt; inside the conda environment.  So the final working Dockerfile should look like:  # Define base image FROM continuumio/miniconda3   # Set working directory for the project WORKDIR /app   # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml   # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]   # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot;   # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]   And the result obtained is as follows:  $ docker build . Sending build context to Docker daemon  4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&gt; Using cache ---&gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done   Downloading and Extracting Packages _libgcc_mutex-0.1    | 3 KB      | ########## | 100% flask-1.1.2          | 70 KB     | ########## | 100% zlib-1.2.11          | 106 KB    | ########## | 100% wheel-0.35.1         | 29 KB     | ########## | 100% ncurses-6.2          | 1022 KB   | ########## | 100% werkzeug-1.0.1       | 239 KB    | ########## | 100% ld_impl_linux-64-2.3 | 617 KB    | ########## | 100% click-7.1.2          | 64 KB     | ########## | 100% markupsafe-1.1.1     | 27 KB     | ########## | 100% libffi-3.2.1         | 47 KB     | ########## | 100% openssl-1.1.1h       | 2.1 MB    | ########## | 100% python-3.6.11        | 34.2 MB   | ########## | 100% itsdangerous-1.1.0   | 16 KB     | ########## | 100% libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100% xz-5.2.5             | 343 KB    | ########## | 100% libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100% setuptools-49.6.0    | 947 KB    | ########## | 100% jinja2-2.11.2        | 93 KB     | ########## | 100% ca-certificates-2020 | 145 KB    | ########## | 100% certifi-2020.6.20    | 151 KB    | ########## | 100% pip-20.2.4           | 1.1 MB    | ########## | 100% libgomp-9.3.0        | 378 KB    | ########## | 100% tk-8.6.10            | 3.2 MB    | ########## | 100% python_abi-3.6       | 4 KB      | ########## | 100% _openmp_mutex-4.5    | 22 KB     | ########## | 100% sqlite-3.33.0        | 1.4 MB    | ########## | 100% readline-8.0         | 281 KB    | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # #     $ conda activate env # # To deactivate an active environment, use # #     $ conda deactivate   ==&gt; WARNING: A newer version of conda exists. &lt;==  current version: 4.8.2  latest version: 4.9.1   Please update conda by running      $ conda update -n base -c defaults conda   Removing intermediate container d6729c106f2b ---&gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&gt; Running in 46b28807a8e2 Making sure flask is installed correctly...   Removing intermediate container 46b28807a8e2 ---&gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&gt; 846df181bd85 Step 8/9 : COPY run.py . ---&gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&gt; 72a352583f00 Successfully built 72a352583f00   $ docker images REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE &lt;none&gt;                   &lt;none&gt;              72a352583f00        2 minutes ago       964MB   $ docker run 72a352583f00 Flask import successful!   References">
+
+
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="Conda in Dockerfile">
+<meta property="og:url" content="http://localhost:4000/conda-in-dockerfile">
+
+
+  <meta property="og:description" content="Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.  Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.  Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment.  name: env channels:    - conda-forge dependencies:    - python=3.6    - flask   Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.  environment.yml is similar to the requirements.txt used by virtual environment venv module.  A simple Python program  Write a simple Python program to test the Conda environment activation.  import flask   print(&quot;Flask import successful!&quot;)   First attempt  Following the standard approach, our first iteration of the Dockerfile looks like:  # Define base image FROM continuumio/miniconda3   # Set working directory for the project WORKDIR /app   # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml   # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot;   # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]   Following is the result when we try building the Docker image  Step 5/9 : RUN conda activate env ---&gt; Running in e33a2dcd4d99   CommandNotFoundError: Your shell has not been properly configured to use &#39;conda activate&#39;. To initialize your shell, run      $ conda init &lt;SHELL_NAME&gt;   The command &#39;/bin/sh -c conda activate env&#39; returned a non-zero code: 1   We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.  Second attempt  We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &lt;command&gt; to execute instructions but we require a bash shell to run the conda init bash command.  To tackle this, we override the default shell by adding the following to the Dockerfile:  SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]   Our updated Dockerfile should look as follows:  # Define base image FROM continuumio/miniconda3   # Set working directory for the project WORKDIR /app   # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]   # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml   # Initialize conda in the bash config files RUN conda init bash   # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot;   # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]   Building the Docker image again gives us the following result:  Step 9/11 : RUN python -c &quot;import flask&quot; ---&gt; Running in ea831eb42ff6 Traceback (most recent call last):  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt; ModuleNotFoundError: No module named &#39;flask&#39; The command &#39;/bin/bash --login -c python -c &quot;import flask&quot;&#39; returned a non-zero code: 1   So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation.  Third attempt  Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.  This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container.  The final resort to this problem is by using conda run -n env &lt;command&gt; instruction which actually runs &lt;command&gt; inside the conda environment.  So the final working Dockerfile should look like:  # Define base image FROM continuumio/miniconda3   # Set working directory for the project WORKDIR /app   # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml   # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]   # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot;   # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]   And the result obtained is as follows:  $ docker build . Sending build context to Docker daemon  4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&gt; Using cache ---&gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done   Downloading and Extracting Packages _libgcc_mutex-0.1    | 3 KB      | ########## | 100% flask-1.1.2          | 70 KB     | ########## | 100% zlib-1.2.11          | 106 KB    | ########## | 100% wheel-0.35.1         | 29 KB     | ########## | 100% ncurses-6.2          | 1022 KB   | ########## | 100% werkzeug-1.0.1       | 239 KB    | ########## | 100% ld_impl_linux-64-2.3 | 617 KB    | ########## | 100% click-7.1.2          | 64 KB     | ########## | 100% markupsafe-1.1.1     | 27 KB     | ########## | 100% libffi-3.2.1         | 47 KB     | ########## | 100% openssl-1.1.1h       | 2.1 MB    | ########## | 100% python-3.6.11        | 34.2 MB   | ########## | 100% itsdangerous-1.1.0   | 16 KB     | ########## | 100% libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100% xz-5.2.5             | 343 KB    | ########## | 100% libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100% setuptools-49.6.0    | 947 KB    | ########## | 100% jinja2-2.11.2        | 93 KB     | ########## | 100% ca-certificates-2020 | 145 KB    | ########## | 100% certifi-2020.6.20    | 151 KB    | ########## | 100% pip-20.2.4           | 1.1 MB    | ########## | 100% libgomp-9.3.0        | 378 KB    | ########## | 100% tk-8.6.10            | 3.2 MB    | ########## | 100% python_abi-3.6       | 4 KB      | ########## | 100% _openmp_mutex-4.5    | 22 KB     | ########## | 100% sqlite-3.33.0        | 1.4 MB    | ########## | 100% readline-8.0         | 281 KB    | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # #     $ conda activate env # # To deactivate an active environment, use # #     $ conda deactivate   ==&gt; WARNING: A newer version of conda exists. &lt;==  current version: 4.8.2  latest version: 4.9.1   Please update conda by running      $ conda update -n base -c defaults conda   Removing intermediate container d6729c106f2b ---&gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&gt; Running in 46b28807a8e2 Making sure flask is installed correctly...   Removing intermediate container 46b28807a8e2 ---&gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&gt; 846df181bd85 Step 8/9 : COPY run.py . ---&gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&gt; 72a352583f00 Successfully built 72a352583f00   $ docker images REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE &lt;none&gt;                   &lt;none&gt;              72a352583f00        2 minutes ago       964MB   $ docker run 72a352583f00 Flask import successful!   References">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-11-10T00:00:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/conda-in-dockerfile">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Conda in Dockerfile">
+    <meta itemprop="description" content="Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.Defining the Conda environmentFirstly, let’s create an environment.yml file to define the Conda environment.name: envchannels:   - conda-forgedependencies:   - python=3.6   - flaskHere env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.environment.yml is similar to the requirements.txt used by virtual environment venv module.A simple Python programWrite a simple Python program to test the Conda environment activation.import flask print(&quot;Flask import successful!&quot;)First attemptFollowing the standard approach, our first iteration of the Dockerfile looks like:# Define base imageFROM continuumio/miniconda3 # Set working directory for the projectWORKDIR /app # Create Conda environment from the YAML fileCOPY environment.yml .RUN conda env create -f environment.yml # Activate Conda environment and check if it is working properlyRUN conda activate envRUN echo &quot;Making sure flask is installed correctly...&quot;RUN python -c &quot;import flask&quot; # Python program to run in the containerCOPY run.py .ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]Following is the result when we try building the Docker imageStep 5/9 : RUN conda activate env---&gt; Running in e33a2dcd4d99 CommandNotFoundError: Your shell has not been properly configured to use &#39;conda activate&#39;.To initialize your shell, run    $ conda init &lt;SHELL_NAME&gt; The command &#39;/bin/sh -c conda activate env&#39; returned a non-zero code: 1We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.Second attemptWe can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &lt;command&gt; to execute instructions but we require a bash shell to run the conda init bash command.To tackle this, we override the default shell by adding the following to the Dockerfile:SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]Our updated Dockerfile should look as follows:# Define base imageFROM continuumio/miniconda3 # Set working directory for the projectWORKDIR /app # Override default shell and use bashSHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] # Create Conda environment from the YAML fileCOPY environment.yml .RUN conda env create -f environment.yml # Initialize conda in the bash config filesRUN conda init bash # Activate Conda environment and check if it is working properlyRUN conda activate envRUN echo &quot;Making sure flask is installed correctly...&quot;RUN python -c &quot;import flask&quot; # Python program to run in the containerCOPY run.py .ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]Building the Docker image again gives us the following result:Step 9/11 : RUN python -c &quot;import flask&quot;---&gt; Running in ea831eb42ff6Traceback (most recent call last): File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;ModuleNotFoundError: No module named &#39;flask&#39;The command &#39;/bin/bash --login -c python -c &quot;import flask&quot;&#39; returned a non-zero code: 1So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation.Third attemptNow, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container.The final resort to this problem is by using conda run -n env &lt;command&gt; instruction which actually runs &lt;command&gt; inside the conda environment.So the final working Dockerfile should look like:# Define base imageFROM continuumio/miniconda3 # Set working directory for the projectWORKDIR /app # Create Conda environment from the YAML fileCOPY environment.yml .RUN conda env create -f environment.yml # Override default shell and use bashSHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] # Activate Conda environment and check if it is working properlyRUN echo &quot;Making sure flask is installed correctly...&quot;RUN python -c &quot;import flask&quot; # Python program to run in the containerCOPY run.py .ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]And the result obtained is as follows:$ docker build .Sending build context to Docker daemon  4.608kBStep 1/9 : FROM continuumio/miniconda3---&gt; b4adc22212f1Step 2/9 : WORKDIR /app---&gt; Using cache---&gt; 658c526932d9Step 3/9 : COPY environment.yml .---&gt; 26ff11b33587Step 4/9 : RUN conda env create -f environment.yml---&gt; Running in d6729c106f2bCollecting package metadata (repodata.json): ...working... doneSolving environment: ...working... done Downloading and Extracting Packages_libgcc_mutex-0.1    | 3 KB      | ########## | 100%flask-1.1.2          | 70 KB     | ########## | 100%zlib-1.2.11          | 106 KB    | ########## | 100%wheel-0.35.1         | 29 KB     | ########## | 100%ncurses-6.2          | 1022 KB   | ########## | 100%werkzeug-1.0.1       | 239 KB    | ########## | 100%ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%click-7.1.2          | 64 KB     | ########## | 100%markupsafe-1.1.1     | 27 KB     | ########## | 100%libffi-3.2.1         | 47 KB     | ########## | 100%openssl-1.1.1h       | 2.1 MB    | ########## | 100%python-3.6.11        | 34.2 MB   | ########## | 100%itsdangerous-1.1.0   | 16 KB     | ########## | 100%libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%xz-5.2.5             | 343 KB    | ########## | 100%libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%setuptools-49.6.0    | 947 KB    | ########## | 100%jinja2-2.11.2        | 93 KB     | ########## | 100%ca-certificates-2020 | 145 KB    | ########## | 100%certifi-2020.6.20    | 151 KB    | ########## | 100%pip-20.2.4           | 1.1 MB    | ########## | 100%libgomp-9.3.0        | 378 KB    | ########## | 100%tk-8.6.10            | 3.2 MB    | ########## | 100%python_abi-3.6       | 4 KB      | ########## | 100%_openmp_mutex-4.5    | 22 KB     | ########## | 100%sqlite-3.33.0        | 1.4 MB    | ########## | 100%readline-8.0         | 281 KB    | ########## | 100%Preparing transaction: ...working... doneVerifying transaction: ...working... doneExecuting transaction: ...working... done## To activate this environment, use##     $ conda activate env## To deactivate an active environment, use##     $ conda deactivate ==&gt; WARNING: A newer version of conda exists. &lt;== current version: 4.8.2 latest version: 4.9.1 Please update conda by running    $ conda update -n base -c defaults conda Removing intermediate container d6729c106f2b---&gt; c03cbd024136Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]---&gt; Running in f37ed240c11eRemoving intermediate container f37ed240c11e---&gt; b56ab8574a14Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot;---&gt; Running in 46b28807a8e2Making sure flask is installed correctly... Removing intermediate container 46b28807a8e2---&gt; 70228fcf11ecStep 7/9 : RUN python -c &quot;import flask&quot;---&gt; Running in b5a021d87998Removing intermediate container b5a021d87998---&gt; 846df181bd85Step 8/9 : COPY run.py .---&gt; 975a983a3504Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]---&gt; Running in 240d3476910cRemoving intermediate container 240d3476910c---&gt; 72a352583f00Successfully built 72a352583f00 $ docker imagesREPOSITORY               TAG                 IMAGE ID            CREATED             SIZE&lt;none&gt;                   &lt;none&gt;              72a352583f00        2 minutes ago       964MB $ docker run 72a352583f00Flask import successful!References">
+    <meta itemprop="datePublished" content="2020-11-10T00:00:00+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Conda in Dockerfile
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-11-10T00:00:00+05:30">November 10, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.
+Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.</p>
+
+<p>Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.</p>
+
+<h2 id="defining-the-conda-environment">Defining the Conda environment</h2>
+<p>Firstly, let’s create an <code class="language-plaintext highlighter-rouge">environment.yml</code> file to define the Conda environment.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name: env
+channels:
+   - conda-forge
+dependencies:
+   - python=3.6
+   - flask
+</code></pre></div></div>
+
+<p>Here <code class="language-plaintext highlighter-rouge">env</code> is the name of our Conda environment. We use <code class="language-plaintext highlighter-rouge">conda-forge</code> channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.</p>
+
+<p><code class="language-plaintext highlighter-rouge">environment.yml</code> is similar to the <code class="language-plaintext highlighter-rouge">requirements.txt</code> used by virtual environment <code class="language-plaintext highlighter-rouge">venv</code> module.</p>
+
+<h2 id="a-simple-python-program">A simple Python program</h2>
+
+<p>Write a simple Python program to test the Conda environment activation.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import flask
+ 
+print("Flask import successful!")
+</code></pre></div></div>
+
+<h2 id="first-attempt">First attempt</h2>
+
+<p>Following the standard approach, our first iteration of the Dockerfile looks like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo "Making sure flask is installed correctly..."
+RUN python -c "import flask"
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT ["python", "run.py"]
+</code></pre></div></div>
+
+<p>Following is the result when we try building the Docker image</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Step 5/9 : RUN conda activate env
+---&gt; Running in e33a2dcd4d99
+ 
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+To initialize your shell, run
+ 
+   $ conda init &lt;SHELL_NAME&gt;
+ 
+The command '/bin/sh -c conda activate env' returned a non-zero code: 1
+</code></pre></div></div>
+
+<p>We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.</p>
+
+<h2 id="second-attempt">Second attempt</h2>
+
+<p>We can use <code class="language-plaintext highlighter-rouge">conda init bash</code> as a solution to the above problem. Docker by default uses <code class="language-plaintext highlighter-rouge">/bin/sh -c &lt;command&gt;</code> to execute instructions but we require a bash shell to run the <code class="language-plaintext highlighter-rouge">conda init bash</code> command.</p>
+
+<p>To tackle this, we override the default shell by adding the following to the Dockerfile:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SHELL ["/bin/bash", "--login", "-c"]
+</code></pre></div></div>
+
+<p>Our updated Dockerfile should look as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Override default shell and use bash
+SHELL ["/bin/bash", "--login", "-c"]
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Initialize conda in the bash config files
+RUN conda init bash
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo "Making sure flask is installed correctly..."
+RUN python -c "import flask"
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT ["python", "run.py"]
+</code></pre></div></div>
+
+<p>Building the Docker image again gives us the following result:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Step 9/11 : RUN python -c "import flask"
+---&gt; Running in ea831eb42ff6
+Traceback (most recent call last):
+ File "&lt;string&gt;", line 1, in &lt;module&gt;
+ModuleNotFoundError: No module named 'flask'
+The command '/bin/bash --login -c python -c "import flask"' returned a non-zero code: 1
+</code></pre></div></div>
+
+<p>So the problem is that each <code class="language-plaintext highlighter-rouge">RUN</code> instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first <code class="language-plaintext highlighter-rouge">RUN</code> and later <code class="language-plaintext highlighter-rouge">RUN</code>s are new shell sessions without Conda activation.</p>
+
+<h2 id="third-attempt">Third attempt</h2>
+
+<p>Now, since each <code class="language-plaintext highlighter-rouge">RUN</code> instruction is a separate run of bash, adding <code class="language-plaintext highlighter-rouge">conda activate</code> command to the <code class="language-plaintext highlighter-rouge">~/.bashrc</code> of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.</p>
+
+<p>This is due to the fact that we are using <em>exec</em> form of <code class="language-plaintext highlighter-rouge">ENTRYPOINT</code> instruction which doesn’t actually start a shell session. An alternative to this is the <em>shell</em> form of <code class="language-plaintext highlighter-rouge">ENTRYPOINT</code> i.e. <code class="language-plaintext highlighter-rouge">ENTRYPOINT python run.py</code> but this won’t work since it breaks down the container.</p>
+
+<p>The final resort to this problem is by using <code class="language-plaintext highlighter-rouge">conda run -n env &lt;command&gt;</code> instruction which actually runs <code class="language-plaintext highlighter-rouge">&lt;command&gt;</code> inside the conda environment.</p>
+
+<p>So the final working Dockerfile should look like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Override default shell and use bash
+SHELL ["conda", "run", "-n", "env", "/bin/bash", "-c"]
+ 
+# Activate Conda environment and check if it is working properly
+RUN echo "Making sure flask is installed correctly..."
+RUN python -c "import flask"
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT ["conda", "run", "-n", "env", "python", "run.py"]
+</code></pre></div></div>
+
+<p>And the result obtained is as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker build .
+Sending build context to Docker daemon  4.608kB
+Step 1/9 : FROM continuumio/miniconda3
+---&gt; b4adc22212f1
+Step 2/9 : WORKDIR /app
+---&gt; Using cache
+---&gt; 658c526932d9
+Step 3/9 : COPY environment.yml .
+---&gt; 26ff11b33587
+Step 4/9 : RUN conda env create -f environment.yml
+---&gt; Running in d6729c106f2b
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+ 
+Downloading and Extracting Packages
+_libgcc_mutex-0.1    | 3 KB      | ########## | 100%
+flask-1.1.2          | 70 KB     | ########## | 100%
+zlib-1.2.11          | 106 KB    | ########## | 100%
+wheel-0.35.1         | 29 KB     | ########## | 100%
+ncurses-6.2          | 1022 KB   | ########## | 100%
+werkzeug-1.0.1       | 239 KB    | ########## | 100%
+ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%
+click-7.1.2          | 64 KB     | ########## | 100%
+markupsafe-1.1.1     | 27 KB     | ########## | 100%
+libffi-3.2.1         | 47 KB     | ########## | 100%
+openssl-1.1.1h       | 2.1 MB    | ########## | 100%
+python-3.6.11        | 34.2 MB   | ########## | 100%
+itsdangerous-1.1.0   | 16 KB     | ########## | 100%
+libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%
+xz-5.2.5             | 343 KB    | ########## | 100%
+libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%
+setuptools-49.6.0    | 947 KB    | ########## | 100%
+jinja2-2.11.2        | 93 KB     | ########## | 100%
+ca-certificates-2020 | 145 KB    | ########## | 100%
+certifi-2020.6.20    | 151 KB    | ########## | 100%
+pip-20.2.4           | 1.1 MB    | ########## | 100%
+libgomp-9.3.0        | 378 KB    | ########## | 100%
+tk-8.6.10            | 3.2 MB    | ########## | 100%
+python_abi-3.6       | 4 KB      | ########## | 100%
+_openmp_mutex-4.5    | 22 KB     | ########## | 100%
+sqlite-3.33.0        | 1.4 MB    | ########## | 100%
+readline-8.0         | 281 KB    | ########## | 100%
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+#
+# To activate this environment, use
+#
+#     $ conda activate env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+ 
+==&gt; WARNING: A newer version of conda exists. &lt;==
+ current version: 4.8.2
+ latest version: 4.9.1
+ 
+Please update conda by running
+ 
+   $ conda update -n base -c defaults conda
+ 
+Removing intermediate container d6729c106f2b
+---&gt; c03cbd024136
+Step 5/9 : SHELL ["conda", "run", "-n", "env", "/bin/bash", "-c"]
+---&gt; Running in f37ed240c11e
+Removing intermediate container f37ed240c11e
+---&gt; b56ab8574a14
+Step 6/9 : RUN echo "Making sure flask is installed correctly..."
+---&gt; Running in 46b28807a8e2
+Making sure flask is installed correctly...
+ 
+Removing intermediate container 46b28807a8e2
+---&gt; 70228fcf11ec
+Step 7/9 : RUN python -c "import flask"
+---&gt; Running in b5a021d87998
+Removing intermediate container b5a021d87998
+---&gt; 846df181bd85
+Step 8/9 : COPY run.py .
+---&gt; 975a983a3504
+Step 9/9 : ENTRYPOINT ["conda", "run", "-n", "env", "python", "run.py"]
+---&gt; Running in 240d3476910c
+Removing intermediate container 240d3476910c
+---&gt; 72a352583f00
+Successfully built 72a352583f00
+ 
+$ docker images
+REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
+&lt;none&gt;                   &lt;none&gt;              72a352583f00        2 minutes ago       964MB
+ 
+$ docker run 72a352583f00
+Flask import successful!
+</code></pre></div></div>
+
+<h2 id="references">References</h2>
+
+<p><a href="https://pythonspeed.com/articles/activate-conda-dockerfile/">Activating a Conda environment in your Dockerfile</a></p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-10T00:00:00+05:30">November 10, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Conda+in+Dockerfile%20http%3A%2F%2Flocalhost%3A4000%2Fconda-in-dockerfile" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fconda-in-dockerfile" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fconda-in-dockerfile" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/dockerfile" class="pagination--pager" title="Dockerfile tutorial
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
