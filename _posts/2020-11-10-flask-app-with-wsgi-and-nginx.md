@@ -264,8 +264,7 @@ Skipping adding existing rule (v6)
  
 You can visit `http://localhost:80` to view your running flask application.
 
-![]
-(/assets/img/flaskapp/1.png)
+![](/assets/img/flaskapp/1.png)
 
 ## References
  
