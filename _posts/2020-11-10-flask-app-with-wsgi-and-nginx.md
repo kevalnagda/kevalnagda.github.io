@@ -109,8 +109,8 @@ Now, create a `templates` folder with `index.html` file in it to be used as a te
    <div class="container">
        <h2>Quote of the day</h2>
        <hr>
-       <h3>FILM: </h3><h4> {{ film }}</h4>
-       <h3>QUOTE: </h3><h4> {{ quote }}</h4>       
+       <h3>FILM: </h3><h4> {{ film }} </h4>
+       <h3>QUOTE: </h3><h4> {{ quote }} </h4>       
    </div>
 </body>
  

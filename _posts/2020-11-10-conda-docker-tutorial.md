@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Conda in Dockerfile"
+title: "Conda Docker tutorial"
 date: 2020-11-10 12:00:00 +0530
 categories: jekyll update
 ---
