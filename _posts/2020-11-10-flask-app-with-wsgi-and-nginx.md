@@ -82,6 +82,7 @@ if __name__ == '__main__':
 Now, create a `templates` folder with `index.html` file in it to be used as a template for our flask application. Below is the sample `index.html` file which can be modified as per your requirements.
  
 ```
+{% raw %}
 <html>
  
 <head>
@@ -115,6 +116,7 @@ Now, create a `templates` folder with `index.html` file in it to be used as a te
 </body>
  
 </html>
+{% endraw %}
 ```
  
 ### 5.Testing the app
