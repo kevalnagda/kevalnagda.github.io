@@ -40,4 +40,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/flask-app-with-wsgi-and-nginx",
         "teaser": null
+      },{
+        "title": "Jenkins Docker tutorial",
+        "excerpt":"In this blog, we learn how to setup Jenkins in a Docker container. What is Jenkins? Jenkins is a self-contained, open source automation server which can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software. Jenkins can be installed through native system...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/jenkins-docker-tutorial",
+        "teaser": null
       }]

@@ -1,4 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-11T16:36:45+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">How to build a Flask app with WSGI and Nginx</title><link href="http://localhost:4000/flask-app-with-wsgi-and-nginx" rel="alternate" type="text/html" title="How to build a Flask app with WSGI and Nginx" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/flask-app-with-wsgi-and-nginx</id><content type="html" xml:base="http://localhost:4000/flask-app-with-wsgi-and-nginx">&lt;p&gt;In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-12T11:27:57+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">Jenkins Docker tutorial</title><link href="http://localhost:4000/jenkins-docker-tutorial" rel="alternate" type="text/html" title="Jenkins Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/jenkins-docker-tutorial">&lt;p&gt;In this blog, we learn how to setup Jenkins in a Docker container.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-jenkins&quot;&gt;What is Jenkins?&lt;/h2&gt;
+
+&lt;p&gt;Jenkins is a self-contained, open source automation server which can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software.&lt;/p&gt;
+
+&lt;p&gt;Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with a Java Runtime Environment (JRE) installed.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-1-pull-jenkins-docker-image&quot;&gt;Step 1: Pull Jenkins Docker image&lt;/h2&gt;
+
+&lt;p&gt;We pull the [Jenkins Docker image] from the Docker Hub repository.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull jenkins/jenkins
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;step-2-run-a-docker-container&quot;&gt;Step 2: Run a Docker container&lt;/h2&gt;
+
+&lt;p&gt;We can run a docker container based on the Docker image we just pulled.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;where, we expose port 8080 on the host and docker server to access Jenkins dashboard and port 50000 for the Jenkins API.&lt;/p&gt;
+
+&lt;p&gt;This command will create and run a Docker container for you, however, it won’t save any data created when the container is exited or shutdown.&lt;/p&gt;
+
+&lt;p&gt;We can have a persistent storage for Jenkins by executing the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -p 8080:8080 -p 50000:50000 -v /home/projects/Jenkins_Home:/var/jenkins_home jenkins/jenkins:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/home/projects/Jenkins_Home&lt;/code&gt; can be replaced by the path where you wish to store your Jenkins data.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-3-setup-jenkins&quot;&gt;Step 3: Setup Jenkins&lt;/h2&gt;
+
+&lt;p&gt;Once Jenkins files have been extracted, the Jenkins server will be fully up and running at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can find the initial admin password at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/var/jenkins_home/secrets/initialAdminPassword&lt;/code&gt; as mentioned on the login page.&lt;/p&gt;
+
+&lt;p&gt;Next, we can install plugins as per our requirement.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as admin user.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Congratulations! You just setup the Jenkins server inside a Docker container.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to setup Jenkins in a Docker container. What is Jenkins?</summary></entry><entry><title type="html">How to build a Flask app with WSGI and Nginx</title><link href="http://localhost:4000/flask-app-with-wsgi-and-nginx" rel="alternate" type="text/html" title="How to build a Flask app with WSGI and Nginx" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/flask-app-with-wsgi-and-nginx</id><content type="html" xml:base="http://localhost:4000/flask-app-with-wsgi-and-nginx">&lt;p&gt;In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -242,8 +293,7 @@ Skipping adding existing rule (v6)
 
 &lt;p&gt;You can visit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://localhost:80&lt;/code&gt; to view your running flask application.&lt;/p&gt;
 
-&lt;p&gt;![]
-(/assets/img/flaskapp/1.png)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/flaskapp/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
