@@ -1,11 +1,11 @@
 ---
 layout: single
-title: "Jenkins Docker tutorial"
+title: "Set up Jenkins in Docker"
 date: 2020-11-10 12:00:00 +530
 categories: jekyll update
 ---
  
-In this blog, we learn how to setup Jenkins in a Docker container.
+In this blog, we learn how to run Jenkins in a Docker container.
  
 ## What is Jenkins?
  
@@ -41,7 +41,21 @@ docker run -p 8080:8080 -p 50000:50000 -v /home/projects/Jenkins_Home:/var/jenki
  
 Here, `/home/projects/Jenkins_Home` can be replaced by the path where you wish to store your Jenkins data.
  
-## Step 3: Setup Jenkins
+However, I would recommend using a Docker volume to avoid permission issues while accessing the directory and let Docker handle the storage functionality.
+ 
+To use a Docker volume for Jenkins data, simply just create a volume as follows:
+ 
+```
+docker volume create myjenkins
+```
+ 
+Now, to use this volume to store Jenkins data execute the following command:
+ 
+```
+docker run -p 8080:8080 -p 50000:50000 -v myjenkins:/var/jenkins_home jenkins/jenkins:latest
+```
+ 
+## Step 3: Set up Jenkins
  
 Once Jenkins files have been extracted, the Jenkins server will be fully up and running at `http://localhost:8080`.
  

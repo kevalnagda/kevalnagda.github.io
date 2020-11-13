@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "AMD processor review"
+title: "AMD CPU review"
 date: 2020-11-12 12:00:00 +530
 categories: jekyll update
 ---
