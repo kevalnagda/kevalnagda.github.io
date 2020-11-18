@@ -1,0 +1,446 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Build and Publish Docker image using Jenkins - Home</title>
+<meta name="description" content="Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub.  Create a new Jenkins Docker image  The official Jenkins image does not have docker installed in it. So if you try to access docker while running a container based on the official Jenkins image it would result in an error.  How to solve this? we can create a new Jenkins Docker image by preinstalling Docker in it. Following is the Dockerfile that we use to create the new Jenkins Docker image.  FROM jenkins/jenkins:latest   USER root RUN apt-get update -qq \     &amp;&amp; apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - RUN add-apt-repository \   &quot;deb [arch=amd64] https://download.docker.com/linux/debian \   $(lsb_release -cs) \   stable&quot; RUN apt-get update  -qq \     &amp;&amp; apt-get install docker-ce=17.12.1~ce-0~debian -y   RUN usermod -aG docker jenkins   Here we use the base image as Jenkins official image, download and install Docker on top of it. Later we use usermod command to change attributes of the docker and jenkins group.  Next, create a docker-compose.yml file to ease the process of Docker image creation.  version: &#39;3&#39;   services:   jenkins:     container_name: &#39;jenkins-container&#39;     privileged: true     build: .     ports:       - &#39;8080:8080&#39;       - &#39;50000:50000&#39;     volumes:       - myjenkins:/var/jenkins_home       - /var/run/docker.sock:/var/run/docker.sock     restart: unless-stopped   volumes:   myjenkins:   Here, we mount a Docker volume myjenkins to /var/jenkins_home directory which lies inside the Docker container and we also map the Docker socket from host to the container.  Build and run the Docker image by executing the following command in the project directory.  docker-compose up   Set up Jenkins  Once Jenkins files have been extracted, the Jenkins server will be fully up and running at http://localhost:8080.    You can find the initial admin password at /var/jenkins_home/secrets/initialAdminPassword as mentioned on the login page.  Next, we can install plugins as per our requirement.      It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user.">
+
+
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="Build and Publish Docker image using Jenkins">
+<meta property="og:url" content="http://localhost:4000/jenkins-git-docker-image">
+
+
+  <meta property="og:description" content="Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub.  Create a new Jenkins Docker image  The official Jenkins image does not have docker installed in it. So if you try to access docker while running a container based on the official Jenkins image it would result in an error.  How to solve this? we can create a new Jenkins Docker image by preinstalling Docker in it. Following is the Dockerfile that we use to create the new Jenkins Docker image.  FROM jenkins/jenkins:latest   USER root RUN apt-get update -qq \     &amp;&amp; apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - RUN add-apt-repository \   &quot;deb [arch=amd64] https://download.docker.com/linux/debian \   $(lsb_release -cs) \   stable&quot; RUN apt-get update  -qq \     &amp;&amp; apt-get install docker-ce=17.12.1~ce-0~debian -y   RUN usermod -aG docker jenkins   Here we use the base image as Jenkins official image, download and install Docker on top of it. Later we use usermod command to change attributes of the docker and jenkins group.  Next, create a docker-compose.yml file to ease the process of Docker image creation.  version: &#39;3&#39;   services:   jenkins:     container_name: &#39;jenkins-container&#39;     privileged: true     build: .     ports:       - &#39;8080:8080&#39;       - &#39;50000:50000&#39;     volumes:       - myjenkins:/var/jenkins_home       - /var/run/docker.sock:/var/run/docker.sock     restart: unless-stopped   volumes:   myjenkins:   Here, we mount a Docker volume myjenkins to /var/jenkins_home directory which lies inside the Docker container and we also map the Docker socket from host to the container.  Build and run the Docker image by executing the following command in the project directory.  docker-compose up   Set up Jenkins  Once Jenkins files have been extracted, the Jenkins server will be fully up and running at http://localhost:8080.    You can find the initial admin password at /var/jenkins_home/secrets/initialAdminPassword as mentioned on the login page.  Next, we can install plugins as per our requirement.      It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-11-18T12:00:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/jenkins-git-docker-image">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Build and Publish Docker image using Jenkins">
+    <meta itemprop="description" content="Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub.Create a new Jenkins Docker imageThe official Jenkins image does not have docker installed in it. So if you try to access docker while running a container based on the official Jenkins image it would result in an error.How to solve this? we can create a new Jenkins Docker image by preinstalling Docker in it. Following is the Dockerfile that we use to create the new Jenkins Docker image.FROM jenkins/jenkins:latest USER rootRUN apt-get update -qq \    &amp;&amp; apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-commonRUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -RUN add-apt-repository \  &quot;deb [arch=amd64] https://download.docker.com/linux/debian \  $(lsb_release -cs) \  stable&quot;RUN apt-get update  -qq \    &amp;&amp; apt-get install docker-ce=17.12.1~ce-0~debian -y RUN usermod -aG docker jenkinsHere we use the base image as Jenkins official image, download and install Docker on top of it. Later we use usermod command to change attributes of the docker and jenkins group.Next, create a docker-compose.yml file to ease the process of Docker image creation.version: &#39;3&#39; services:  jenkins:    container_name: &#39;jenkins-container&#39;    privileged: true    build: .    ports:      - &#39;8080:8080&#39;      - &#39;50000:50000&#39;    volumes:      - myjenkins:/var/jenkins_home      - /var/run/docker.sock:/var/run/docker.sock    restart: unless-stopped volumes:  myjenkins:Here, we mount a Docker volume myjenkins to /var/jenkins_home directory which lies inside the Docker container and we also map the Docker socket from host to the container.Build and run the Docker image by executing the following command in the project directory.docker-compose upSet up JenkinsOnce Jenkins files have been extracted, the Jenkins server will be fully up and running at http://localhost:8080.You can find the initial admin password at /var/jenkins_home/secrets/initialAdminPassword as mentioned on the login page.Next, we can install plugins as per our requirement.It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user.">
+    <meta itemprop="datePublished" content="2020-11-18T12:00:00+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Build and Publish Docker image using Jenkins
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-11-18T12:00:00+05:30">November 18, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#create-a-new-jenkins-docker-image">Create a new Jenkins Docker image</a></li>
+  <li><a href="#set-up-jenkins">Set up Jenkins</a></li>
+  <li><a href="#create-jenkins-job">Create Jenkins job</a></li>
+  <li><a href="#add-jenkinsfile">Add Jenkinsfile</a></li>
+  <li><a href="#testing">Testing</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub.</p>
+
+<h2 id="create-a-new-jenkins-docker-image">Create a new Jenkins Docker image</h2>
+
+<p>The official Jenkins image does not have docker installed in it. So if you try to access docker while running a container based on the official Jenkins image it would result in an error.</p>
+
+<p>How to solve this? we can create a new Jenkins Docker image by preinstalling Docker in it. Following is the Dockerfile that we use to create the new Jenkins Docker image.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM jenkins/jenkins:latest
+ 
+USER root
+RUN apt-get update -qq \
+    &amp;&amp; apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository \
+  "deb [arch=amd64] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) \
+  stable"
+RUN apt-get update  -qq \
+    &amp;&amp; apt-get install docker-ce=17.12.1~ce-0~debian -y
+ 
+RUN usermod -aG docker jenkins
+</code></pre></div></div>
+
+<p>Here we use the base image as Jenkins official image, download and install Docker on top of it. Later we use <code class="language-plaintext highlighter-rouge">usermod</code> command to change attributes of the docker and jenkins group.</p>
+
+<p>Next, create a <code class="language-plaintext highlighter-rouge">docker-compose.yml</code> file to ease the process of Docker image creation.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3'
+ 
+services:
+  jenkins:
+    container_name: 'jenkins-container'
+    privileged: true
+    build: .
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+    volumes:
+      - myjenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+ 
+volumes:
+  myjenkins:
+</code></pre></div></div>
+
+<p>Here, we mount a Docker volume <code class="language-plaintext highlighter-rouge">myjenkins</code> to <code class="language-plaintext highlighter-rouge">/var/jenkins_home</code> directory which lies inside the Docker container and we also map the Docker socket from host to the container.</p>
+
+<p>Build and run the Docker image by executing the following command in the project directory.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-compose up
+</code></pre></div></div>
+
+<h2 id="set-up-jenkins">Set up Jenkins</h2>
+
+<p>Once Jenkins files have been extracted, the Jenkins server will be fully up and running at <code class="language-plaintext highlighter-rouge">http://localhost:8080</code>.</p>
+
+<p><img src="/assets/img/jenkins/1.png" alt="" /></p>
+
+<p>You can find the initial admin password at <code class="language-plaintext highlighter-rouge">/var/jenkins_home/secrets/initialAdminPassword</code> as mentioned on the login page.</p>
+
+<p>Next, we can install plugins as per our requirement.</p>
+
+<p><img src="/assets/img/jenkins/2.png" alt="" /></p>
+
+<p><img src="/assets/img/jenkins/3.png" alt="" /></p>
+
+<p>It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user.</p>
+
+<p><img src="/assets/img/jenkins/4.png" alt="" /></p>
+
+<h2 id="create-jenkins-job">Create Jenkins job</h2>
+
+<p>On completion of the initial setup, create a new pipeline in Jenkins by selecting <code class="language-plaintext highlighter-rouge">New Item</code>.</p>
+
+<p><img src="/assets/img/jenkins/5.png" alt="" /></p>
+
+<p>Enter the name of the job and select the type of job you wish to run on Jenkins. We select the <code class="language-plaintext highlighter-rouge">Pipeline</code> option since we wish to create a Jenkins pipeline to execute a series of steps.</p>
+
+<p><img src="/assets/img/jenkins/6.png" alt="" /></p>
+
+<p>There are multiple options as triggers for Jenkins, however, we use the <code class="language-plaintext highlighter-rouge">Polling</code> method and set a schedule as <code class="language-plaintext highlighter-rouge">* * * * *</code> which will poll the SCM repository every minute.</p>
+
+<p><img src="/assets/img/jenkins/7.png" alt="" /></p>
+
+<p>Now in the Pipeline section, select the <code class="language-plaintext highlighter-rouge">Pipeline script from SCM</code> option, select SCM, and insert the URL of the SCM repository.</p>
+
+<p>You can add credentials for authentication however, credentials are not required for repositories with public access.</p>
+
+<p><img src="/assets/img/jenkins/8.png" alt="" /></p>
+
+<p>You can also select a specific branch that you wish to build by adding the branch name in the <code class="language-plaintext highlighter-rouge">Branch to build</code> section. For example, add <code class="language-plaintext highlighter-rouge">*/main</code> to build the <code class="language-plaintext highlighter-rouge">main</code> branch.</p>
+
+<p><img src="/assets/img/jenkins/9.png" alt="" /></p>
+
+<p>Click the <code class="language-plaintext highlighter-rouge">Save</code> button and go to <code class="language-plaintext highlighter-rouge">Plugin Manager</code> to install the <code class="language-plaintext highlighter-rouge">Docker Build and Publish</code> and <code class="language-plaintext highlighter-rouge">Docker Pipeline</code> plugin which helps us to build and push the Docker image to Docker Hub.</p>
+
+<p><img src="/assets/img/jenkins/10.png" alt="" /></p>
+
+<h2 id="add-jenkinsfile">Add Jenkinsfile</h2>
+
+<p>Once the plugin has been installed, go ahead and add a <code class="language-plaintext highlighter-rouge">Jenkinsfile</code> script given below to the SCM repository which will be used by Jenkins while building a job.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pipeline {
+  environment {
+    imagename = "kevalnagda/flaskapp"
+    registryCredential = 'kevalnagda'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git([url: 'https://github.com/kevalnagda/movieapp.git', branch: 'main', credentialsId: 'kevalnagda'])
+ 
+      }
+    }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $imagename:$BUILD_NUMBER"
+         sh "docker rmi $imagename:latest"
+ 
+      }
+    }
+  }
+}
+</code></pre></div></div>
+
+<h2 id="testing">Testing</h2>
+
+<p>Now, commit changes to the SCM repository to test and see if Jenkins can access the SCM repository and Jenkinsfile.</p>
+
+<p>On successful completion of the job, you would be able to see the latest Docker image in your Docker Hub repository.</p>
+
+<p><img src="/assets/img/jenkins/11.png" alt="" /></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-18T12:00:00+05:30">November 18, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Build+and+Publish+Docker+image+using+Jenkins%20http%3A%2F%2Flocalhost%3A4000%2Fjenkins-git-docker-image" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fjenkins-git-docker-image" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fjenkins-git-docker-image" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/amd-cpu-review" class="pagination--pager" title="AMD CPU review
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

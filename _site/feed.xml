@@ -1,8 +1,451 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-12T11:27:57+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">Jenkins Docker tutorial</title><link href="http://localhost:4000/jenkins-docker-tutorial" rel="alternate" type="text/html" title="Jenkins Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/jenkins-docker-tutorial">&lt;p&gt;In this blog, we learn how to setup Jenkins in a Docker container.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-18T18:54:31+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">Build and Publish Docker image using Jenkins</title><link href="http://localhost:4000/jenkins-git-docker-image" rel="alternate" type="text/html" title="Build and Publish Docker image using Jenkins" /><published>2020-11-18T12:00:00+05:30</published><updated>2020-11-18T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-git-docker-image</id><content type="html" xml:base="http://localhost:4000/jenkins-git-docker-image">&lt;p&gt;Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub.&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-new-jenkins-docker-image&quot;&gt;Create a new Jenkins Docker image&lt;/h2&gt;
+
+&lt;p&gt;The official Jenkins image does not have docker installed in it. So if you try to access docker while running a container based on the official Jenkins image it would result in an error.&lt;/p&gt;
+
+&lt;p&gt;How to solve this? we can create a new Jenkins Docker image by preinstalling Docker in it. Following is the Dockerfile that we use to create the new Jenkins Docker image.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM jenkins/jenkins:latest
+ 
+USER root
+RUN apt-get update -qq \
+    &amp;amp;&amp;amp; apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository \
+  &quot;deb [arch=amd64] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) \
+  stable&quot;
+RUN apt-get update  -qq \
+    &amp;amp;&amp;amp; apt-get install docker-ce=17.12.1~ce-0~debian -y
+ 
+RUN usermod -aG docker jenkins
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here we use the base image as Jenkins official image, download and install Docker on top of it. Later we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;usermod&lt;/code&gt; command to change attributes of the docker and jenkins group.&lt;/p&gt;
+
+&lt;p&gt;Next, create a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; file to ease the process of Docker image creation.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;version: '3'
+ 
+services:
+  jenkins:
+    container_name: 'jenkins-container'
+    privileged: true
+    build: .
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+    volumes:
+      - myjenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+ 
+volumes:
+  myjenkins:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here, we mount a Docker volume &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;myjenkins&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/var/jenkins_home&lt;/code&gt; directory which lies inside the Docker container and we also map the Docker socket from host to the container.&lt;/p&gt;
+
+&lt;p&gt;Build and run the Docker image by executing the following command in the project directory.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-compose up
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;set-up-jenkins&quot;&gt;Set up Jenkins&lt;/h2&gt;
+
+&lt;p&gt;Once Jenkins files have been extracted, the Jenkins server will be fully up and running at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can find the initial admin password at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/var/jenkins_home/secrets/initialAdminPassword&lt;/code&gt; as mentioned on the login page.&lt;/p&gt;
+
+&lt;p&gt;Next, we can install plugins as per our requirement.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;create-jenkins-job&quot;&gt;Create Jenkins job&lt;/h2&gt;
+
+&lt;p&gt;On completion of the initial setup, create a new pipeline in Jenkins by selecting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;New Item&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Enter the name of the job and select the type of job you wish to run on Jenkins. We select the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Pipeline&lt;/code&gt; option since we wish to create a Jenkins pipeline to execute a series of steps.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are multiple options as triggers for Jenkins, however, we use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Polling&lt;/code&gt; method and set a schedule as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;* * * * *&lt;/code&gt; which will poll the SCM repository every minute.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now in the Pipeline section, select the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Pipeline script from SCM&lt;/code&gt; option, select SCM, and insert the URL of the SCM repository.&lt;/p&gt;
+
+&lt;p&gt;You can add credentials for authentication however, credentials are not required for repositories with public access.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/8.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can also select a specific branch that you wish to build by adding the branch name in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Branch to build&lt;/code&gt; section. For example, add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*/main&lt;/code&gt; to build the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt; branch.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/9.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Click the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Save&lt;/code&gt; button and go to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Plugin Manager&lt;/code&gt; to install the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Docker Build and Publish&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Docker Pipeline&lt;/code&gt; plugin which helps us to build and push the Docker image to Docker Hub.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/10.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;add-jenkinsfile&quot;&gt;Add Jenkinsfile&lt;/h2&gt;
+
+&lt;p&gt;Once the plugin has been installed, go ahead and add a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Jenkinsfile&lt;/code&gt; script given below to the SCM repository which will be used by Jenkins while building a job.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pipeline {
+  environment {
+    imagename = &quot;kevalnagda/flaskapp&quot;
+    registryCredential = 'kevalnagda'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git([url: 'https://github.com/kevalnagda/movieapp.git', branch: 'main', credentialsId: 'kevalnagda'])
+ 
+      }
+    }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push(&quot;$BUILD_NUMBER&quot;)
+             dockerImage.push('latest')
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh &quot;docker rmi $imagename:$BUILD_NUMBER&quot;
+         sh &quot;docker rmi $imagename:latest&quot;
+ 
+      }
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
+
+&lt;p&gt;Now, commit changes to the SCM repository to test and see if Jenkins can access the SCM repository and Jenkinsfile.&lt;/p&gt;
+
+&lt;p&gt;On successful completion of the job, you would be able to see the latest Docker image in your Docker Hub repository.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/11.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub. Create a new Jenkins Docker image The official Jenkins image does not have docker installed in it. So if you try to access docker while running a container based on the official Jenkins image it would result in an error. How to solve this? we can create a new Jenkins Docker image by preinstalling Docker in it. Following is the Dockerfile that we use to create the new Jenkins Docker image. FROM jenkins/jenkins:latest USER root RUN apt-get update -qq \ &amp;amp;&amp;amp; apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - RUN add-apt-repository \ &quot;deb [arch=amd64] https://download.docker.com/linux/debian \ $(lsb_release -cs) \ stable&quot; RUN apt-get update -qq \ &amp;amp;&amp;amp; apt-get install docker-ce=17.12.1~ce-0~debian -y RUN usermod -aG docker jenkins Here we use the base image as Jenkins official image, download and install Docker on top of it. Later we use usermod command to change attributes of the docker and jenkins group. Next, create a docker-compose.yml file to ease the process of Docker image creation. version: '3' services: jenkins: container_name: 'jenkins-container' privileged: true build: . ports: - '8080:8080' - '50000:50000' volumes: - myjenkins:/var/jenkins_home - /var/run/docker.sock:/var/run/docker.sock restart: unless-stopped volumes: myjenkins: Here, we mount a Docker volume myjenkins to /var/jenkins_home directory which lies inside the Docker container and we also map the Docker socket from host to the container. Build and run the Docker image by executing the following command in the project directory. docker-compose up Set up Jenkins Once Jenkins files have been extracted, the Jenkins server will be fully up and running at http://localhost:8080. You can find the initial admin password at /var/jenkins_home/secrets/initialAdminPassword as mentioned on the login page. Next, we can install plugins as per our requirement. It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user.</summary></entry><entry><title type="html">AMD CPU review</title><link href="http://localhost:4000/amd-cpu-review" rel="alternate" type="text/html" title="AMD CPU review" /><published>2020-11-12T12:00:00+05:30</published><updated>2020-11-12T12:00:00+05:30</updated><id>http://localhost:4000/amd-cpu-review</id><content type="html" xml:base="http://localhost:4000/amd-cpu-review">&lt;p&gt;AMD’s mainstream Ryzen chips are highly disruptive which include several families of various levels of potency. Ryzen chips introduce a completely new motherboard platform, and the processors require different memory and coolers than their predecessors.&lt;/p&gt;
+
+&lt;p&gt;Below is a quick breakdown of the different AMD Ryzen processor brackets:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ryzen 3: Up to 4-core processors.&lt;/li&gt;
+  &lt;li&gt;Ryzen 5: Up to 8-core processors.&lt;/li&gt;
+  &lt;li&gt;Ryzen 7: Up to 16-core processors.&lt;/li&gt;
+  &lt;li&gt;Ryzen 9: Up to 32-core processors.&lt;/li&gt;
+  &lt;li&gt;Threadripper: Up to 64-core processors.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Within each bracket, the processors are named by model number - the higher the model number the more powerful the CPU.&lt;/p&gt;
+
+&lt;p&gt;Ryzen CPUs that start with the number two are Zen+ processors, released in 2018 while the third generation CPUs using Zen 2 were released in 2019.&lt;/p&gt;
+
+&lt;p&gt;Now, AMD also has CPUs with G as a suffix for graphics which include Vega video processing which means that you can run a system without a dedicated video card.&lt;/p&gt;
+
+&lt;p&gt;Coming to socket type, all AMD processors use the same AM4 socket with a few exceptions like Generation 1 and 2 Threadrippers using a TR4 socket and Generation 3 Threadrippers using a TRX4 socket.&lt;/p&gt;
+
+&lt;h2 id=&quot;ryzen-3&quot;&gt;Ryzen 3&lt;/h2&gt;
+
+&lt;p&gt;The Ryzen 3 processors are built for budget-friendly PCs and consumers who don’t use PCs for intensive tasks. All processors in this family i.e. 1000, 2000, and 3000 Series are quad-core with decent game handling capability.&lt;/p&gt;
+
+&lt;p&gt;The latest generation chips in this family come with a rocking boost clock speed of 4.0GHz, allowing you to get good performance at the same affordable price.&lt;/p&gt;
+
+&lt;h2 id=&quot;ryzen-5&quot;&gt;Ryzen 5&lt;/h2&gt;
+
+&lt;p&gt;The Ryzen 5 processors are incredible for gaming and are priced aggressively to take on the popular Intel Core i5 family. These processors contain a mix of quadcore and hexacore processors, packed with enough power for intensive applications and tasks like video editing.&lt;/p&gt;
+
+&lt;h2 id=&quot;ryzen-7&quot;&gt;Ryzen 7&lt;/h2&gt;
+
+&lt;p&gt;The Ryzen 7 processors fall in line with Intel Core i7 processors and may be overkill for most people who don’t perform high computation tasks. However, these processors are extremely good for advanced computing in a somewhat affordable price range.&lt;/p&gt;
+
+&lt;p&gt;All processors in this family have 8/16 core/thread configuration and the latest generation chips come with massive L3 cache, high clock speeds and great overclock support.&lt;/p&gt;
+
+&lt;h2 id=&quot;ryzen-9&quot;&gt;Ryzen 9&lt;/h2&gt;
+
+&lt;p&gt;The Ryzen 9 processors are the latest batch of processors that are magically packed with 12/24 to 16/32 core/thread configuration. These chips are amazing and lie in the middle-ground between Ryzen 7 and Threadripper.&lt;/p&gt;
+
+&lt;p&gt;These processors challenge Intel’s Core i9 processor range and are optimal for gamers, streamers, and content creators.&lt;/p&gt;
+
+&lt;h2 id=&quot;threadripper&quot;&gt;Threadripper&lt;/h2&gt;
+
+&lt;p&gt;The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">AMD’s mainstream Ryzen chips are highly disruptive which include several families of various levels of potency. Ryzen chips introduce a completely new motherboard platform, and the processors require different memory and coolers than their predecessors. Below is a quick breakdown of the different AMD Ryzen processor brackets: Ryzen 3: Up to 4-core processors. Ryzen 5: Up to 8-core processors. Ryzen 7: Up to 16-core processors. Ryzen 9: Up to 32-core processors. Threadripper: Up to 64-core processors. Within each bracket, the processors are named by model number - the higher the model number the more powerful the CPU. Ryzen CPUs that start with the number two are Zen+ processors, released in 2018 while the third generation CPUs using Zen 2 were released in 2019. Now, AMD also has CPUs with G as a suffix for graphics which include Vega video processing which means that you can run a system without a dedicated video card. Coming to socket type, all AMD processors use the same AM4 socket with a few exceptions like Generation 1 and 2 Threadrippers using a TR4 socket and Generation 3 Threadrippers using a TRX4 socket. Ryzen 3 The Ryzen 3 processors are built for budget-friendly PCs and consumers who don’t use PCs for intensive tasks. All processors in this family i.e. 1000, 2000, and 3000 Series are quad-core with decent game handling capability. The latest generation chips in this family come with a rocking boost clock speed of 4.0GHz, allowing you to get good performance at the same affordable price. Ryzen 5 The Ryzen 5 processors are incredible for gaming and are priced aggressively to take on the popular Intel Core i5 family. These processors contain a mix of quadcore and hexacore processors, packed with enough power for intensive applications and tasks like video editing. Ryzen 7 The Ryzen 7 processors fall in line with Intel Core i7 processors and may be overkill for most people who don’t perform high computation tasks. However, these processors are extremely good for advanced computing in a somewhat affordable price range. All processors in this family have 8/16 core/thread configuration and the latest generation chips come with massive L3 cache, high clock speeds and great overclock support. Ryzen 9 The Ryzen 9 processors are the latest batch of processors that are magically packed with 12/24 to 16/32 core/thread configuration. These chips are amazing and lie in the middle-ground between Ryzen 7 and Threadripper. These processors challenge Intel’s Core i9 processor range and are optimal for gamers, streamers, and content creators. Threadripper The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.</summary></entry><entry><title type="html">Conda Docker tutorial</title><link href="http://localhost:4000/conda-docker-tutorial" rel="alternate" type="text/html" title="Conda Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/conda-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/conda-docker-tutorial">&lt;p&gt;Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.
+Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.&lt;/p&gt;
+
+&lt;h2 id=&quot;defining-the-conda-environment&quot;&gt;Defining the Conda environment&lt;/h2&gt;
+&lt;p&gt;Firstly, let’s create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; file to define the Conda environment.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name: env
+channels:
+   - conda-forge
+dependencies:
+   - python=3.6
+   - flask
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; is the name of our Conda environment. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda-forge&lt;/code&gt; channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; is similar to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; used by virtual environment &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;venv&lt;/code&gt; module.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-simple-python-program&quot;&gt;A simple Python program&lt;/h2&gt;
+
+&lt;p&gt;Write a simple Python program to test the Conda environment activation.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import flask
+ 
+print(&quot;Flask import successful!&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h2&gt;
+
+&lt;p&gt;Following the standard approach, our first iteration of the Dockerfile looks like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Following is the result when we try building the Docker image&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 5/9 : RUN conda activate env
+---&amp;gt; Running in e33a2dcd4d99
+ 
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+To initialize your shell, run
+ 
+   $ conda init &amp;lt;SHELL_NAME&amp;gt;
+ 
+The command '/bin/sh -c conda activate env' returned a non-zero code: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.&lt;/p&gt;
+
+&lt;h2 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h2&gt;
+
+&lt;p&gt;We can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; as a solution to the above problem. Docker by default uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/bin/sh -c &amp;lt;command&amp;gt;&lt;/code&gt; to execute instructions but we require a bash shell to run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;To tackle this, we override the default shell by adding the following to the Dockerfile:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Our updated Dockerfile should look as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Override default shell and use bash
+SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Initialize conda in the bash config files
+RUN conda init bash
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Building the Docker image again gives us the following result:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 9/11 : RUN python -c &quot;import flask&quot;
+---&amp;gt; Running in ea831eb42ff6
+Traceback (most recent call last):
+ File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+ModuleNotFoundError: No module named 'flask'
+The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So the problem is that each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; and later &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;s are new shell sessions without Conda activation.&lt;/p&gt;
+
+&lt;h2 id=&quot;third-attempt&quot;&gt;Third attempt&lt;/h2&gt;
+
+&lt;p&gt;Now, since each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction is a separate run of bash, adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda activate&lt;/code&gt; command to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.&lt;/p&gt;
+
+&lt;p&gt;This is due to the fact that we are using &lt;em&gt;exec&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction which doesn’t actually start a shell session. An alternative to this is the &lt;em&gt;shell&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT python run.py&lt;/code&gt; but this won’t work since it breaks down the container.&lt;/p&gt;
+
+&lt;p&gt;The final resort to this problem is by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda run -n env &amp;lt;command&amp;gt;&lt;/code&gt; instruction which actually runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;command&amp;gt;&lt;/code&gt; inside the conda environment.&lt;/p&gt;
+
+&lt;p&gt;So the final working Dockerfile should look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Override default shell and use bash
+SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
+ 
+# Activate Conda environment and check if it is working properly
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And the result obtained is as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build .
+Sending build context to Docker daemon  4.608kB
+Step 1/9 : FROM continuumio/miniconda3
+---&amp;gt; b4adc22212f1
+Step 2/9 : WORKDIR /app
+---&amp;gt; Using cache
+---&amp;gt; 658c526932d9
+Step 3/9 : COPY environment.yml .
+---&amp;gt; 26ff11b33587
+Step 4/9 : RUN conda env create -f environment.yml
+---&amp;gt; Running in d6729c106f2b
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+ 
+Downloading and Extracting Packages
+_libgcc_mutex-0.1    | 3 KB      | ########## | 100%
+flask-1.1.2          | 70 KB     | ########## | 100%
+zlib-1.2.11          | 106 KB    | ########## | 100%
+wheel-0.35.1         | 29 KB     | ########## | 100%
+ncurses-6.2          | 1022 KB   | ########## | 100%
+werkzeug-1.0.1       | 239 KB    | ########## | 100%
+ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%
+click-7.1.2          | 64 KB     | ########## | 100%
+markupsafe-1.1.1     | 27 KB     | ########## | 100%
+libffi-3.2.1         | 47 KB     | ########## | 100%
+openssl-1.1.1h       | 2.1 MB    | ########## | 100%
+python-3.6.11        | 34.2 MB   | ########## | 100%
+itsdangerous-1.1.0   | 16 KB     | ########## | 100%
+libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%
+xz-5.2.5             | 343 KB    | ########## | 100%
+libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%
+setuptools-49.6.0    | 947 KB    | ########## | 100%
+jinja2-2.11.2        | 93 KB     | ########## | 100%
+ca-certificates-2020 | 145 KB    | ########## | 100%
+certifi-2020.6.20    | 151 KB    | ########## | 100%
+pip-20.2.4           | 1.1 MB    | ########## | 100%
+libgomp-9.3.0        | 378 KB    | ########## | 100%
+tk-8.6.10            | 3.2 MB    | ########## | 100%
+python_abi-3.6       | 4 KB      | ########## | 100%
+_openmp_mutex-4.5    | 22 KB     | ########## | 100%
+sqlite-3.33.0        | 1.4 MB    | ########## | 100%
+readline-8.0         | 281 KB    | ########## | 100%
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+#
+# To activate this environment, use
+#
+#     $ conda activate env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+ 
+==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;==
+ current version: 4.8.2
+ latest version: 4.9.1
+ 
+Please update conda by running
+ 
+   $ conda update -n base -c defaults conda
+ 
+Removing intermediate container d6729c106f2b
+---&amp;gt; c03cbd024136
+Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
+---&amp;gt; Running in f37ed240c11e
+Removing intermediate container f37ed240c11e
+---&amp;gt; b56ab8574a14
+Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot;
+---&amp;gt; Running in 46b28807a8e2
+Making sure flask is installed correctly...
+ 
+Removing intermediate container 46b28807a8e2
+---&amp;gt; 70228fcf11ec
+Step 7/9 : RUN python -c &quot;import flask&quot;
+---&amp;gt; Running in b5a021d87998
+Removing intermediate container b5a021d87998
+---&amp;gt; 846df181bd85
+Step 8/9 : COPY run.py .
+---&amp;gt; 975a983a3504
+Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
+---&amp;gt; Running in 240d3476910c
+Removing intermediate container 240d3476910c
+---&amp;gt; 72a352583f00
+Successfully built 72a352583f00
+ 
+$ docker images
+REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
+&amp;lt;none&amp;gt;                   &amp;lt;none&amp;gt;              72a352583f00        2 minutes ago       964MB
+ 
+$ docker run 72a352583f00
+Flask import successful!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://pythonspeed.com/articles/activate-conda-dockerfile/&quot;&gt;Activating a Conda environment in your Dockerfile&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile. Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect. Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment. name: env channels: - conda-forge dependencies: - python=3.6 - flask Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask. environment.yml is similar to the requirements.txt used by virtual environment venv module. A simple Python program Write a simple Python program to test the Conda environment activation. import flask print(&quot;Flask import successful!&quot;) First attempt Following the standard approach, our first iteration of the Dockerfile looks like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Following is the result when we try building the Docker image Step 5/9 : RUN conda activate env ---&amp;gt; Running in e33a2dcd4d99 CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'. To initialize your shell, run $ conda init &amp;lt;SHELL_NAME&amp;gt; The command '/bin/sh -c conda activate env' returned a non-zero code: 1 We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method. Second attempt We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &amp;lt;command&amp;gt; to execute instructions but we require a bash shell to run the conda init bash command. To tackle this, we override the default shell by adding the following to the Dockerfile: SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] Our updated Dockerfile should look as follows: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Initialize conda in the bash config files RUN conda init bash # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Building the Docker image again gives us the following result: Step 9/11 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in ea831eb42ff6 Traceback (most recent call last): File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt; ModuleNotFoundError: No module named 'flask' The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1 So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation. Third attempt Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above. This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container. The final resort to this problem is by using conda run -n env &amp;lt;command&amp;gt; instruction which actually runs &amp;lt;command&amp;gt; inside the conda environment. So the final working Dockerfile should look like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] And the result obtained is as follows: $ docker build . Sending build context to Docker daemon 4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&amp;gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&amp;gt; Using cache ---&amp;gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&amp;gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&amp;gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done Downloading and Extracting Packages _libgcc_mutex-0.1 | 3 KB | ########## | 100% flask-1.1.2 | 70 KB | ########## | 100% zlib-1.2.11 | 106 KB | ########## | 100% wheel-0.35.1 | 29 KB | ########## | 100% ncurses-6.2 | 1022 KB | ########## | 100% werkzeug-1.0.1 | 239 KB | ########## | 100% ld_impl_linux-64-2.3 | 617 KB | ########## | 100% click-7.1.2 | 64 KB | ########## | 100% markupsafe-1.1.1 | 27 KB | ########## | 100% libffi-3.2.1 | 47 KB | ########## | 100% openssl-1.1.1h | 2.1 MB | ########## | 100% python-3.6.11 | 34.2 MB | ########## | 100% itsdangerous-1.1.0 | 16 KB | ########## | 100% libstdcxx-ng-9.3.0 | 4.0 MB | ########## | 100% xz-5.2.5 | 343 KB | ########## | 100% libgcc-ng-9.3.0 | 7.8 MB | ########## | 100% setuptools-49.6.0 | 947 KB | ########## | 100% jinja2-2.11.2 | 93 KB | ########## | 100% ca-certificates-2020 | 145 KB | ########## | 100% certifi-2020.6.20 | 151 KB | ########## | 100% pip-20.2.4 | 1.1 MB | ########## | 100% libgomp-9.3.0 | 378 KB | ########## | 100% tk-8.6.10 | 3.2 MB | ########## | 100% python_abi-3.6 | 4 KB | ########## | 100% _openmp_mutex-4.5 | 22 KB | ########## | 100% sqlite-3.33.0 | 1.4 MB | ########## | 100% readline-8.0 | 281 KB | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # # $ conda activate env # # To deactivate an active environment, use # # $ conda deactivate ==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;== current version: 4.8.2 latest version: 4.9.1 Please update conda by running $ conda update -n base -c defaults conda Removing intermediate container d6729c106f2b ---&amp;gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&amp;gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&amp;gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&amp;gt; Running in 46b28807a8e2 Making sure flask is installed correctly... Removing intermediate container 46b28807a8e2 ---&amp;gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&amp;gt; 846df181bd85 Step 8/9 : COPY run.py . ---&amp;gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&amp;gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&amp;gt; 72a352583f00 Successfully built 72a352583f00 $ docker images REPOSITORY TAG IMAGE ID CREATED SIZE &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 72a352583f00 2 minutes ago 964MB $ docker run 72a352583f00 Flask import successful! References</summary></entry><entry><title type="html">Set up Jenkins in Docker</title><link href="http://localhost:4000/jenkins-in-docker" rel="alternate" type="text/html" title="Set up Jenkins in Docker" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-in-docker</id><content type="html" xml:base="http://localhost:4000/jenkins-in-docker">&lt;p&gt;In this blog, we learn how to run Jenkins in a Docker container.&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-jenkins&quot;&gt;What is Jenkins?&lt;/h2&gt;
 
-&lt;p&gt;Jenkins is a self-contained, open source automation server which can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software.&lt;/p&gt;
+&lt;p&gt;Jenkins is a self-contained, open-source automation server that can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software.&lt;/p&gt;
 
 &lt;p&gt;Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with a Java Runtime Environment (JRE) installed.&lt;/p&gt;
 
@@ -20,18 +463,30 @@
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:latest
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;where, we expose port 8080 on the host and docker server to access Jenkins dashboard and port 50000 for the Jenkins API.&lt;/p&gt;
+&lt;p&gt;where we expose port 8080 on the host and docker server to access Jenkins dashboard and port 50000 for the Jenkins API.&lt;/p&gt;
 
 &lt;p&gt;This command will create and run a Docker container for you, however, it won’t save any data created when the container is exited or shutdown.&lt;/p&gt;
 
-&lt;p&gt;We can have a persistent storage for Jenkins by executing the following command:&lt;/p&gt;
+&lt;p&gt;We can have persistent storage for Jenkins by executing the following command:&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -p 8080:8080 -p 50000:50000 -v /home/projects/Jenkins_Home:/var/jenkins_home jenkins/jenkins:latest
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Here, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/home/projects/Jenkins_Home&lt;/code&gt; can be replaced by the path where you wish to store your Jenkins data.&lt;/p&gt;
 
-&lt;h2 id=&quot;step-3-setup-jenkins&quot;&gt;Step 3: Setup Jenkins&lt;/h2&gt;
+&lt;p&gt;However, I would recommend using a Docker volume to avoid permission issues while accessing the directory and let Docker handle the storage functionality.&lt;/p&gt;
+
+&lt;p&gt;To use a Docker volume for Jenkins data, simply just create a volume as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker volume create myjenkins
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, to use this volume to store Jenkins data execute the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -p 8080:8080 -p 50000:50000 -v myjenkins:/var/jenkins_home jenkins/jenkins:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;step-3-set-up-jenkins&quot;&gt;Step 3: Set up Jenkins&lt;/h2&gt;
 
 &lt;p&gt;Once Jenkins files have been extracted, the Jenkins server will be fully up and running at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;.&lt;/p&gt;
 
@@ -45,11 +500,11 @@
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as admin user.&lt;/p&gt;
+&lt;p&gt;It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Congratulations! You just setup the Jenkins server inside a Docker container.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to setup Jenkins in a Docker container. What is Jenkins?</summary></entry><entry><title type="html">How to build a Flask app with WSGI and Nginx</title><link href="http://localhost:4000/flask-app-with-wsgi-and-nginx" rel="alternate" type="text/html" title="How to build a Flask app with WSGI and Nginx" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/flask-app-with-wsgi-and-nginx</id><content type="html" xml:base="http://localhost:4000/flask-app-with-wsgi-and-nginx">&lt;p&gt;In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.&lt;/p&gt;
+&lt;p&gt;Congratulations! You just set up the Jenkins server inside a Docker container.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to run Jenkins in a Docker container. What is Jenkins? Jenkins is a self-contained, open-source automation server that can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with a Java Runtime Environment (JRE) installed. Step 1: Pull Jenkins Docker image We pull the [Jenkins Docker image] from the Docker Hub repository. docker pull jenkins/jenkins Step 2: Run a Docker container We can run a docker container based on the Docker image we just pulled. docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:latest where we expose port 8080 on the host and docker server to access Jenkins dashboard and port 50000 for the Jenkins API. This command will create and run a Docker container for you, however, it won’t save any data created when the container is exited or shutdown. We can have persistent storage for Jenkins by executing the following command: docker run -p 8080:8080 -p 50000:50000 -v /home/projects/Jenkins_Home:/var/jenkins_home jenkins/jenkins:latest Here, /home/projects/Jenkins_Home can be replaced by the path where you wish to store your Jenkins data. However, I would recommend using a Docker volume to avoid permission issues while accessing the directory and let Docker handle the storage functionality. To use a Docker volume for Jenkins data, simply just create a volume as follows: docker volume create myjenkins Now, to use this volume to store Jenkins data execute the following command: docker run -p 8080:8080 -p 50000:50000 -v myjenkins:/var/jenkins_home jenkins/jenkins:latest Step 3: Set up Jenkins Once Jenkins files have been extracted, the Jenkins server will be fully up and running at http://localhost:8080. You can find the initial admin password at /var/jenkins_home/secrets/initialAdminPassword as mentioned on the login page. Next, we can install plugins as per our requirement. It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user. Congratulations! You just set up the Jenkins server inside a Docker container.</summary></entry><entry><title type="html">How to build a Flask app with WSGI and Nginx</title><link href="http://localhost:4000/flask-app-with-wsgi-and-nginx" rel="alternate" type="text/html" title="How to build a Flask app with WSGI and Nginx" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/flask-app-with-wsgi-and-nginx</id><content type="html" xml:base="http://localhost:4000/flask-app-with-wsgi-and-nginx">&lt;p&gt;In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -297,254 +752,7 @@ Skipping adding existing rule (v6)
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://medium.com/faun/deploy-flask-app-with-nginx-using-gunicorn-7fda4f50066a&quot;&gt;Deploy flask app with Nginx using Gunicorn&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn. Introduction Gunicorn Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks. Nginx Nginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration. Why use Gunicorn and Nginx with Flask? Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests. Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost. Build the Flask app 1. Update and install local packages First of all, update your local package index and then install the required packages as follows: # Update the local package index $ sudo apt-get update # Install dependencies $ sudo apt install python3-pip python3-dev python3-venv nginx 2. Create a virtual environment Now, we create a virtual environment env for the Python project using venv module. python3 -m venv env We activate the environment env as follows: source env/bin/activate 3. Install Python dependencies Next, we install Flask and Gunicorn. pip3 install flask gunicorn requests 4. Create the movie quotes app We create a file app.py with the following content in it: import requests from flask import Flask, render_template app = Flask(__name__) @app.route('/') def movieapp(): url = &quot;http://movie-quotes-2.herokuapp.com/api/v1/quotes/random&quot; response = requests.get(url).json() return render_template(&quot;index.html&quot;, film=response['film'], quote=response['content']) if __name__ == '__main__': app.run(debug=False, host='0.0.0.0') Now, create a templates folder with index.html file in it to be used as a template for our flask application. Below is the sample index.html file which can be modified as per your requirements. &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;style type=&quot;text/css&quot;&amp;gt; body { background: black; color: white; } div.container { max-width: 500px; margin: 100px auto; border: 20px solid white; padding: 10px; text-align: center; } h2 { text-transform: uppercase; } &amp;lt;/style&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;div class=&quot;container&quot;&amp;gt; &amp;lt;h2&amp;gt;Quote of the day&amp;lt;/h2&amp;gt; &amp;lt;hr&amp;gt; &amp;lt;h3&amp;gt;FILM: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ film }} &amp;lt;/h4&amp;gt; &amp;lt;h3&amp;gt;QUOTE: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ quote }} &amp;lt;/h4&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 5.Testing the app Before moving ahead, we test the flask app and make sure everything is working fine. (env) $ python3 app.py * Serving Flask app &quot;app&quot; (lazy loading) * Environment: production WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead. * Debug mode: off * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit) The result should be visible if you visit http://localhost:5000. When you are finished press Ctrl+C in your terminal window to exit the application server. Add WSGI to the app 1. Create WSGI entry point We create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application. Create wsgi.py file in the same directory as app.py, import the Flask instance from our application and run it as follows: from app import app if __name__ == '__main__': app.run() 2. Test Gunicorn’s ability We now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above. Note: The WSGI file name is written without .py extension. So the syntax is gunicorn &amp;lt;WSGI_module&amp;gt;:&amp;lt;callable_name&amp;gt;. (env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app [2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4 [2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725) [2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync [2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728 When you visit http://localhost:5000, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint. When you are finished press Ctrl+C in your terminal window to exit the application server. 3. Create WSGI socket The communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as app.py as follows: (env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app [2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4 [2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854) [2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync [2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857 [2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858 [2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859 By adding --workers 3 we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it. If you notice, an app.sock file will be automatically created in the project folder upon execution of the above command. Configure Nginx 1. Create an Nginx configuration file Gunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file. Let the Gunicorn server run, open a new terminal and execute ls /etc/nginx/ command. In the output you would get a list Nginx configuration along with two important directories: sites-available: contains configuration files for all of your possible applications. sites-enabled: contains links to the configuration files that Nginx will actually read and run. Now, create a new server block configuration file app in /etc/nginx/sites-available/ directory. (env) $ nano /etc/nginx/sites-available/app Next, we add the following code into the configuration file and save it. server { listen 80; location / { include proxy_params; proxy_pass http://unix:/home/movieapp/app.sock; } } Here, we open up a server block and define it to listen for requests on port 80. We also add a location block that matches every request. In this block, we include proxy_params file that specifies some general proxy parameters and passes the requests to the socket we defined using the proxy_pass directive. 2. Enable Nginx server block We need to link the file to the sites-enabled directory to enable the Nginx server block. The syntax for linking the file is as follows: ln -s &amp;lt;source_file&amp;gt; &amp;lt;destination_file&amp;gt; Actual code will look like: ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/ 3. Check for errors in Nginx configuration file we can check syntax errors in Nginx configuration file by executing the nginx -t command as follows: (env) $ nginx -t nginx: the configuration file /etc/nginx/nginx.conf syntax is ok nginx: configuration file /etc/nginx/nginx.conf test is successful If there are no errors, we restart the Nginx process to read our new config file. systemctl restart nginx 4. Adjust firewall The final step we need to take care of is adjusting the firewall to allow access to the Nginx server: (env) $ sudo ufw allow 'Nginx Full' Skipping adding existing rule Skipping adding existing rule (v6) You can visit http://localhost:80 to view your running flask application.</summary></entry><entry><title type="html">Conda Docker tutorial</title><link href="http://localhost:4000/conda-docker-tutorial" rel="alternate" type="text/html" title="Conda Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/conda-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/conda-docker-tutorial">&lt;p&gt;Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.
-Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.&lt;/p&gt;
-
-&lt;h2 id=&quot;defining-the-conda-environment&quot;&gt;Defining the Conda environment&lt;/h2&gt;
-&lt;p&gt;Firstly, let’s create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; file to define the Conda environment.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name: env
-channels:
-   - conda-forge
-dependencies:
-   - python=3.6
-   - flask
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Here &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; is the name of our Conda environment. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda-forge&lt;/code&gt; channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; is similar to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; used by virtual environment &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;venv&lt;/code&gt; module.&lt;/p&gt;
-
-&lt;h2 id=&quot;a-simple-python-program&quot;&gt;A simple Python program&lt;/h2&gt;
-
-&lt;p&gt;Write a simple Python program to test the Conda environment activation.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import flask
- 
-print(&quot;Flask import successful!&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h2&gt;
-
-&lt;p&gt;Following the standard approach, our first iteration of the Dockerfile looks like:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Activate Conda environment and check if it is working properly
-RUN conda activate env
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Following is the result when we try building the Docker image&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 5/9 : RUN conda activate env
----&amp;gt; Running in e33a2dcd4d99
- 
-CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
-To initialize your shell, run
- 
-   $ conda init &amp;lt;SHELL_NAME&amp;gt;
- 
-The command '/bin/sh -c conda activate env' returned a non-zero code: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.&lt;/p&gt;
-
-&lt;h2 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h2&gt;
-
-&lt;p&gt;We can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; as a solution to the above problem. Docker by default uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/bin/sh -c &amp;lt;command&amp;gt;&lt;/code&gt; to execute instructions but we require a bash shell to run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;p&gt;To tackle this, we override the default shell by adding the following to the Dockerfile:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Our updated Dockerfile should look as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Override default shell and use bash
-SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Initialize conda in the bash config files
-RUN conda init bash
- 
-# Activate Conda environment and check if it is working properly
-RUN conda activate env
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Building the Docker image again gives us the following result:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 9/11 : RUN python -c &quot;import flask&quot;
----&amp;gt; Running in ea831eb42ff6
-Traceback (most recent call last):
- File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
-ModuleNotFoundError: No module named 'flask'
-The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;So the problem is that each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; and later &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;s are new shell sessions without Conda activation.&lt;/p&gt;
-
-&lt;h2 id=&quot;third-attempt&quot;&gt;Third attempt&lt;/h2&gt;
-
-&lt;p&gt;Now, since each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction is a separate run of bash, adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda activate&lt;/code&gt; command to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.&lt;/p&gt;
-
-&lt;p&gt;This is due to the fact that we are using &lt;em&gt;exec&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction which doesn’t actually start a shell session. An alternative to this is the &lt;em&gt;shell&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT python run.py&lt;/code&gt; but this won’t work since it breaks down the container.&lt;/p&gt;
-
-&lt;p&gt;The final resort to this problem is by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda run -n env &amp;lt;command&amp;gt;&lt;/code&gt; instruction which actually runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;command&amp;gt;&lt;/code&gt; inside the conda environment.&lt;/p&gt;
-
-&lt;p&gt;So the final working Dockerfile should look like:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Override default shell and use bash
-SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
- 
-# Activate Conda environment and check if it is working properly
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;And the result obtained is as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build .
-Sending build context to Docker daemon  4.608kB
-Step 1/9 : FROM continuumio/miniconda3
----&amp;gt; b4adc22212f1
-Step 2/9 : WORKDIR /app
----&amp;gt; Using cache
----&amp;gt; 658c526932d9
-Step 3/9 : COPY environment.yml .
----&amp;gt; 26ff11b33587
-Step 4/9 : RUN conda env create -f environment.yml
----&amp;gt; Running in d6729c106f2b
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done
- 
-Downloading and Extracting Packages
-_libgcc_mutex-0.1    | 3 KB      | ########## | 100%
-flask-1.1.2          | 70 KB     | ########## | 100%
-zlib-1.2.11          | 106 KB    | ########## | 100%
-wheel-0.35.1         | 29 KB     | ########## | 100%
-ncurses-6.2          | 1022 KB   | ########## | 100%
-werkzeug-1.0.1       | 239 KB    | ########## | 100%
-ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%
-click-7.1.2          | 64 KB     | ########## | 100%
-markupsafe-1.1.1     | 27 KB     | ########## | 100%
-libffi-3.2.1         | 47 KB     | ########## | 100%
-openssl-1.1.1h       | 2.1 MB    | ########## | 100%
-python-3.6.11        | 34.2 MB   | ########## | 100%
-itsdangerous-1.1.0   | 16 KB     | ########## | 100%
-libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%
-xz-5.2.5             | 343 KB    | ########## | 100%
-libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%
-setuptools-49.6.0    | 947 KB    | ########## | 100%
-jinja2-2.11.2        | 93 KB     | ########## | 100%
-ca-certificates-2020 | 145 KB    | ########## | 100%
-certifi-2020.6.20    | 151 KB    | ########## | 100%
-pip-20.2.4           | 1.1 MB    | ########## | 100%
-libgomp-9.3.0        | 378 KB    | ########## | 100%
-tk-8.6.10            | 3.2 MB    | ########## | 100%
-python_abi-3.6       | 4 KB      | ########## | 100%
-_openmp_mutex-4.5    | 22 KB     | ########## | 100%
-sqlite-3.33.0        | 1.4 MB    | ########## | 100%
-readline-8.0         | 281 KB    | ########## | 100%
-Preparing transaction: ...working... done
-Verifying transaction: ...working... done
-Executing transaction: ...working... done
-#
-# To activate this environment, use
-#
-#     $ conda activate env
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
- 
-==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;==
- current version: 4.8.2
- latest version: 4.9.1
- 
-Please update conda by running
- 
-   $ conda update -n base -c defaults conda
- 
-Removing intermediate container d6729c106f2b
----&amp;gt; c03cbd024136
-Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
----&amp;gt; Running in f37ed240c11e
-Removing intermediate container f37ed240c11e
----&amp;gt; b56ab8574a14
-Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot;
----&amp;gt; Running in 46b28807a8e2
-Making sure flask is installed correctly...
- 
-Removing intermediate container 46b28807a8e2
----&amp;gt; 70228fcf11ec
-Step 7/9 : RUN python -c &quot;import flask&quot;
----&amp;gt; Running in b5a021d87998
-Removing intermediate container b5a021d87998
----&amp;gt; 846df181bd85
-Step 8/9 : COPY run.py .
----&amp;gt; 975a983a3504
-Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
----&amp;gt; Running in 240d3476910c
-Removing intermediate container 240d3476910c
----&amp;gt; 72a352583f00
-Successfully built 72a352583f00
- 
-$ docker images
-REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
-&amp;lt;none&amp;gt;                   &amp;lt;none&amp;gt;              72a352583f00        2 minutes ago       964MB
- 
-$ docker run 72a352583f00
-Flask import successful!
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://pythonspeed.com/articles/activate-conda-dockerfile/&quot;&gt;Activating a Conda environment in your Dockerfile&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile. Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect. Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment. name: env channels: - conda-forge dependencies: - python=3.6 - flask Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask. environment.yml is similar to the requirements.txt used by virtual environment venv module. A simple Python program Write a simple Python program to test the Conda environment activation. import flask print(&quot;Flask import successful!&quot;) First attempt Following the standard approach, our first iteration of the Dockerfile looks like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Following is the result when we try building the Docker image Step 5/9 : RUN conda activate env ---&amp;gt; Running in e33a2dcd4d99 CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'. To initialize your shell, run $ conda init &amp;lt;SHELL_NAME&amp;gt; The command '/bin/sh -c conda activate env' returned a non-zero code: 1 We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method. Second attempt We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &amp;lt;command&amp;gt; to execute instructions but we require a bash shell to run the conda init bash command. To tackle this, we override the default shell by adding the following to the Dockerfile: SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] Our updated Dockerfile should look as follows: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Initialize conda in the bash config files RUN conda init bash # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Building the Docker image again gives us the following result: Step 9/11 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in ea831eb42ff6 Traceback (most recent call last): File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt; ModuleNotFoundError: No module named 'flask' The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1 So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation. Third attempt Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above. This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container. The final resort to this problem is by using conda run -n env &amp;lt;command&amp;gt; instruction which actually runs &amp;lt;command&amp;gt; inside the conda environment. So the final working Dockerfile should look like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] And the result obtained is as follows: $ docker build . Sending build context to Docker daemon 4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&amp;gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&amp;gt; Using cache ---&amp;gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&amp;gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&amp;gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done Downloading and Extracting Packages _libgcc_mutex-0.1 | 3 KB | ########## | 100% flask-1.1.2 | 70 KB | ########## | 100% zlib-1.2.11 | 106 KB | ########## | 100% wheel-0.35.1 | 29 KB | ########## | 100% ncurses-6.2 | 1022 KB | ########## | 100% werkzeug-1.0.1 | 239 KB | ########## | 100% ld_impl_linux-64-2.3 | 617 KB | ########## | 100% click-7.1.2 | 64 KB | ########## | 100% markupsafe-1.1.1 | 27 KB | ########## | 100% libffi-3.2.1 | 47 KB | ########## | 100% openssl-1.1.1h | 2.1 MB | ########## | 100% python-3.6.11 | 34.2 MB | ########## | 100% itsdangerous-1.1.0 | 16 KB | ########## | 100% libstdcxx-ng-9.3.0 | 4.0 MB | ########## | 100% xz-5.2.5 | 343 KB | ########## | 100% libgcc-ng-9.3.0 | 7.8 MB | ########## | 100% setuptools-49.6.0 | 947 KB | ########## | 100% jinja2-2.11.2 | 93 KB | ########## | 100% ca-certificates-2020 | 145 KB | ########## | 100% certifi-2020.6.20 | 151 KB | ########## | 100% pip-20.2.4 | 1.1 MB | ########## | 100% libgomp-9.3.0 | 378 KB | ########## | 100% tk-8.6.10 | 3.2 MB | ########## | 100% python_abi-3.6 | 4 KB | ########## | 100% _openmp_mutex-4.5 | 22 KB | ########## | 100% sqlite-3.33.0 | 1.4 MB | ########## | 100% readline-8.0 | 281 KB | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # # $ conda activate env # # To deactivate an active environment, use # # $ conda deactivate ==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;== current version: 4.8.2 latest version: 4.9.1 Please update conda by running $ conda update -n base -c defaults conda Removing intermediate container d6729c106f2b ---&amp;gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&amp;gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&amp;gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&amp;gt; Running in 46b28807a8e2 Making sure flask is installed correctly... Removing intermediate container 46b28807a8e2 ---&amp;gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&amp;gt; 846df181bd85 Step 8/9 : COPY run.py . ---&amp;gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&amp;gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&amp;gt; 72a352583f00 Successfully built 72a352583f00 $ docker images REPOSITORY TAG IMAGE ID CREATED SIZE &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 72a352583f00 2 minutes ago 964MB $ docker run 72a352583f00 Flask import successful! References</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/faun/deploy-flask-app-with-nginx-using-gunicorn-7fda4f50066a&quot;&gt;Deploy flask app with Nginx using Gunicorn&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn. Introduction Gunicorn Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks. Nginx Nginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration. Why use Gunicorn and Nginx with Flask? Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests. Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost. Build the Flask app 1. Update and install local packages First of all, update your local package index and then install the required packages as follows: # Update the local package index $ sudo apt-get update # Install dependencies $ sudo apt install python3-pip python3-dev python3-venv nginx 2. Create a virtual environment Now, we create a virtual environment env for the Python project using venv module. python3 -m venv env We activate the environment env as follows: source env/bin/activate 3. Install Python dependencies Next, we install Flask and Gunicorn. pip3 install flask gunicorn requests 4. Create the movie quotes app We create a file app.py with the following content in it: import requests from flask import Flask, render_template app = Flask(__name__) @app.route('/') def movieapp(): url = &quot;http://movie-quotes-2.herokuapp.com/api/v1/quotes/random&quot; response = requests.get(url).json() return render_template(&quot;index.html&quot;, film=response['film'], quote=response['content']) if __name__ == '__main__': app.run(debug=False, host='0.0.0.0') Now, create a templates folder with index.html file in it to be used as a template for our flask application. Below is the sample index.html file which can be modified as per your requirements. &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;style type=&quot;text/css&quot;&amp;gt; body { background: black; color: white; } div.container { max-width: 500px; margin: 100px auto; border: 20px solid white; padding: 10px; text-align: center; } h2 { text-transform: uppercase; } &amp;lt;/style&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;div class=&quot;container&quot;&amp;gt; &amp;lt;h2&amp;gt;Quote of the day&amp;lt;/h2&amp;gt; &amp;lt;hr&amp;gt; &amp;lt;h3&amp;gt;FILM: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ film }} &amp;lt;/h4&amp;gt; &amp;lt;h3&amp;gt;QUOTE: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ quote }} &amp;lt;/h4&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 5.Testing the app Before moving ahead, we test the flask app and make sure everything is working fine. (env) $ python3 app.py * Serving Flask app &quot;app&quot; (lazy loading) * Environment: production WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead. * Debug mode: off * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit) The result should be visible if you visit http://localhost:5000. When you are finished press Ctrl+C in your terminal window to exit the application server. Add WSGI to the app 1. Create WSGI entry point We create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application. Create wsgi.py file in the same directory as app.py, import the Flask instance from our application and run it as follows: from app import app if __name__ == '__main__': app.run() 2. Test Gunicorn’s ability We now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above. Note: The WSGI file name is written without .py extension. So the syntax is gunicorn &amp;lt;WSGI_module&amp;gt;:&amp;lt;callable_name&amp;gt;. (env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app [2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4 [2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725) [2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync [2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728 When you visit http://localhost:5000, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint. When you are finished press Ctrl+C in your terminal window to exit the application server. 3. Create WSGI socket The communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as app.py as follows: (env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app [2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4 [2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854) [2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync [2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857 [2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858 [2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859 By adding --workers 3 we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it. If you notice, an app.sock file will be automatically created in the project folder upon execution of the above command. Configure Nginx 1. Create an Nginx configuration file Gunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file. Let the Gunicorn server run, open a new terminal and execute ls /etc/nginx/ command. In the output you would get a list Nginx configuration along with two important directories: sites-available: contains configuration files for all of your possible applications. sites-enabled: contains links to the configuration files that Nginx will actually read and run. Now, create a new server block configuration file app in /etc/nginx/sites-available/ directory. (env) $ nano /etc/nginx/sites-available/app Next, we add the following code into the configuration file and save it. server { listen 80; location / { include proxy_params; proxy_pass http://unix:/home/movieapp/app.sock; } } Here, we open up a server block and define it to listen for requests on port 80. We also add a location block that matches every request. In this block, we include proxy_params file that specifies some general proxy parameters and passes the requests to the socket we defined using the proxy_pass directive. 2. Enable Nginx server block We need to link the file to the sites-enabled directory to enable the Nginx server block. The syntax for linking the file is as follows: ln -s &amp;lt;source_file&amp;gt; &amp;lt;destination_file&amp;gt; Actual code will look like: ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/ 3. Check for errors in Nginx configuration file we can check syntax errors in Nginx configuration file by executing the nginx -t command as follows: (env) $ nginx -t nginx: the configuration file /etc/nginx/nginx.conf syntax is ok nginx: configuration file /etc/nginx/nginx.conf test is successful If there are no errors, we restart the Nginx process to read our new config file. systemctl restart nginx 4. Adjust firewall The final step we need to take care of is adjusting the firewall to allow access to the Nginx server: (env) $ sudo ufw allow 'Nginx Full' Skipping adding existing rule Skipping adding existing rule (v6) You can visit http://localhost:80 to view your running flask application.</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
 
 &lt;h2 id=&quot;why-would-you-want-to-use-a-dockerfile&quot;&gt;Why would you want to use a Dockerfile?&lt;/h2&gt;
 

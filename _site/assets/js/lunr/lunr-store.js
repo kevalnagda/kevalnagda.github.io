@@ -41,9 +41,21 @@ var store = [{
         "url": "http://localhost:4000/flask-app-with-wsgi-and-nginx",
         "teaser": null
       },{
-        "title": "Jenkins Docker tutorial",
-        "excerpt":"In this blog, we learn how to setup Jenkins in a Docker container. What is Jenkins? Jenkins is a self-contained, open source automation server which can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software. Jenkins can be installed through native system...","categories": ["jekyll","update"],
+        "title": "Set up Jenkins in Docker",
+        "excerpt":"In this blog, we learn how to run Jenkins in a Docker container. What is Jenkins? Jenkins is a self-contained, open-source automation server that can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software. Jenkins can be installed through native system packages,...","categories": ["jekyll","update"],
         "tags": [],
-        "url": "http://localhost:4000/jenkins-docker-tutorial",
+        "url": "http://localhost:4000/jenkins-in-docker",
+        "teaser": null
+      },{
+        "title": "AMD CPU review",
+        "excerpt":"AMD’s mainstream Ryzen chips are highly disruptive which include several families of various levels of potency. Ryzen chips introduce a completely new motherboard platform, and the processors require different memory and coolers than their predecessors. Below is a quick breakdown of the different AMD Ryzen processor brackets: Ryzen 3: Up...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/amd-cpu-review",
+        "teaser": null
+      },{
+        "title": "Build and Publish Docker image using Jenkins",
+        "excerpt":"Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub. Create a new Jenkins Docker image The official Jenkins image does not have docker installed in it. So if you try to access docker while running...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/jenkins-git-docker-image",
         "teaser": null
       }]
