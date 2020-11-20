@@ -58,4 +58,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/jenkins-git-docker-image",
         "teaser": null
+      },{
+        "title": "fastText",
+        "excerpt":"FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers. The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices. Introduction Most of the...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/fastText",
+        "teaser": null
       }]

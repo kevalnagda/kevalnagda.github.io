@@ -1,0 +1,614 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>fastText - Home</title>
+<meta name="description" content="FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers.  The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices.  Introduction  Most of the techniques represent each word of the vocabulary with a distinct vector i.e. without a shared parameter between words. In other words, they ignore the internal structure of words which might affect the learning of languages rich in morphology.  Thus, Enriching Word Vectors with Subword Information proposes an alternative approach where they learn representations for character n-grams and represent words as the sum of the n-gram vectors.  Experimental setup  Subword model  The proposed model sisg (Subword Information Skip Gram) is based on the continuous skipgram model introduced by Mikolov et al. (2013b).  Since the base skipgram model ignores the internal structure of words by using a distinct word representation for each word, sisg proposes a different scoring function s, in order to take into account the internal structure information.    where each word w is represented as a bag of character n-gram, Gw belongs to the set { 1, …, G } of the n-grams of size G. Each n-gram g is associated to a vector represention zgT.  Now, for example, the word where with n=3 will be represented by the character n-grams as &lt;wh, whe, her, ere, re&gt;.  and the special sequence &lt;where&gt;. Here &lt; and &gt; are added as special boundary symbols to distinguish prefixes and suffixes from other characters sequences.  Optimization  The optimization problem is solved by using stochastic gradient descent on the negative log-likelihood function. The optimization is being carried out in parallel where all threads share parameters and update vectors in an asynchronous manner.  Implementation details  Coming to implementation details, sisg has word vectors of dimension 300 where 5 negatives are sampled at random for each positive example. The context window of size c lies between 1 and 5. The step size is set to 0.05 since this is the default value set in the word2vec package and works well for sisg model too.  Also, while building the word dictionary, only those words were kept which appeared at least 5 times in the training set.  Dataset  The sisg model was trained on Wikipedia data which consists of nine languages. The Wikipedia data was pre-processed using a perl script. All the datasets are shuffled and used to train the model over 5 passes.  Now because of the simplicity, the sisg model trains fast and does not require heavy preprocessing or supervision.  Text classification with fastText  Text classification is a core problem to many applications and the fastText tool helps us easily solve this problem.  Installation  Download and unzip the most recent fastText release:  $ wget https://github.com/facebookresearch/fastText/archive/v0.9.2.zip $ unzip v0.9.2.zip   Move to the fastText directory and install as follows:  $ cd fastText-0.9.2   # to install using the command-line tool $ make   # to install via python bindings (we select this approach) $ pip install .   We check the installation by importing fastText in a Python console:  &gt;&gt;&gt; import fasttext &gt;&gt;&gt; help(fasttext.FastText) Help on module fasttext.FastText in fasttext:   NAME     fasttext.FastText   DESCRIPTION     # Copyright (c) 2017-present, Facebook, Inc.     # All rights reserved.     #     # This source code is licensed under the MIT license found in the     # LICENSE file in the root directory of this source tree.   FUNCTIONS     load_model(path)         Load a model given a filepath and return a model object.       read_args(arg_list, arg_dict, arg_names, default_values)       tokenize(text)         Given a string of text, tokenize it and return a list of tokens       train_supervised(*kargs, **kwargs)         Train a supervised model and return a model object.           input must be a filepath. The input text does not need to be tokenized         as per the tokenize function, but it must be preprocessed and encoded         as UTF-8. You might want to consult standard preprocessing scripts such         as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html           The input file must must contain at least one label per line. For an         example consult the example datasets which are part of the fastText         repository such as the dataset pulled by classification-example.sh.       train_unsupervised(*kargs, **kwargs)         Train an unsupervised model and return a model object.           input must be a filepath. The input text does not need to be tokenized         as per the tokenize function, but it must be preprocessed and encoded         as UTF-8. You might want to consult standard preprocessing scripts such         as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html           The input field must not contain any labels or use the specified label prefix         unless it is ok for those words to be ignored. For an example consult the         dataset pulled by the example script word-vector-example.sh, which is         part of the fastText repository.   Dataset  Let’s download example questions from the Stackexchange:  $ wget https://dl.fbaipublicfiles.com/fasttext/data/cooking.stackexchange.tar.gz &amp;&amp; tar xvzf cooking.stackexchange.tar.gz   Before training a text classifier we need to split the dataset into training and validation sets. We use wc command to check the number of lines in the dataset:  $ wc cooking.stackexchange.txt 15404  169582 1401900 cooking.stackexchange.txt   The dataset contains 15404 lines i.e. 15404 examples which we split into a training set of 12404 examples and a validation set of 3000 examples:  $ head -n 12404 cooking.stackexchange.txt &gt; cooking.train $ tail -n 3000 cooking.stackexchange.txt &gt; cooking.valid   Train  To train the text classifier we import fastText and then use the train_supervised method by providing the training set as an input parameter.  &gt;&gt;&gt; import fasttext &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;) Read 0M words Number of words:  8974 Number of labels: 735 Progress: 100.0% words/sec/thread:   77120 lr:  0.000000 avg.loss:  9.961853 ETA:   0h 0m 0s   Save  We save the model with save_model so that we can load it later with load_model function:  &gt;&gt;&gt; model.save_model(&quot;model_cooking.bin&quot;)   Test  We can test the model as follows:  &gt;&gt;&gt; model.predict(&quot;Which baking dish is best to bake a banana bread ?&quot;) ((&#39;__label__baking&#39;,), array([0.21342881]))   The predict method predicts baking tag for the given text input. Let’s look at another example:  &gt;&gt;&gt; model.predict(&quot;Why not put knives in the dishwasher?&quot;) ((&#39;__label__food-safety&#39;,), array([0.09138963]))   The label predicted in this case is food-safety which is not relevant for the given input. To get a better understanding, let’s test the model on the validation set:  &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.172, 0.07438373936860314)   The output contains the number of samples (3000), the precision at one (0.172), and the recall at one (0.074).     What is precision?    Precision is a measure of how precise or accurate the model is out of those predicted positive, how many of them are actually positive.          What is recall?    Recall is a measure that calculates how many of the Actual Positives of the model are True Positives.       We can also compute the precision and recall at k (here we use k=5) as follows:  &gt;&gt;&gt; model.test(&quot;cooking.test&quot;, k=5) (3000, 0.07286666666666666, 0.1575609052904714)   Optimization  We can optimize and improve the performance of the model by performing various steps given below  Preprocessing the dataset  The raw dataset usually contains elements like uppercase letters or punctuations which are not required for training and might/might not affect the model’s performance. Thus, we can normalize the dataset by using command line tools such as sed and tr:   $ cat cooking.stackexchange.txt | sed -e &quot;s/\([.\!?,&#39;/()]\)/ \1 /g&quot; | tr &quot;[:upper:]&quot; &quot;[:lower:]&quot; &gt; cooking.preprocessed.txt  $ head -n 12404 cooking.preprocessed.txt &gt; cooking.train  $ tail -n 3000 cooking.preprocessed.txt &gt; cooking.valid   Now, we retrain our model on the preprocessed dataset:  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;) Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   46336 lr:  0.000000 avg.loss: 10.019582 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.17466666666666666, 0.07553697563788381)   We can observe a slight improvement in the results which can be significant in other cases.  Tweaking number of epochs and learning rate  fastText sees each training example only 5 times (epochs=5) by default which may be pretty small depending on the size of the dataset. We can change this by using the epoch option while training.  Also, the learning rate of the model corresponds to how much the model changes after processing each example and we can tweak it by using the lr option.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25) Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   60929 lr:  0.000000 avg.loss:  4.399605 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.585, 0.25299120657344676)   We observe drastic changes in the output results and thus, it is evident that experimenting with hyperparameters such as learning rate and epochs can significantly improve a model’s performance.  n-grams  Currently, we use unigrams for training the model which generally does not help much. Instead, we can use bigrams which might cover prefixes or suffixes properly. In bigrams, we split a sentence or corpus of text into 2 tokens or words, unlike unigrams.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2) Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   66974 lr:  0.000000 avg.loss:  3.152711 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.6083333333333333, 0.2630820239296526)   The results have further improved with just a single easy step.  Hierarchical Softmax  Finally, we replace the regular softmax function with a hierarchical softmax function for loss since it helps training models on large datasets faster.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2, bucket=200000, dim=50, loss=&#39;hs&#39;)Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:  899564 lr:  0.000000 avg.loss:  2.271247 ETA:   0h 0m 0s   Here, bucket is used to define the bucket size and dim is the dimension of the word vectors.  Autotune  We observed that finding the best hyperparameters is crucial for building efficient models but doing it manually is difficult. This is where fastText’s autotune feature comes to help.  FastText’s autotune feature allows you to automatically perform hyperparameter optimization for the model by providing a validation file with the autottuneValidationFile parameter.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&#39;cooking.train&#39;, autotuneValidationFile=&#39;cooking.valid&#39;) Progress: 100.0% Trials:   12 Best score:  0.335514 ETA:   0h 0m 0s Training again with best arguments Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   66732 lr:  0.000000 avg.loss:  4.540132 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.5583333333333333, 0.24145884388064004)   We get the best F1-score in the output after a default duration of 5 minutes which can be changed by setting the autotuneDuration parameter.     What is F1-score?    F1-score is a function of Precision and Recall as shown below. F1-score is an important measure that is required to seek a proper balance between Precision and Recall.       Reference     Text classification">
+
+
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="fastText">
+<meta property="og:url" content="http://localhost:4000/fastText">
+
+
+  <meta property="og:description" content="FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers.  The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices.  Introduction  Most of the techniques represent each word of the vocabulary with a distinct vector i.e. without a shared parameter between words. In other words, they ignore the internal structure of words which might affect the learning of languages rich in morphology.  Thus, Enriching Word Vectors with Subword Information proposes an alternative approach where they learn representations for character n-grams and represent words as the sum of the n-gram vectors.  Experimental setup  Subword model  The proposed model sisg (Subword Information Skip Gram) is based on the continuous skipgram model introduced by Mikolov et al. (2013b).  Since the base skipgram model ignores the internal structure of words by using a distinct word representation for each word, sisg proposes a different scoring function s, in order to take into account the internal structure information.    where each word w is represented as a bag of character n-gram, Gw belongs to the set { 1, …, G } of the n-grams of size G. Each n-gram g is associated to a vector represention zgT.  Now, for example, the word where with n=3 will be represented by the character n-grams as &lt;wh, whe, her, ere, re&gt;.  and the special sequence &lt;where&gt;. Here &lt; and &gt; are added as special boundary symbols to distinguish prefixes and suffixes from other characters sequences.  Optimization  The optimization problem is solved by using stochastic gradient descent on the negative log-likelihood function. The optimization is being carried out in parallel where all threads share parameters and update vectors in an asynchronous manner.  Implementation details  Coming to implementation details, sisg has word vectors of dimension 300 where 5 negatives are sampled at random for each positive example. The context window of size c lies between 1 and 5. The step size is set to 0.05 since this is the default value set in the word2vec package and works well for sisg model too.  Also, while building the word dictionary, only those words were kept which appeared at least 5 times in the training set.  Dataset  The sisg model was trained on Wikipedia data which consists of nine languages. The Wikipedia data was pre-processed using a perl script. All the datasets are shuffled and used to train the model over 5 passes.  Now because of the simplicity, the sisg model trains fast and does not require heavy preprocessing or supervision.  Text classification with fastText  Text classification is a core problem to many applications and the fastText tool helps us easily solve this problem.  Installation  Download and unzip the most recent fastText release:  $ wget https://github.com/facebookresearch/fastText/archive/v0.9.2.zip $ unzip v0.9.2.zip   Move to the fastText directory and install as follows:  $ cd fastText-0.9.2   # to install using the command-line tool $ make   # to install via python bindings (we select this approach) $ pip install .   We check the installation by importing fastText in a Python console:  &gt;&gt;&gt; import fasttext &gt;&gt;&gt; help(fasttext.FastText) Help on module fasttext.FastText in fasttext:   NAME     fasttext.FastText   DESCRIPTION     # Copyright (c) 2017-present, Facebook, Inc.     # All rights reserved.     #     # This source code is licensed under the MIT license found in the     # LICENSE file in the root directory of this source tree.   FUNCTIONS     load_model(path)         Load a model given a filepath and return a model object.       read_args(arg_list, arg_dict, arg_names, default_values)       tokenize(text)         Given a string of text, tokenize it and return a list of tokens       train_supervised(*kargs, **kwargs)         Train a supervised model and return a model object.           input must be a filepath. The input text does not need to be tokenized         as per the tokenize function, but it must be preprocessed and encoded         as UTF-8. You might want to consult standard preprocessing scripts such         as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html           The input file must must contain at least one label per line. For an         example consult the example datasets which are part of the fastText         repository such as the dataset pulled by classification-example.sh.       train_unsupervised(*kargs, **kwargs)         Train an unsupervised model and return a model object.           input must be a filepath. The input text does not need to be tokenized         as per the tokenize function, but it must be preprocessed and encoded         as UTF-8. You might want to consult standard preprocessing scripts such         as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html           The input field must not contain any labels or use the specified label prefix         unless it is ok for those words to be ignored. For an example consult the         dataset pulled by the example script word-vector-example.sh, which is         part of the fastText repository.   Dataset  Let’s download example questions from the Stackexchange:  $ wget https://dl.fbaipublicfiles.com/fasttext/data/cooking.stackexchange.tar.gz &amp;&amp; tar xvzf cooking.stackexchange.tar.gz   Before training a text classifier we need to split the dataset into training and validation sets. We use wc command to check the number of lines in the dataset:  $ wc cooking.stackexchange.txt 15404  169582 1401900 cooking.stackexchange.txt   The dataset contains 15404 lines i.e. 15404 examples which we split into a training set of 12404 examples and a validation set of 3000 examples:  $ head -n 12404 cooking.stackexchange.txt &gt; cooking.train $ tail -n 3000 cooking.stackexchange.txt &gt; cooking.valid   Train  To train the text classifier we import fastText and then use the train_supervised method by providing the training set as an input parameter.  &gt;&gt;&gt; import fasttext &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;) Read 0M words Number of words:  8974 Number of labels: 735 Progress: 100.0% words/sec/thread:   77120 lr:  0.000000 avg.loss:  9.961853 ETA:   0h 0m 0s   Save  We save the model with save_model so that we can load it later with load_model function:  &gt;&gt;&gt; model.save_model(&quot;model_cooking.bin&quot;)   Test  We can test the model as follows:  &gt;&gt;&gt; model.predict(&quot;Which baking dish is best to bake a banana bread ?&quot;) ((&#39;__label__baking&#39;,), array([0.21342881]))   The predict method predicts baking tag for the given text input. Let’s look at another example:  &gt;&gt;&gt; model.predict(&quot;Why not put knives in the dishwasher?&quot;) ((&#39;__label__food-safety&#39;,), array([0.09138963]))   The label predicted in this case is food-safety which is not relevant for the given input. To get a better understanding, let’s test the model on the validation set:  &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.172, 0.07438373936860314)   The output contains the number of samples (3000), the precision at one (0.172), and the recall at one (0.074).     What is precision?    Precision is a measure of how precise or accurate the model is out of those predicted positive, how many of them are actually positive.          What is recall?    Recall is a measure that calculates how many of the Actual Positives of the model are True Positives.       We can also compute the precision and recall at k (here we use k=5) as follows:  &gt;&gt;&gt; model.test(&quot;cooking.test&quot;, k=5) (3000, 0.07286666666666666, 0.1575609052904714)   Optimization  We can optimize and improve the performance of the model by performing various steps given below  Preprocessing the dataset  The raw dataset usually contains elements like uppercase letters or punctuations which are not required for training and might/might not affect the model’s performance. Thus, we can normalize the dataset by using command line tools such as sed and tr:   $ cat cooking.stackexchange.txt | sed -e &quot;s/\([.\!?,&#39;/()]\)/ \1 /g&quot; | tr &quot;[:upper:]&quot; &quot;[:lower:]&quot; &gt; cooking.preprocessed.txt  $ head -n 12404 cooking.preprocessed.txt &gt; cooking.train  $ tail -n 3000 cooking.preprocessed.txt &gt; cooking.valid   Now, we retrain our model on the preprocessed dataset:  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;) Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   46336 lr:  0.000000 avg.loss: 10.019582 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.17466666666666666, 0.07553697563788381)   We can observe a slight improvement in the results which can be significant in other cases.  Tweaking number of epochs and learning rate  fastText sees each training example only 5 times (epochs=5) by default which may be pretty small depending on the size of the dataset. We can change this by using the epoch option while training.  Also, the learning rate of the model corresponds to how much the model changes after processing each example and we can tweak it by using the lr option.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25) Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   60929 lr:  0.000000 avg.loss:  4.399605 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.585, 0.25299120657344676)   We observe drastic changes in the output results and thus, it is evident that experimenting with hyperparameters such as learning rate and epochs can significantly improve a model’s performance.  n-grams  Currently, we use unigrams for training the model which generally does not help much. Instead, we can use bigrams which might cover prefixes or suffixes properly. In bigrams, we split a sentence or corpus of text into 2 tokens or words, unlike unigrams.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2) Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   66974 lr:  0.000000 avg.loss:  3.152711 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.6083333333333333, 0.2630820239296526)   The results have further improved with just a single easy step.  Hierarchical Softmax  Finally, we replace the regular softmax function with a hierarchical softmax function for loss since it helps training models on large datasets faster.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2, bucket=200000, dim=50, loss=&#39;hs&#39;)Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:  899564 lr:  0.000000 avg.loss:  2.271247 ETA:   0h 0m 0s   Here, bucket is used to define the bucket size and dim is the dimension of the word vectors.  Autotune  We observed that finding the best hyperparameters is crucial for building efficient models but doing it manually is difficult. This is where fastText’s autotune feature comes to help.  FastText’s autotune feature allows you to automatically perform hyperparameter optimization for the model by providing a validation file with the autottuneValidationFile parameter.  &gt;&gt;&gt; model = fasttext.train_supervised(input=&#39;cooking.train&#39;, autotuneValidationFile=&#39;cooking.valid&#39;) Progress: 100.0% Trials:   12 Best score:  0.335514 ETA:   0h 0m 0s Training again with best arguments Read 0M words Number of words:  8952 Number of labels: 735 Progress: 100.0% words/sec/thread:   66732 lr:  0.000000 avg.loss:  4.540132 ETA:   0h 0m 0s   &gt;&gt;&gt; model.test(&quot;cooking.test&quot;) (3000, 0.5583333333333333, 0.24145884388064004)   We get the best F1-score in the output after a default duration of 5 minutes which can be changed by setting the autotuneDuration parameter.     What is F1-score?    F1-score is a function of Precision and Recall as shown below. F1-score is an important measure that is required to seek a proper balance between Precision and Recall.       Reference     Text classification">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-11-19T12:00:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/fastText">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="fastText">
+    <meta itemprop="description" content="FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers.The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices.IntroductionMost of the techniques represent each word of the vocabulary with a distinct vector i.e. without a shared parameter between words. In other words, they ignore the internal structure of words which might affect the learning of languages rich in morphology.Thus, Enriching Word Vectors with Subword Information proposes an alternative approach where they learn representations for character n-grams and represent words as the sum of the n-gram vectors.Experimental setupSubword modelThe proposed model sisg (Subword Information Skip Gram) is based on the continuous skipgram model introduced by Mikolov et al. (2013b).Since the base skipgram model ignores the internal structure of words by using a distinct word representation for each word, sisg proposes a different scoring function s, in order to take into account the internal structure information.where each word w is represented as a bag of character n-gram, Gw belongs to the set { 1, …, G } of the n-grams of size G. Each n-gram g is associated to a vector represention zgT.Now, for example, the word where with n=3 will be represented by the character n-grams as &lt;wh, whe, her, ere, re&gt;.and the special sequence &lt;where&gt;. Here &lt; and &gt; are added as special boundary symbols to distinguish prefixes and suffixes from other characters sequences.OptimizationThe optimization problem is solved by using stochastic gradient descent on the negative log-likelihood function. The optimization is being carried out in parallel where all threads share parameters and update vectors in an asynchronous manner.Implementation detailsComing to implementation details, sisg has word vectors of dimension 300 where 5 negatives are sampled at random for each positive example. The context window of size c lies between 1 and 5. The step size is set to 0.05 since this is the default value set in the word2vec package and works well for sisg model too.Also, while building the word dictionary, only those words were kept which appeared at least 5 times in the training set.DatasetThe sisg model was trained on Wikipedia data which consists of nine languages. The Wikipedia data was pre-processed using a perl script. All the datasets are shuffled and used to train the model over 5 passes.Now because of the simplicity, the sisg model trains fast and does not require heavy preprocessing or supervision.Text classification with fastTextText classification is a core problem to many applications and the fastText tool helps us easily solve this problem.InstallationDownload and unzip the most recent fastText release:$ wget https://github.com/facebookresearch/fastText/archive/v0.9.2.zip$ unzip v0.9.2.zipMove to the fastText directory and install as follows:$ cd fastText-0.9.2 # to install using the command-line tool$ make # to install via python bindings (we select this approach)$ pip install .We check the installation by importing fastText in a Python console:&gt;&gt;&gt; import fasttext&gt;&gt;&gt; help(fasttext.FastText)Help on module fasttext.FastText in fasttext: NAME    fasttext.FastText DESCRIPTION    # Copyright (c) 2017-present, Facebook, Inc.    # All rights reserved.    #    # This source code is licensed under the MIT license found in the    # LICENSE file in the root directory of this source tree. FUNCTIONS    load_model(path)        Load a model given a filepath and return a model object.     read_args(arg_list, arg_dict, arg_names, default_values)     tokenize(text)        Given a string of text, tokenize it and return a list of tokens     train_supervised(*kargs, **kwargs)        Train a supervised model and return a model object.         input must be a filepath. The input text does not need to be tokenized        as per the tokenize function, but it must be preprocessed and encoded        as UTF-8. You might want to consult standard preprocessing scripts such        as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html         The input file must must contain at least one label per line. For an        example consult the example datasets which are part of the fastText        repository such as the dataset pulled by classification-example.sh.     train_unsupervised(*kargs, **kwargs)        Train an unsupervised model and return a model object.         input must be a filepath. The input text does not need to be tokenized        as per the tokenize function, but it must be preprocessed and encoded        as UTF-8. You might want to consult standard preprocessing scripts such        as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html         The input field must not contain any labels or use the specified label prefix        unless it is ok for those words to be ignored. For an example consult the        dataset pulled by the example script word-vector-example.sh, which is        part of the fastText repository.DatasetLet’s download example questions from the Stackexchange:$ wget https://dl.fbaipublicfiles.com/fasttext/data/cooking.stackexchange.tar.gz &amp;&amp; tar xvzf cooking.stackexchange.tar.gzBefore training a text classifier we need to split the dataset into training and validation sets. We use wc command to check the number of lines in the dataset:$ wc cooking.stackexchange.txt15404  169582 1401900 cooking.stackexchange.txtThe dataset contains 15404 lines i.e. 15404 examples which we split into a training set of 12404 examples and a validation set of 3000 examples:$ head -n 12404 cooking.stackexchange.txt &gt; cooking.train$ tail -n 3000 cooking.stackexchange.txt &gt; cooking.validTrainTo train the text classifier we import fastText and then use the train_supervised method by providing the training set as an input parameter.&gt;&gt;&gt; import fasttext&gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;)Read 0M wordsNumber of words:  8974Number of labels: 735Progress: 100.0% words/sec/thread:   77120 lr:  0.000000 avg.loss:  9.961853 ETA:   0h 0m 0sSaveWe save the model with save_model so that we can load it later with load_model function:&gt;&gt;&gt; model.save_model(&quot;model_cooking.bin&quot;)TestWe can test the model as follows:&gt;&gt;&gt; model.predict(&quot;Which baking dish is best to bake a banana bread ?&quot;)((&#39;__label__baking&#39;,), array([0.21342881]))The predict method predicts baking tag for the given text input. Let’s look at another example:&gt;&gt;&gt; model.predict(&quot;Why not put knives in the dishwasher?&quot;)((&#39;__label__food-safety&#39;,), array([0.09138963]))The label predicted in this case is food-safety which is not relevant for the given input. To get a better understanding, let’s test the model on the validation set:&gt;&gt;&gt; model.test(&quot;cooking.test&quot;)(3000, 0.172, 0.07438373936860314)The output contains the number of samples (3000), the precision at one (0.172), and the recall at one (0.074).  What is precision?  Precision is a measure of how precise or accurate the model is out of those predicted positive, how many of them are actually positive.    What is recall?  Recall is a measure that calculates how many of the Actual Positives of the model are True Positives.  We can also compute the precision and recall at k (here we use k=5) as follows:&gt;&gt;&gt; model.test(&quot;cooking.test&quot;, k=5)(3000, 0.07286666666666666, 0.1575609052904714)OptimizationWe can optimize and improve the performance of the model by performing various steps given belowPreprocessing the datasetThe raw dataset usually contains elements like uppercase letters or punctuations which are not required for training and might/might not affect the model’s performance. Thus, we can normalize the dataset by using command line tools such as sed and tr: $ cat cooking.stackexchange.txt | sed -e &quot;s/\([.\!?,&#39;/()]\)/ \1 /g&quot; | tr &quot;[:upper:]&quot; &quot;[:lower:]&quot; &gt; cooking.preprocessed.txt $ head -n 12404 cooking.preprocessed.txt &gt; cooking.train $ tail -n 3000 cooking.preprocessed.txt &gt; cooking.validNow, we retrain our model on the preprocessed dataset:&gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;)Read 0M wordsNumber of words:  8952Number of labels: 735Progress: 100.0% words/sec/thread:   46336 lr:  0.000000 avg.loss: 10.019582 ETA:   0h 0m 0s &gt;&gt;&gt; model.test(&quot;cooking.test&quot;)(3000, 0.17466666666666666, 0.07553697563788381)We can observe a slight improvement in the results which can be significant in other cases.Tweaking number of epochs and learning ratefastText sees each training example only 5 times (epochs=5) by default which may be pretty small depending on the size of the dataset. We can change this by using the epoch option while training.Also, the learning rate of the model corresponds to how much the model changes after processing each example and we can tweak it by using the lr option.&gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25)Read 0M wordsNumber of words:  8952Number of labels: 735Progress: 100.0% words/sec/thread:   60929 lr:  0.000000 avg.loss:  4.399605 ETA:   0h 0m 0s &gt;&gt;&gt; model.test(&quot;cooking.test&quot;)(3000, 0.585, 0.25299120657344676)We observe drastic changes in the output results and thus, it is evident that experimenting with hyperparameters such as learning rate and epochs can significantly improve a model’s performance.n-gramsCurrently, we use unigrams for training the model which generally does not help much. Instead, we can use bigrams which might cover prefixes or suffixes properly. In bigrams, we split a sentence or corpus of text into 2 tokens or words, unlike unigrams.&gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2)Read 0M wordsNumber of words:  8952Number of labels: 735Progress: 100.0% words/sec/thread:   66974 lr:  0.000000 avg.loss:  3.152711 ETA:   0h 0m 0s &gt;&gt;&gt; model.test(&quot;cooking.test&quot;)(3000, 0.6083333333333333, 0.2630820239296526)The results have further improved with just a single easy step.Hierarchical SoftmaxFinally, we replace the regular softmax function with a hierarchical softmax function for loss since it helps training models on large datasets faster.&gt;&gt;&gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2, bucket=200000, dim=50, loss=&#39;hs&#39;)Read 0M wordsNumber of words:  8952Number of labels: 735Progress: 100.0% words/sec/thread:  899564 lr:  0.000000 avg.loss:  2.271247 ETA:   0h 0m 0sHere, bucket is used to define the bucket size and dim is the dimension of the word vectors.AutotuneWe observed that finding the best hyperparameters is crucial for building efficient models but doing it manually is difficult. This is where fastText’s autotune feature comes to help.FastText’s autotune feature allows you to automatically perform hyperparameter optimization for the model by providing a validation file with the autottuneValidationFile parameter.&gt;&gt;&gt; model = fasttext.train_supervised(input=&#39;cooking.train&#39;, autotuneValidationFile=&#39;cooking.valid&#39;)Progress: 100.0% Trials:   12 Best score:  0.335514 ETA:   0h 0m 0sTraining again with best argumentsRead 0M wordsNumber of words:  8952Number of labels: 735Progress: 100.0% words/sec/thread:   66732 lr:  0.000000 avg.loss:  4.540132 ETA:   0h 0m 0s &gt;&gt;&gt; model.test(&quot;cooking.test&quot;)(3000, 0.5583333333333333, 0.24145884388064004)We get the best F1-score in the output after a default duration of 5 minutes which can be changed by setting the autotuneDuration parameter.  What is F1-score?  F1-score is a function of Precision and Recall as shown below. F1-score is an important measure that is required to seek a proper balance between Precision and Recall.  Reference  Text classification">
+    <meta itemprop="datePublished" content="2020-11-19T12:00:00+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">fastText
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-11-19T12:00:00+05:30">November 19, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#experimental-setup">Experimental setup</a>
+    <ul>
+      <li><a href="#subword-model">Subword model</a></li>
+      <li><a href="#optimization">Optimization</a></li>
+      <li><a href="#implementation-details">Implementation details</a></li>
+      <li><a href="#dataset">Dataset</a></li>
+    </ul>
+  </li>
+  <li><a href="#text-classification-with-fasttext">Text classification with fastText</a>
+    <ul>
+      <li><a href="#installation">Installation</a></li>
+      <li><a href="#dataset-1">Dataset</a></li>
+      <li><a href="#train">Train</a></li>
+      <li><a href="#save">Save</a></li>
+      <li><a href="#test">Test</a></li>
+      <li><a href="#optimization-1">Optimization</a></li>
+      <li><a href="#autotune">Autotune</a></li>
+    </ul>
+  </li>
+  <li><a href="#reference">Reference</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers.</p>
+
+<p>The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices.</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Most of the techniques represent each word of the vocabulary with a distinct vector i.e. without a shared parameter between words. In other words, they ignore the internal structure of words which might affect the learning of languages rich in morphology.</p>
+
+<p>Thus, <a href="https://arxiv.org/pdf/1607.04606.pdf">Enriching Word Vectors with Subword Information</a> proposes an alternative approach where they learn representations for character <em>n</em>-grams and represent words as the sum of the <em>n</em>-gram vectors.</p>
+
+<h2 id="experimental-setup">Experimental setup</h2>
+
+<h3 id="subword-model">Subword model</h3>
+
+<p>The proposed model <code class="language-plaintext highlighter-rouge">sisg</code> (Subword Information Skip Gram) is based on the continuous skipgram model introduced by Mikolov et al. (2013b).</p>
+
+<p>Since the base skipgram model ignores the internal structure of words by using a distinct word representation for each word, <code class="language-plaintext highlighter-rouge">sisg</code> proposes a different scoring function <em>s</em>, in order to take into account the internal structure information.</p>
+
+<p><img src="/assets/img/fasttext/1.png" alt="" /></p>
+
+<p>where each word <em>w</em> is represented as a bag of character <em>n</em>-gram, <em>G<sub>w</sub></em> belongs to the set { 1, …, <em>G</em> } of the <em>n</em>-grams of size <em>G</em>. Each <em>n</em>-gram <em>g</em> is associated to a vector represention <strong>z</strong><sub>g</sub><sup>T</sup>.</p>
+
+<p>Now, for example, the word <code class="language-plaintext highlighter-rouge">where</code> with n=3 will be represented by the character <em>n</em>-grams as <code class="language-plaintext highlighter-rouge">&lt;wh, whe, her, ere, re&gt;</code>.</p>
+
+<p>and the special sequence <code class="language-plaintext highlighter-rouge">&lt;where&gt;</code>. Here <code class="language-plaintext highlighter-rouge">&lt;</code> and <code class="language-plaintext highlighter-rouge">&gt;</code> are added as special boundary symbols to distinguish prefixes and suffixes from other characters sequences.</p>
+
+<h3 id="optimization">Optimization</h3>
+
+<p>The optimization problem is solved by using stochastic gradient descent on the negative log-likelihood function. The optimization is being carried out in parallel where all threads share parameters and update vectors in an asynchronous manner.</p>
+
+<h3 id="implementation-details">Implementation details</h3>
+
+<p>Coming to implementation details, <code class="language-plaintext highlighter-rouge">sisg</code> has word vectors of dimension 300 where 5 negatives are sampled at random for each positive example. The context window of size <em>c</em> lies between 1 and 5. The step size is set to 0.05 since this is the default value set in the <code class="language-plaintext highlighter-rouge">word2vec</code> package and works well for <code class="language-plaintext highlighter-rouge">sisg</code> model too.</p>
+
+<p>Also, while building the word dictionary, only those words were kept which appeared at least 5 times in the training set.</p>
+
+<h3 id="dataset">Dataset</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">sisg</code> model was trained on <a href="https://dumps.wikimedia.org/">Wikipedia data</a> which consists of nine languages. The Wikipedia data was pre-processed using a <a href="http://mattmahoney.net/dc/textdata">perl script</a>. All the datasets are shuffled and used to train the model over 5 passes.</p>
+
+<p>Now because of the simplicity, the <code class="language-plaintext highlighter-rouge">sisg</code> model trains fast and does not require heavy preprocessing or supervision.</p>
+
+<h2 id="text-classification-with-fasttext">Text classification with fastText</h2>
+
+<p>Text classification is a core problem to many applications and the fastText tool helps us easily solve this problem.</p>
+
+<h3 id="installation">Installation</h3>
+
+<p>Download and unzip the most recent fastText release:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ wget https://github.com/facebookresearch/fastText/archive/v0.9.2.zip
+$ unzip v0.9.2.zip
+</code></pre></div></div>
+
+<p>Move to the fastText directory and install as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd fastText-0.9.2
+ 
+# to install using the command-line tool
+$ make
+ 
+# to install via python bindings (we select this approach)
+$ pip install .
+</code></pre></div></div>
+
+<p>We check the installation by importing fastText in a Python console:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; import fasttext
+&gt;&gt;&gt; help(fasttext.FastText)
+Help on module fasttext.FastText in fasttext:
+ 
+NAME
+    fasttext.FastText
+ 
+DESCRIPTION
+    # Copyright (c) 2017-present, Facebook, Inc.
+    # All rights reserved.
+    #
+    # This source code is licensed under the MIT license found in the
+    # LICENSE file in the root directory of this source tree.
+ 
+FUNCTIONS
+    load_model(path)
+        Load a model given a filepath and return a model object.
+ 
+    read_args(arg_list, arg_dict, arg_names, default_values)
+ 
+    tokenize(text)
+        Given a string of text, tokenize it and return a list of tokens
+ 
+    train_supervised(*kargs, **kwargs)
+        Train a supervised model and return a model object.
+ 
+        input must be a filepath. The input text does not need to be tokenized
+        as per the tokenize function, but it must be preprocessed and encoded
+        as UTF-8. You might want to consult standard preprocessing scripts such
+        as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html
+ 
+        The input file must must contain at least one label per line. For an
+        example consult the example datasets which are part of the fastText
+        repository such as the dataset pulled by classification-example.sh.
+ 
+    train_unsupervised(*kargs, **kwargs)
+        Train an unsupervised model and return a model object.
+ 
+        input must be a filepath. The input text does not need to be tokenized
+        as per the tokenize function, but it must be preprocessed and encoded
+        as UTF-8. You might want to consult standard preprocessing scripts such
+        as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html
+ 
+        The input field must not contain any labels or use the specified label prefix
+        unless it is ok for those words to be ignored. For an example consult the
+        dataset pulled by the example script word-vector-example.sh, which is
+        part of the fastText repository.
+</code></pre></div></div>
+
+<h3 id="dataset-1">Dataset</h3>
+
+<p>Let’s download example questions from the <a href="https://cooking.stackexchange.com/">Stackexchange</a>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ wget https://dl.fbaipublicfiles.com/fasttext/data/cooking.stackexchange.tar.gz &amp;&amp; tar xvzf cooking.stackexchange.tar.gz
+</code></pre></div></div>
+
+<p>Before training a text classifier we need to split the dataset into training and validation sets. We use <code class="language-plaintext highlighter-rouge">wc</code> command to check the number of lines in the dataset:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ wc cooking.stackexchange.txt
+15404  169582 1401900 cooking.stackexchange.txt
+</code></pre></div></div>
+
+<p>The dataset contains 15404 lines i.e. 15404 examples which we split into a training set of 12404 examples and a validation set of 3000 examples:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ head -n 12404 cooking.stackexchange.txt &gt; cooking.train
+$ tail -n 3000 cooking.stackexchange.txt &gt; cooking.valid
+</code></pre></div></div>
+
+<h3 id="train">Train</h3>
+
+<p>To train the text classifier we import fastText and then use the <code class="language-plaintext highlighter-rouge">train_supervised</code> method by providing the training set as an input parameter.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; import fasttext
+&gt;&gt;&gt; model = fasttext.train_supervised(input="cooking.train")
+Read 0M words
+Number of words:  8974
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   77120 lr:  0.000000 avg.loss:  9.961853 ETA:   0h 0m 0s
+</code></pre></div></div>
+
+<h3 id="save">Save</h3>
+
+<p>We save the model with <code class="language-plaintext highlighter-rouge">save_model</code> so that we can load it later with <code class="language-plaintext highlighter-rouge">load_model</code> function:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model.save_model("model_cooking.bin")
+</code></pre></div></div>
+
+<h3 id="test">Test</h3>
+
+<p>We can test the model as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model.predict("Which baking dish is best to bake a banana bread ?")
+(('__label__baking',), array([0.21342881]))
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">predict</code> method predicts <em>baking</em> tag for the given text input. Let’s look at another example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model.predict("Why not put knives in the dishwasher?")
+(('__label__food-safety',), array([0.09138963]))
+</code></pre></div></div>
+
+<p>The label predicted in this case is <code class="language-plaintext highlighter-rouge">food-safety</code> which is not relevant for the given input. To get a better understanding, let’s test the model on the validation set:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model.test("cooking.test")
+(3000, 0.172, 0.07438373936860314)
+</code></pre></div></div>
+
+<p>The output contains the number of samples (3000), the precision at one (0.172), and the recall at one (0.074).</p>
+
+<blockquote>
+  <p>What is precision?</p>
+
+  <p>Precision is a measure of how precise or accurate the model is out of those predicted positive, how many of them are actually positive.</p>
+
+  <p><img src="/assets/img/fasttext/2.png" alt="" /></p>
+</blockquote>
+
+<blockquote>
+  <p>What is recall?</p>
+
+  <p>Recall is a measure that calculates how many of the Actual Positives of the model are True Positives.</p>
+
+  <p><img src="/assets/img/fasttext/3.png" alt="" /></p>
+</blockquote>
+
+<p>We can also compute the precision and recall at <em>k</em> (here we use k=5) as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model.test("cooking.test", k=5)
+(3000, 0.07286666666666666, 0.1575609052904714)
+</code></pre></div></div>
+
+<h3 id="optimization-1">Optimization</h3>
+
+<p>We can optimize and improve the performance of the model by performing various steps given below</p>
+
+<p><strong>Preprocessing the dataset</strong></p>
+
+<p>The raw dataset usually contains elements like uppercase letters or punctuations which are not required for training and might/might not affect the model’s performance. Thus, we can normalize the dataset by using command line tools such as <code class="language-plaintext highlighter-rouge">sed</code> and <code class="language-plaintext highlighter-rouge">tr</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cat cooking.stackexchange.txt | sed -e "s/\([.\!?,'/()]\)/ \1 /g" | tr "[:upper:]" "[:lower:]" &gt; cooking.preprocessed.txt
+ $ head -n 12404 cooking.preprocessed.txt &gt; cooking.train
+ $ tail -n 3000 cooking.preprocessed.txt &gt; cooking.valid
+</code></pre></div></div>
+
+<p>Now, we retrain our model on the preprocessed dataset:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model = fasttext.train_supervised(input="cooking.train")
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   46336 lr:  0.000000 avg.loss: 10.019582 ETA:   0h 0m 0s
+ 
+&gt;&gt;&gt; model.test("cooking.test")
+(3000, 0.17466666666666666, 0.07553697563788381)
+</code></pre></div></div>
+
+<p>We can observe a slight improvement in the results which can be significant in other cases.</p>
+
+<p><strong>Tweaking number of epochs and learning rate</strong></p>
+
+<p>fastText sees each training example only 5 times (epochs=5) by default which may be pretty small depending on the size of the dataset. We can change this by using the <code class="language-plaintext highlighter-rouge">epoch</code> option while training.</p>
+
+<p>Also, the learning rate of the model corresponds to how much the model changes after processing each example and we can tweak it by using the <code class="language-plaintext highlighter-rouge">lr</code> option.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model = fasttext.train_supervised(input="cooking.train", lr=1.0, epoch=25)
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   60929 lr:  0.000000 avg.loss:  4.399605 ETA:   0h 0m 0s
+ 
+&gt;&gt;&gt; model.test("cooking.test")
+(3000, 0.585, 0.25299120657344676)
+</code></pre></div></div>
+
+<p>We observe drastic changes in the output results and thus, it is evident that experimenting with hyperparameters such as learning rate and epochs can significantly improve a model’s performance.</p>
+
+<p><strong><em>n</em>-grams</strong></p>
+
+<p>Currently, we use unigrams for training the model which generally does not help much. Instead, we can use bigrams which might cover prefixes or suffixes properly. In bigrams, we split a sentence or corpus of text into 2 tokens or words, unlike unigrams.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model = fasttext.train_supervised(input="cooking.train", lr=1.0, epoch=25, wordNgrams=2)
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   66974 lr:  0.000000 avg.loss:  3.152711 ETA:   0h 0m 0s
+ 
+&gt;&gt;&gt; model.test("cooking.test")
+(3000, 0.6083333333333333, 0.2630820239296526)
+</code></pre></div></div>
+
+<p>The results have further improved with just a single easy step.</p>
+
+<p><strong>Hierarchical Softmax</strong></p>
+
+<p>Finally, we replace the regular softmax function with a hierarchical softmax function for loss since it helps training models on large datasets faster.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model = fasttext.train_supervised(input="cooking.train", lr=1.0, epoch=25, wordNgrams=2, bucket=200000, dim=50, loss='hs')Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:  899564 lr:  0.000000 avg.loss:  2.271247 ETA:   0h 0m 0s
+</code></pre></div></div>
+
+<p>Here, <code class="language-plaintext highlighter-rouge">bucket</code> is used to define the bucket size and <code class="language-plaintext highlighter-rouge">dim</code> is the dimension of the word vectors.</p>
+
+<h3 id="autotune">Autotune</h3>
+
+<p>We observed that finding the best hyperparameters is crucial for building efficient models but doing it manually is difficult. This is where fastText’s autotune feature comes to help.</p>
+
+<p>FastText’s autotune feature allows you to automatically perform hyperparameter optimization for the model by providing a validation file with the <code class="language-plaintext highlighter-rouge">autottuneValidationFile</code> parameter.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; model = fasttext.train_supervised(input='cooking.train', autotuneValidationFile='cooking.valid')
+Progress: 100.0% Trials:   12 Best score:  0.335514 ETA:   0h 0m 0s
+Training again with best arguments
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   66732 lr:  0.000000 avg.loss:  4.540132 ETA:   0h 0m 0s
+ 
+&gt;&gt;&gt; model.test("cooking.test")
+(3000, 0.5583333333333333, 0.24145884388064004)
+</code></pre></div></div>
+
+<p>We get the best F1-score in the output after a default duration of 5 minutes which can be changed by setting the <code class="language-plaintext highlighter-rouge">autotuneDuration</code> parameter.</p>
+
+<blockquote>
+  <p>What is F1-score?</p>
+
+  <p>F1-score is a function of Precision and Recall as shown below. F1-score is an important measure that is required to seek a proper balance between Precision and Recall.</p>
+
+  <p><img src="/assets/img/fasttext/4.png" alt="" /></p>
+</blockquote>
+
+<h2 id="reference">Reference</h2>
+
+<ol>
+  <li><a href="https://fasttext.cc/docs/en/supervised-tutorial.html">Text classification</a></li>
+</ol>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-19T12:00:00+05:30">November 19, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=fastText%20http%3A%2F%2Flocalhost%3A4000%2FfastText" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2FfastText" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2FfastText" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/jenkins-git-docker-image" class="pagination--pager" title="Build and Publish Docker image using Jenkins
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

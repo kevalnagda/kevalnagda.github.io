@@ -1,4 +1,307 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-18T19:15:40+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">Build and Publish Docker image using Jenkins</title><link href="http://localhost:4000/jenkins-git-docker-image" rel="alternate" type="text/html" title="Build and Publish Docker image using Jenkins" /><published>2020-11-18T12:00:00+05:30</published><updated>2020-11-18T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-git-docker-image</id><content type="html" xml:base="http://localhost:4000/jenkins-git-docker-image">&lt;p&gt;Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-11-20T14:45:54+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">fastText</title><link href="http://localhost:4000/fastText" rel="alternate" type="text/html" title="fastText" /><published>2020-11-19T12:00:00+05:30</published><updated>2020-11-19T12:00:00+05:30</updated><id>http://localhost:4000/fastText</id><content type="html" xml:base="http://localhost:4000/fastText">&lt;p&gt;FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers.&lt;/p&gt;
+
+&lt;p&gt;The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices.&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Most of the techniques represent each word of the vocabulary with a distinct vector i.e. without a shared parameter between words. In other words, they ignore the internal structure of words which might affect the learning of languages rich in morphology.&lt;/p&gt;
+
+&lt;p&gt;Thus, &lt;a href=&quot;https://arxiv.org/pdf/1607.04606.pdf&quot;&gt;Enriching Word Vectors with Subword Information&lt;/a&gt; proposes an alternative approach where they learn representations for character &lt;em&gt;n&lt;/em&gt;-grams and represent words as the sum of the &lt;em&gt;n&lt;/em&gt;-gram vectors.&lt;/p&gt;
+
+&lt;h2 id=&quot;experimental-setup&quot;&gt;Experimental setup&lt;/h2&gt;
+
+&lt;h3 id=&quot;subword-model&quot;&gt;Subword model&lt;/h3&gt;
+
+&lt;p&gt;The proposed model &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sisg&lt;/code&gt; (Subword Information Skip Gram) is based on the continuous skipgram model introduced by Mikolov et al. (2013b).&lt;/p&gt;
+
+&lt;p&gt;Since the base skipgram model ignores the internal structure of words by using a distinct word representation for each word, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sisg&lt;/code&gt; proposes a different scoring function &lt;em&gt;s&lt;/em&gt;, in order to take into account the internal structure information.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/fasttext/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;where each word &lt;em&gt;w&lt;/em&gt; is represented as a bag of character &lt;em&gt;n&lt;/em&gt;-gram, &lt;em&gt;G&lt;sub&gt;w&lt;/sub&gt;&lt;/em&gt; belongs to the set { 1, …, &lt;em&gt;G&lt;/em&gt; } of the &lt;em&gt;n&lt;/em&gt;-grams of size &lt;em&gt;G&lt;/em&gt;. Each &lt;em&gt;n&lt;/em&gt;-gram &lt;em&gt;g&lt;/em&gt; is associated to a vector represention &lt;strong&gt;z&lt;/strong&gt;&lt;sub&gt;g&lt;/sub&gt;&lt;sup&gt;T&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now, for example, the word &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;where&lt;/code&gt; with n=3 will be represented by the character &lt;em&gt;n&lt;/em&gt;-grams as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;wh, whe, her, ere, re&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;and the special sequence &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;where&amp;gt;&lt;/code&gt;. Here &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;gt;&lt;/code&gt; are added as special boundary symbols to distinguish prefixes and suffixes from other characters sequences.&lt;/p&gt;
+
+&lt;h3 id=&quot;optimization&quot;&gt;Optimization&lt;/h3&gt;
+
+&lt;p&gt;The optimization problem is solved by using stochastic gradient descent on the negative log-likelihood function. The optimization is being carried out in parallel where all threads share parameters and update vectors in an asynchronous manner.&lt;/p&gt;
+
+&lt;h3 id=&quot;implementation-details&quot;&gt;Implementation details&lt;/h3&gt;
+
+&lt;p&gt;Coming to implementation details, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sisg&lt;/code&gt; has word vectors of dimension 300 where 5 negatives are sampled at random for each positive example. The context window of size &lt;em&gt;c&lt;/em&gt; lies between 1 and 5. The step size is set to 0.05 since this is the default value set in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;word2vec&lt;/code&gt; package and works well for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sisg&lt;/code&gt; model too.&lt;/p&gt;
+
+&lt;p&gt;Also, while building the word dictionary, only those words were kept which appeared at least 5 times in the training set.&lt;/p&gt;
+
+&lt;h3 id=&quot;dataset&quot;&gt;Dataset&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sisg&lt;/code&gt; model was trained on &lt;a href=&quot;https://dumps.wikimedia.org/&quot;&gt;Wikipedia data&lt;/a&gt; which consists of nine languages. The Wikipedia data was pre-processed using a &lt;a href=&quot;http://mattmahoney.net/dc/textdata&quot;&gt;perl script&lt;/a&gt;. All the datasets are shuffled and used to train the model over 5 passes.&lt;/p&gt;
+
+&lt;p&gt;Now because of the simplicity, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sisg&lt;/code&gt; model trains fast and does not require heavy preprocessing or supervision.&lt;/p&gt;
+
+&lt;h2 id=&quot;text-classification-with-fasttext&quot;&gt;Text classification with fastText&lt;/h2&gt;
+
+&lt;p&gt;Text classification is a core problem to many applications and the fastText tool helps us easily solve this problem.&lt;/p&gt;
+
+&lt;h3 id=&quot;installation&quot;&gt;Installation&lt;/h3&gt;
+
+&lt;p&gt;Download and unzip the most recent fastText release:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ wget https://github.com/facebookresearch/fastText/archive/v0.9.2.zip
+$ unzip v0.9.2.zip
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Move to the fastText directory and install as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd fastText-0.9.2
+ 
+# to install using the command-line tool
+$ make
+ 
+# to install via python bindings (we select this approach)
+$ pip install .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We check the installation by importing fastText in a Python console:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import fasttext
+&amp;gt;&amp;gt;&amp;gt; help(fasttext.FastText)
+Help on module fasttext.FastText in fasttext:
+ 
+NAME
+    fasttext.FastText
+ 
+DESCRIPTION
+    # Copyright (c) 2017-present, Facebook, Inc.
+    # All rights reserved.
+    #
+    # This source code is licensed under the MIT license found in the
+    # LICENSE file in the root directory of this source tree.
+ 
+FUNCTIONS
+    load_model(path)
+        Load a model given a filepath and return a model object.
+ 
+    read_args(arg_list, arg_dict, arg_names, default_values)
+ 
+    tokenize(text)
+        Given a string of text, tokenize it and return a list of tokens
+ 
+    train_supervised(*kargs, **kwargs)
+        Train a supervised model and return a model object.
+ 
+        input must be a filepath. The input text does not need to be tokenized
+        as per the tokenize function, but it must be preprocessed and encoded
+        as UTF-8. You might want to consult standard preprocessing scripts such
+        as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html
+ 
+        The input file must must contain at least one label per line. For an
+        example consult the example datasets which are part of the fastText
+        repository such as the dataset pulled by classification-example.sh.
+ 
+    train_unsupervised(*kargs, **kwargs)
+        Train an unsupervised model and return a model object.
+ 
+        input must be a filepath. The input text does not need to be tokenized
+        as per the tokenize function, but it must be preprocessed and encoded
+        as UTF-8. You might want to consult standard preprocessing scripts such
+        as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html
+ 
+        The input field must not contain any labels or use the specified label prefix
+        unless it is ok for those words to be ignored. For an example consult the
+        dataset pulled by the example script word-vector-example.sh, which is
+        part of the fastText repository.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;dataset-1&quot;&gt;Dataset&lt;/h3&gt;
+
+&lt;p&gt;Let’s download example questions from the &lt;a href=&quot;https://cooking.stackexchange.com/&quot;&gt;Stackexchange&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ wget https://dl.fbaipublicfiles.com/fasttext/data/cooking.stackexchange.tar.gz &amp;amp;&amp;amp; tar xvzf cooking.stackexchange.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Before training a text classifier we need to split the dataset into training and validation sets. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wc&lt;/code&gt; command to check the number of lines in the dataset:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ wc cooking.stackexchange.txt
+15404  169582 1401900 cooking.stackexchange.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The dataset contains 15404 lines i.e. 15404 examples which we split into a training set of 12404 examples and a validation set of 3000 examples:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ head -n 12404 cooking.stackexchange.txt &amp;gt; cooking.train
+$ tail -n 3000 cooking.stackexchange.txt &amp;gt; cooking.valid
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;train&quot;&gt;Train&lt;/h3&gt;
+
+&lt;p&gt;To train the text classifier we import fastText and then use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;train_supervised&lt;/code&gt; method by providing the training set as an input parameter.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import fasttext
+&amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;)
+Read 0M words
+Number of words:  8974
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   77120 lr:  0.000000 avg.loss:  9.961853 ETA:   0h 0m 0s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;save&quot;&gt;Save&lt;/h3&gt;
+
+&lt;p&gt;We save the model with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;save_model&lt;/code&gt; so that we can load it later with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;load_model&lt;/code&gt; function:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model.save_model(&quot;model_cooking.bin&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;test&quot;&gt;Test&lt;/h3&gt;
+
+&lt;p&gt;We can test the model as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model.predict(&quot;Which baking dish is best to bake a banana bread ?&quot;)
+(('__label__baking',), array([0.21342881]))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;predict&lt;/code&gt; method predicts &lt;em&gt;baking&lt;/em&gt; tag for the given text input. Let’s look at another example:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model.predict(&quot;Why not put knives in the dishwasher?&quot;)
+(('__label__food-safety',), array([0.09138963]))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The label predicted in this case is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;food-safety&lt;/code&gt; which is not relevant for the given input. To get a better understanding, let’s test the model on the validation set:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;)
+(3000, 0.172, 0.07438373936860314)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The output contains the number of samples (3000), the precision at one (0.172), and the recall at one (0.074).&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;What is precision?&lt;/p&gt;
+
+  &lt;p&gt;Precision is a measure of how precise or accurate the model is out of those predicted positive, how many of them are actually positive.&lt;/p&gt;
+
+  &lt;p&gt;&lt;img src=&quot;/assets/img/fasttext/2.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;What is recall?&lt;/p&gt;
+
+  &lt;p&gt;Recall is a measure that calculates how many of the Actual Positives of the model are True Positives.&lt;/p&gt;
+
+  &lt;p&gt;&lt;img src=&quot;/assets/img/fasttext/3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;We can also compute the precision and recall at &lt;em&gt;k&lt;/em&gt; (here we use k=5) as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;, k=5)
+(3000, 0.07286666666666666, 0.1575609052904714)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;optimization-1&quot;&gt;Optimization&lt;/h3&gt;
+
+&lt;p&gt;We can optimize and improve the performance of the model by performing various steps given below&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Preprocessing the dataset&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The raw dataset usually contains elements like uppercase letters or punctuations which are not required for training and might/might not affect the model’s performance. Thus, we can normalize the dataset by using command line tools such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sed&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tr&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ cat cooking.stackexchange.txt | sed -e &quot;s/\([.\!?,'/()]\)/ \1 /g&quot; | tr &quot;[:upper:]&quot; &quot;[:lower:]&quot; &amp;gt; cooking.preprocessed.txt
+ $ head -n 12404 cooking.preprocessed.txt &amp;gt; cooking.train
+ $ tail -n 3000 cooking.preprocessed.txt &amp;gt; cooking.valid
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, we retrain our model on the preprocessed dataset:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;)
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   46336 lr:  0.000000 avg.loss: 10.019582 ETA:   0h 0m 0s
+ 
+&amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;)
+(3000, 0.17466666666666666, 0.07553697563788381)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can observe a slight improvement in the results which can be significant in other cases.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Tweaking number of epochs and learning rate&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;fastText sees each training example only 5 times (epochs=5) by default which may be pretty small depending on the size of the dataset. We can change this by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;epoch&lt;/code&gt; option while training.&lt;/p&gt;
+
+&lt;p&gt;Also, the learning rate of the model corresponds to how much the model changes after processing each example and we can tweak it by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lr&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25)
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   60929 lr:  0.000000 avg.loss:  4.399605 ETA:   0h 0m 0s
+ 
+&amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;)
+(3000, 0.585, 0.25299120657344676)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We observe drastic changes in the output results and thus, it is evident that experimenting with hyperparameters such as learning rate and epochs can significantly improve a model’s performance.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;n&lt;/em&gt;-grams&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Currently, we use unigrams for training the model which generally does not help much. Instead, we can use bigrams which might cover prefixes or suffixes properly. In bigrams, we split a sentence or corpus of text into 2 tokens or words, unlike unigrams.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2)
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   66974 lr:  0.000000 avg.loss:  3.152711 ETA:   0h 0m 0s
+ 
+&amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;)
+(3000, 0.6083333333333333, 0.2630820239296526)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The results have further improved with just a single easy step.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Hierarchical Softmax&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, we replace the regular softmax function with a hierarchical softmax function for loss since it helps training models on large datasets faster.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2, bucket=200000, dim=50, loss='hs')Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:  899564 lr:  0.000000 avg.loss:  2.271247 ETA:   0h 0m 0s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bucket&lt;/code&gt; is used to define the bucket size and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dim&lt;/code&gt; is the dimension of the word vectors.&lt;/p&gt;
+
+&lt;h3 id=&quot;autotune&quot;&gt;Autotune&lt;/h3&gt;
+
+&lt;p&gt;We observed that finding the best hyperparameters is crucial for building efficient models but doing it manually is difficult. This is where fastText’s autotune feature comes to help.&lt;/p&gt;
+
+&lt;p&gt;FastText’s autotune feature allows you to automatically perform hyperparameter optimization for the model by providing a validation file with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;autottuneValidationFile&lt;/code&gt; parameter.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input='cooking.train', autotuneValidationFile='cooking.valid')
+Progress: 100.0% Trials:   12 Best score:  0.335514 ETA:   0h 0m 0s
+Training again with best arguments
+Read 0M words
+Number of words:  8952
+Number of labels: 735
+Progress: 100.0% words/sec/thread:   66732 lr:  0.000000 avg.loss:  4.540132 ETA:   0h 0m 0s
+ 
+&amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;)
+(3000, 0.5583333333333333, 0.24145884388064004)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We get the best F1-score in the output after a default duration of 5 minutes which can be changed by setting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;autotuneDuration&lt;/code&gt; parameter.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;What is F1-score?&lt;/p&gt;
+
+  &lt;p&gt;F1-score is a function of Precision and Recall as shown below. F1-score is an important measure that is required to seek a proper balance between Precision and Recall.&lt;/p&gt;
+
+  &lt;p&gt;&lt;img src=&quot;/assets/img/fasttext/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://fasttext.cc/docs/en/supervised-tutorial.html&quot;&gt;Text classification&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers. The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices. Introduction Most of the techniques represent each word of the vocabulary with a distinct vector i.e. without a shared parameter between words. In other words, they ignore the internal structure of words which might affect the learning of languages rich in morphology. Thus, Enriching Word Vectors with Subword Information proposes an alternative approach where they learn representations for character n-grams and represent words as the sum of the n-gram vectors. Experimental setup Subword model The proposed model sisg (Subword Information Skip Gram) is based on the continuous skipgram model introduced by Mikolov et al. (2013b). Since the base skipgram model ignores the internal structure of words by using a distinct word representation for each word, sisg proposes a different scoring function s, in order to take into account the internal structure information. where each word w is represented as a bag of character n-gram, Gw belongs to the set { 1, …, G } of the n-grams of size G. Each n-gram g is associated to a vector represention zgT. Now, for example, the word where with n=3 will be represented by the character n-grams as &amp;lt;wh, whe, her, ere, re&amp;gt;. and the special sequence &amp;lt;where&amp;gt;. Here &amp;lt; and &amp;gt; are added as special boundary symbols to distinguish prefixes and suffixes from other characters sequences. Optimization The optimization problem is solved by using stochastic gradient descent on the negative log-likelihood function. The optimization is being carried out in parallel where all threads share parameters and update vectors in an asynchronous manner. Implementation details Coming to implementation details, sisg has word vectors of dimension 300 where 5 negatives are sampled at random for each positive example. The context window of size c lies between 1 and 5. The step size is set to 0.05 since this is the default value set in the word2vec package and works well for sisg model too. Also, while building the word dictionary, only those words were kept which appeared at least 5 times in the training set. Dataset The sisg model was trained on Wikipedia data which consists of nine languages. The Wikipedia data was pre-processed using a perl script. All the datasets are shuffled and used to train the model over 5 passes. Now because of the simplicity, the sisg model trains fast and does not require heavy preprocessing or supervision. Text classification with fastText Text classification is a core problem to many applications and the fastText tool helps us easily solve this problem. Installation Download and unzip the most recent fastText release: $ wget https://github.com/facebookresearch/fastText/archive/v0.9.2.zip $ unzip v0.9.2.zip Move to the fastText directory and install as follows: $ cd fastText-0.9.2 # to install using the command-line tool $ make # to install via python bindings (we select this approach) $ pip install . We check the installation by importing fastText in a Python console: &amp;gt;&amp;gt;&amp;gt; import fasttext &amp;gt;&amp;gt;&amp;gt; help(fasttext.FastText) Help on module fasttext.FastText in fasttext: NAME fasttext.FastText DESCRIPTION # Copyright (c) 2017-present, Facebook, Inc. # All rights reserved. # # This source code is licensed under the MIT license found in the # LICENSE file in the root directory of this source tree. FUNCTIONS load_model(path) Load a model given a filepath and return a model object. read_args(arg_list, arg_dict, arg_names, default_values) tokenize(text) Given a string of text, tokenize it and return a list of tokens train_supervised(*kargs, **kwargs) Train a supervised model and return a model object. input must be a filepath. The input text does not need to be tokenized as per the tokenize function, but it must be preprocessed and encoded as UTF-8. You might want to consult standard preprocessing scripts such as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html The input file must must contain at least one label per line. For an example consult the example datasets which are part of the fastText repository such as the dataset pulled by classification-example.sh. train_unsupervised(*kargs, **kwargs) Train an unsupervised model and return a model object. input must be a filepath. The input text does not need to be tokenized as per the tokenize function, but it must be preprocessed and encoded as UTF-8. You might want to consult standard preprocessing scripts such as tokenizer.perl mentioned here: http://www.statmt.org/wmt07/baseline.html The input field must not contain any labels or use the specified label prefix unless it is ok for those words to be ignored. For an example consult the dataset pulled by the example script word-vector-example.sh, which is part of the fastText repository. Dataset Let’s download example questions from the Stackexchange: $ wget https://dl.fbaipublicfiles.com/fasttext/data/cooking.stackexchange.tar.gz &amp;amp;&amp;amp; tar xvzf cooking.stackexchange.tar.gz Before training a text classifier we need to split the dataset into training and validation sets. We use wc command to check the number of lines in the dataset: $ wc cooking.stackexchange.txt 15404 169582 1401900 cooking.stackexchange.txt The dataset contains 15404 lines i.e. 15404 examples which we split into a training set of 12404 examples and a validation set of 3000 examples: $ head -n 12404 cooking.stackexchange.txt &amp;gt; cooking.train $ tail -n 3000 cooking.stackexchange.txt &amp;gt; cooking.valid Train To train the text classifier we import fastText and then use the train_supervised method by providing the training set as an input parameter. &amp;gt;&amp;gt;&amp;gt; import fasttext &amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;) Read 0M words Number of words: 8974 Number of labels: 735 Progress: 100.0% words/sec/thread: 77120 lr: 0.000000 avg.loss: 9.961853 ETA: 0h 0m 0s Save We save the model with save_model so that we can load it later with load_model function: &amp;gt;&amp;gt;&amp;gt; model.save_model(&quot;model_cooking.bin&quot;) Test We can test the model as follows: &amp;gt;&amp;gt;&amp;gt; model.predict(&quot;Which baking dish is best to bake a banana bread ?&quot;) (('__label__baking',), array([0.21342881])) The predict method predicts baking tag for the given text input. Let’s look at another example: &amp;gt;&amp;gt;&amp;gt; model.predict(&quot;Why not put knives in the dishwasher?&quot;) (('__label__food-safety',), array([0.09138963])) The label predicted in this case is food-safety which is not relevant for the given input. To get a better understanding, let’s test the model on the validation set: &amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;) (3000, 0.172, 0.07438373936860314) The output contains the number of samples (3000), the precision at one (0.172), and the recall at one (0.074). What is precision? Precision is a measure of how precise or accurate the model is out of those predicted positive, how many of them are actually positive. What is recall? Recall is a measure that calculates how many of the Actual Positives of the model are True Positives. We can also compute the precision and recall at k (here we use k=5) as follows: &amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;, k=5) (3000, 0.07286666666666666, 0.1575609052904714) Optimization We can optimize and improve the performance of the model by performing various steps given below Preprocessing the dataset The raw dataset usually contains elements like uppercase letters or punctuations which are not required for training and might/might not affect the model’s performance. Thus, we can normalize the dataset by using command line tools such as sed and tr: $ cat cooking.stackexchange.txt | sed -e &quot;s/\([.\!?,'/()]\)/ \1 /g&quot; | tr &quot;[:upper:]&quot; &quot;[:lower:]&quot; &amp;gt; cooking.preprocessed.txt $ head -n 12404 cooking.preprocessed.txt &amp;gt; cooking.train $ tail -n 3000 cooking.preprocessed.txt &amp;gt; cooking.valid Now, we retrain our model on the preprocessed dataset: &amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;) Read 0M words Number of words: 8952 Number of labels: 735 Progress: 100.0% words/sec/thread: 46336 lr: 0.000000 avg.loss: 10.019582 ETA: 0h 0m 0s &amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;) (3000, 0.17466666666666666, 0.07553697563788381) We can observe a slight improvement in the results which can be significant in other cases. Tweaking number of epochs and learning rate fastText sees each training example only 5 times (epochs=5) by default which may be pretty small depending on the size of the dataset. We can change this by using the epoch option while training. Also, the learning rate of the model corresponds to how much the model changes after processing each example and we can tweak it by using the lr option. &amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25) Read 0M words Number of words: 8952 Number of labels: 735 Progress: 100.0% words/sec/thread: 60929 lr: 0.000000 avg.loss: 4.399605 ETA: 0h 0m 0s &amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;) (3000, 0.585, 0.25299120657344676) We observe drastic changes in the output results and thus, it is evident that experimenting with hyperparameters such as learning rate and epochs can significantly improve a model’s performance. n-grams Currently, we use unigrams for training the model which generally does not help much. Instead, we can use bigrams which might cover prefixes or suffixes properly. In bigrams, we split a sentence or corpus of text into 2 tokens or words, unlike unigrams. &amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2) Read 0M words Number of words: 8952 Number of labels: 735 Progress: 100.0% words/sec/thread: 66974 lr: 0.000000 avg.loss: 3.152711 ETA: 0h 0m 0s &amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;) (3000, 0.6083333333333333, 0.2630820239296526) The results have further improved with just a single easy step. Hierarchical Softmax Finally, we replace the regular softmax function with a hierarchical softmax function for loss since it helps training models on large datasets faster. &amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input=&quot;cooking.train&quot;, lr=1.0, epoch=25, wordNgrams=2, bucket=200000, dim=50, loss='hs')Read 0M words Number of words: 8952 Number of labels: 735 Progress: 100.0% words/sec/thread: 899564 lr: 0.000000 avg.loss: 2.271247 ETA: 0h 0m 0s Here, bucket is used to define the bucket size and dim is the dimension of the word vectors. Autotune We observed that finding the best hyperparameters is crucial for building efficient models but doing it manually is difficult. This is where fastText’s autotune feature comes to help. FastText’s autotune feature allows you to automatically perform hyperparameter optimization for the model by providing a validation file with the autottuneValidationFile parameter. &amp;gt;&amp;gt;&amp;gt; model = fasttext.train_supervised(input='cooking.train', autotuneValidationFile='cooking.valid') Progress: 100.0% Trials: 12 Best score: 0.335514 ETA: 0h 0m 0s Training again with best arguments Read 0M words Number of words: 8952 Number of labels: 735 Progress: 100.0% words/sec/thread: 66732 lr: 0.000000 avg.loss: 4.540132 ETA: 0h 0m 0s &amp;gt;&amp;gt;&amp;gt; model.test(&quot;cooking.test&quot;) (3000, 0.5583333333333333, 0.24145884388064004) We get the best F1-score in the output after a default duration of 5 minutes which can be changed by setting the autotuneDuration parameter. What is F1-score? F1-score is a function of Precision and Recall as shown below. F1-score is an important measure that is required to seek a proper balance between Precision and Recall. Reference Text classification</summary></entry><entry><title type="html">Build and Publish Docker image using Jenkins</title><link href="http://localhost:4000/jenkins-git-docker-image" rel="alternate" type="text/html" title="Build and Publish Docker image using Jenkins" /><published>2020-11-18T12:00:00+05:30</published><updated>2020-11-18T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-git-docker-image</id><content type="html" xml:base="http://localhost:4000/jenkins-git-docker-image">&lt;p&gt;Today we’re going to learn how to build a Docker image using Jenkinsfile from a git repository and push it to the Docker Hub.&lt;/p&gt;
 
 &lt;h2 id=&quot;create-a-new-jenkins-docker-image&quot;&gt;Create a new Jenkins Docker image&lt;/h2&gt;
 
@@ -194,254 +497,7 @@ volumes:
 
 &lt;h2 id=&quot;threadripper&quot;&gt;Threadripper&lt;/h2&gt;
 
-&lt;p&gt;The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">AMD’s mainstream Ryzen chips are highly disruptive which include several families of various levels of potency. Ryzen chips introduce a completely new motherboard platform, and the processors require different memory and coolers than their predecessors. Below is a quick breakdown of the different AMD Ryzen processor brackets: Ryzen 3: Up to 4-core processors. Ryzen 5: Up to 8-core processors. Ryzen 7: Up to 16-core processors. Ryzen 9: Up to 32-core processors. Threadripper: Up to 64-core processors. Within each bracket, the processors are named by model number - the higher the model number the more powerful the CPU. Ryzen CPUs that start with the number two are Zen+ processors, released in 2018 while the third generation CPUs using Zen 2 were released in 2019. Now, AMD also has CPUs with G as a suffix for graphics which include Vega video processing which means that you can run a system without a dedicated video card. Coming to socket type, all AMD processors use the same AM4 socket with a few exceptions like Generation 1 and 2 Threadrippers using a TR4 socket and Generation 3 Threadrippers using a TRX4 socket. Ryzen 3 The Ryzen 3 processors are built for budget-friendly PCs and consumers who don’t use PCs for intensive tasks. All processors in this family i.e. 1000, 2000, and 3000 Series are quad-core with decent game handling capability. The latest generation chips in this family come with a rocking boost clock speed of 4.0GHz, allowing you to get good performance at the same affordable price. Ryzen 5 The Ryzen 5 processors are incredible for gaming and are priced aggressively to take on the popular Intel Core i5 family. These processors contain a mix of quadcore and hexacore processors, packed with enough power for intensive applications and tasks like video editing. Ryzen 7 The Ryzen 7 processors fall in line with Intel Core i7 processors and may be overkill for most people who don’t perform high computation tasks. However, these processors are extremely good for advanced computing in a somewhat affordable price range. All processors in this family have 8/16 core/thread configuration and the latest generation chips come with massive L3 cache, high clock speeds and great overclock support. Ryzen 9 The Ryzen 9 processors are the latest batch of processors that are magically packed with 12/24 to 16/32 core/thread configuration. These chips are amazing and lie in the middle-ground between Ryzen 7 and Threadripper. These processors challenge Intel’s Core i9 processor range and are optimal for gamers, streamers, and content creators. Threadripper The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.</summary></entry><entry><title type="html">Conda Docker tutorial</title><link href="http://localhost:4000/conda-docker-tutorial" rel="alternate" type="text/html" title="Conda Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/conda-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/conda-docker-tutorial">&lt;p&gt;Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.
-Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.&lt;/p&gt;
-
-&lt;h2 id=&quot;defining-the-conda-environment&quot;&gt;Defining the Conda environment&lt;/h2&gt;
-&lt;p&gt;Firstly, let’s create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; file to define the Conda environment.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name: env
-channels:
-   - conda-forge
-dependencies:
-   - python=3.6
-   - flask
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Here &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; is the name of our Conda environment. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda-forge&lt;/code&gt; channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; is similar to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; used by virtual environment &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;venv&lt;/code&gt; module.&lt;/p&gt;
-
-&lt;h2 id=&quot;a-simple-python-program&quot;&gt;A simple Python program&lt;/h2&gt;
-
-&lt;p&gt;Write a simple Python program to test the Conda environment activation.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import flask
- 
-print(&quot;Flask import successful!&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h2&gt;
-
-&lt;p&gt;Following the standard approach, our first iteration of the Dockerfile looks like:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Activate Conda environment and check if it is working properly
-RUN conda activate env
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Following is the result when we try building the Docker image&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 5/9 : RUN conda activate env
----&amp;gt; Running in e33a2dcd4d99
- 
-CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
-To initialize your shell, run
- 
-   $ conda init &amp;lt;SHELL_NAME&amp;gt;
- 
-The command '/bin/sh -c conda activate env' returned a non-zero code: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.&lt;/p&gt;
-
-&lt;h2 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h2&gt;
-
-&lt;p&gt;We can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; as a solution to the above problem. Docker by default uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/bin/sh -c &amp;lt;command&amp;gt;&lt;/code&gt; to execute instructions but we require a bash shell to run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;p&gt;To tackle this, we override the default shell by adding the following to the Dockerfile:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Our updated Dockerfile should look as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Override default shell and use bash
-SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Initialize conda in the bash config files
-RUN conda init bash
- 
-# Activate Conda environment and check if it is working properly
-RUN conda activate env
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Building the Docker image again gives us the following result:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 9/11 : RUN python -c &quot;import flask&quot;
----&amp;gt; Running in ea831eb42ff6
-Traceback (most recent call last):
- File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
-ModuleNotFoundError: No module named 'flask'
-The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;So the problem is that each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; and later &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;s are new shell sessions without Conda activation.&lt;/p&gt;
-
-&lt;h2 id=&quot;third-attempt&quot;&gt;Third attempt&lt;/h2&gt;
-
-&lt;p&gt;Now, since each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction is a separate run of bash, adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda activate&lt;/code&gt; command to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.&lt;/p&gt;
-
-&lt;p&gt;This is due to the fact that we are using &lt;em&gt;exec&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction which doesn’t actually start a shell session. An alternative to this is the &lt;em&gt;shell&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT python run.py&lt;/code&gt; but this won’t work since it breaks down the container.&lt;/p&gt;
-
-&lt;p&gt;The final resort to this problem is by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda run -n env &amp;lt;command&amp;gt;&lt;/code&gt; instruction which actually runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;command&amp;gt;&lt;/code&gt; inside the conda environment.&lt;/p&gt;
-
-&lt;p&gt;So the final working Dockerfile should look like:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Override default shell and use bash
-SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
- 
-# Activate Conda environment and check if it is working properly
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;And the result obtained is as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build .
-Sending build context to Docker daemon  4.608kB
-Step 1/9 : FROM continuumio/miniconda3
----&amp;gt; b4adc22212f1
-Step 2/9 : WORKDIR /app
----&amp;gt; Using cache
----&amp;gt; 658c526932d9
-Step 3/9 : COPY environment.yml .
----&amp;gt; 26ff11b33587
-Step 4/9 : RUN conda env create -f environment.yml
----&amp;gt; Running in d6729c106f2b
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done
- 
-Downloading and Extracting Packages
-_libgcc_mutex-0.1    | 3 KB      | ########## | 100%
-flask-1.1.2          | 70 KB     | ########## | 100%
-zlib-1.2.11          | 106 KB    | ########## | 100%
-wheel-0.35.1         | 29 KB     | ########## | 100%
-ncurses-6.2          | 1022 KB   | ########## | 100%
-werkzeug-1.0.1       | 239 KB    | ########## | 100%
-ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%
-click-7.1.2          | 64 KB     | ########## | 100%
-markupsafe-1.1.1     | 27 KB     | ########## | 100%
-libffi-3.2.1         | 47 KB     | ########## | 100%
-openssl-1.1.1h       | 2.1 MB    | ########## | 100%
-python-3.6.11        | 34.2 MB   | ########## | 100%
-itsdangerous-1.1.0   | 16 KB     | ########## | 100%
-libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%
-xz-5.2.5             | 343 KB    | ########## | 100%
-libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%
-setuptools-49.6.0    | 947 KB    | ########## | 100%
-jinja2-2.11.2        | 93 KB     | ########## | 100%
-ca-certificates-2020 | 145 KB    | ########## | 100%
-certifi-2020.6.20    | 151 KB    | ########## | 100%
-pip-20.2.4           | 1.1 MB    | ########## | 100%
-libgomp-9.3.0        | 378 KB    | ########## | 100%
-tk-8.6.10            | 3.2 MB    | ########## | 100%
-python_abi-3.6       | 4 KB      | ########## | 100%
-_openmp_mutex-4.5    | 22 KB     | ########## | 100%
-sqlite-3.33.0        | 1.4 MB    | ########## | 100%
-readline-8.0         | 281 KB    | ########## | 100%
-Preparing transaction: ...working... done
-Verifying transaction: ...working... done
-Executing transaction: ...working... done
-#
-# To activate this environment, use
-#
-#     $ conda activate env
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
- 
-==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;==
- current version: 4.8.2
- latest version: 4.9.1
- 
-Please update conda by running
- 
-   $ conda update -n base -c defaults conda
- 
-Removing intermediate container d6729c106f2b
----&amp;gt; c03cbd024136
-Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
----&amp;gt; Running in f37ed240c11e
-Removing intermediate container f37ed240c11e
----&amp;gt; b56ab8574a14
-Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot;
----&amp;gt; Running in 46b28807a8e2
-Making sure flask is installed correctly...
- 
-Removing intermediate container 46b28807a8e2
----&amp;gt; 70228fcf11ec
-Step 7/9 : RUN python -c &quot;import flask&quot;
----&amp;gt; Running in b5a021d87998
-Removing intermediate container b5a021d87998
----&amp;gt; 846df181bd85
-Step 8/9 : COPY run.py .
----&amp;gt; 975a983a3504
-Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
----&amp;gt; Running in 240d3476910c
-Removing intermediate container 240d3476910c
----&amp;gt; 72a352583f00
-Successfully built 72a352583f00
- 
-$ docker images
-REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
-&amp;lt;none&amp;gt;                   &amp;lt;none&amp;gt;              72a352583f00        2 minutes ago       964MB
- 
-$ docker run 72a352583f00
-Flask import successful!
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://pythonspeed.com/articles/activate-conda-dockerfile/&quot;&gt;Activating a Conda environment in your Dockerfile&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile. Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect. Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment. name: env channels: - conda-forge dependencies: - python=3.6 - flask Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask. environment.yml is similar to the requirements.txt used by virtual environment venv module. A simple Python program Write a simple Python program to test the Conda environment activation. import flask print(&quot;Flask import successful!&quot;) First attempt Following the standard approach, our first iteration of the Dockerfile looks like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Following is the result when we try building the Docker image Step 5/9 : RUN conda activate env ---&amp;gt; Running in e33a2dcd4d99 CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'. To initialize your shell, run $ conda init &amp;lt;SHELL_NAME&amp;gt; The command '/bin/sh -c conda activate env' returned a non-zero code: 1 We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method. Second attempt We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &amp;lt;command&amp;gt; to execute instructions but we require a bash shell to run the conda init bash command. To tackle this, we override the default shell by adding the following to the Dockerfile: SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] Our updated Dockerfile should look as follows: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Initialize conda in the bash config files RUN conda init bash # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Building the Docker image again gives us the following result: Step 9/11 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in ea831eb42ff6 Traceback (most recent call last): File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt; ModuleNotFoundError: No module named 'flask' The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1 So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation. Third attempt Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above. This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container. The final resort to this problem is by using conda run -n env &amp;lt;command&amp;gt; instruction which actually runs &amp;lt;command&amp;gt; inside the conda environment. So the final working Dockerfile should look like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] And the result obtained is as follows: $ docker build . Sending build context to Docker daemon 4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&amp;gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&amp;gt; Using cache ---&amp;gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&amp;gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&amp;gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done Downloading and Extracting Packages _libgcc_mutex-0.1 | 3 KB | ########## | 100% flask-1.1.2 | 70 KB | ########## | 100% zlib-1.2.11 | 106 KB | ########## | 100% wheel-0.35.1 | 29 KB | ########## | 100% ncurses-6.2 | 1022 KB | ########## | 100% werkzeug-1.0.1 | 239 KB | ########## | 100% ld_impl_linux-64-2.3 | 617 KB | ########## | 100% click-7.1.2 | 64 KB | ########## | 100% markupsafe-1.1.1 | 27 KB | ########## | 100% libffi-3.2.1 | 47 KB | ########## | 100% openssl-1.1.1h | 2.1 MB | ########## | 100% python-3.6.11 | 34.2 MB | ########## | 100% itsdangerous-1.1.0 | 16 KB | ########## | 100% libstdcxx-ng-9.3.0 | 4.0 MB | ########## | 100% xz-5.2.5 | 343 KB | ########## | 100% libgcc-ng-9.3.0 | 7.8 MB | ########## | 100% setuptools-49.6.0 | 947 KB | ########## | 100% jinja2-2.11.2 | 93 KB | ########## | 100% ca-certificates-2020 | 145 KB | ########## | 100% certifi-2020.6.20 | 151 KB | ########## | 100% pip-20.2.4 | 1.1 MB | ########## | 100% libgomp-9.3.0 | 378 KB | ########## | 100% tk-8.6.10 | 3.2 MB | ########## | 100% python_abi-3.6 | 4 KB | ########## | 100% _openmp_mutex-4.5 | 22 KB | ########## | 100% sqlite-3.33.0 | 1.4 MB | ########## | 100% readline-8.0 | 281 KB | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # # $ conda activate env # # To deactivate an active environment, use # # $ conda deactivate ==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;== current version: 4.8.2 latest version: 4.9.1 Please update conda by running $ conda update -n base -c defaults conda Removing intermediate container d6729c106f2b ---&amp;gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&amp;gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&amp;gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&amp;gt; Running in 46b28807a8e2 Making sure flask is installed correctly... Removing intermediate container 46b28807a8e2 ---&amp;gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&amp;gt; 846df181bd85 Step 8/9 : COPY run.py . ---&amp;gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&amp;gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&amp;gt; 72a352583f00 Successfully built 72a352583f00 $ docker images REPOSITORY TAG IMAGE ID CREATED SIZE &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 72a352583f00 2 minutes ago 964MB $ docker run 72a352583f00 Flask import successful! References</summary></entry><entry><title type="html">Set up Jenkins in Docker</title><link href="http://localhost:4000/jenkins-in-docker" rel="alternate" type="text/html" title="Set up Jenkins in Docker" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-in-docker</id><content type="html" xml:base="http://localhost:4000/jenkins-in-docker">&lt;p&gt;In this blog, we learn how to run Jenkins in a Docker container.&lt;/p&gt;
+&lt;p&gt;The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">AMD’s mainstream Ryzen chips are highly disruptive which include several families of various levels of potency. Ryzen chips introduce a completely new motherboard platform, and the processors require different memory and coolers than their predecessors. Below is a quick breakdown of the different AMD Ryzen processor brackets: Ryzen 3: Up to 4-core processors. Ryzen 5: Up to 8-core processors. Ryzen 7: Up to 16-core processors. Ryzen 9: Up to 32-core processors. Threadripper: Up to 64-core processors. Within each bracket, the processors are named by model number - the higher the model number the more powerful the CPU. Ryzen CPUs that start with the number two are Zen+ processors, released in 2018 while the third generation CPUs using Zen 2 were released in 2019. Now, AMD also has CPUs with G as a suffix for graphics which include Vega video processing which means that you can run a system without a dedicated video card. Coming to socket type, all AMD processors use the same AM4 socket with a few exceptions like Generation 1 and 2 Threadrippers using a TR4 socket and Generation 3 Threadrippers using a TRX4 socket. Ryzen 3 The Ryzen 3 processors are built for budget-friendly PCs and consumers who don’t use PCs for intensive tasks. All processors in this family i.e. 1000, 2000, and 3000 Series are quad-core with decent game handling capability. The latest generation chips in this family come with a rocking boost clock speed of 4.0GHz, allowing you to get good performance at the same affordable price. Ryzen 5 The Ryzen 5 processors are incredible for gaming and are priced aggressively to take on the popular Intel Core i5 family. These processors contain a mix of quadcore and hexacore processors, packed with enough power for intensive applications and tasks like video editing. Ryzen 7 The Ryzen 7 processors fall in line with Intel Core i7 processors and may be overkill for most people who don’t perform high computation tasks. However, these processors are extremely good for advanced computing in a somewhat affordable price range. All processors in this family have 8/16 core/thread configuration and the latest generation chips come with massive L3 cache, high clock speeds and great overclock support. Ryzen 9 The Ryzen 9 processors are the latest batch of processors that are magically packed with 12/24 to 16/32 core/thread configuration. These chips are amazing and lie in the middle-ground between Ryzen 7 and Threadripper. These processors challenge Intel’s Core i9 processor range and are optimal for gamers, streamers, and content creators. Threadripper The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.</summary></entry><entry><title type="html">Set up Jenkins in Docker</title><link href="http://localhost:4000/jenkins-in-docker" rel="alternate" type="text/html" title="Set up Jenkins in Docker" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/jenkins-in-docker</id><content type="html" xml:base="http://localhost:4000/jenkins-in-docker">&lt;p&gt;In this blog, we learn how to run Jenkins in a Docker container.&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-jenkins&quot;&gt;What is Jenkins?&lt;/h2&gt;
 
@@ -752,7 +808,301 @@ Skipping adding existing rule (v6)
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://medium.com/faun/deploy-flask-app-with-nginx-using-gunicorn-7fda4f50066a&quot;&gt;Deploy flask app with Nginx using Gunicorn&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn. Introduction Gunicorn Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks. Nginx Nginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration. Why use Gunicorn and Nginx with Flask? Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests. Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost. Build the Flask app 1. Update and install local packages First of all, update your local package index and then install the required packages as follows: # Update the local package index $ sudo apt-get update # Install dependencies $ sudo apt install python3-pip python3-dev python3-venv nginx 2. Create a virtual environment Now, we create a virtual environment env for the Python project using venv module. python3 -m venv env We activate the environment env as follows: source env/bin/activate 3. Install Python dependencies Next, we install Flask and Gunicorn. pip3 install flask gunicorn requests 4. Create the movie quotes app We create a file app.py with the following content in it: import requests from flask import Flask, render_template app = Flask(__name__) @app.route('/') def movieapp(): url = &quot;http://movie-quotes-2.herokuapp.com/api/v1/quotes/random&quot; response = requests.get(url).json() return render_template(&quot;index.html&quot;, film=response['film'], quote=response['content']) if __name__ == '__main__': app.run(debug=False, host='0.0.0.0') Now, create a templates folder with index.html file in it to be used as a template for our flask application. Below is the sample index.html file which can be modified as per your requirements. &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;style type=&quot;text/css&quot;&amp;gt; body { background: black; color: white; } div.container { max-width: 500px; margin: 100px auto; border: 20px solid white; padding: 10px; text-align: center; } h2 { text-transform: uppercase; } &amp;lt;/style&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;div class=&quot;container&quot;&amp;gt; &amp;lt;h2&amp;gt;Quote of the day&amp;lt;/h2&amp;gt; &amp;lt;hr&amp;gt; &amp;lt;h3&amp;gt;FILM: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ film }} &amp;lt;/h4&amp;gt; &amp;lt;h3&amp;gt;QUOTE: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ quote }} &amp;lt;/h4&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 5.Testing the app Before moving ahead, we test the flask app and make sure everything is working fine. (env) $ python3 app.py * Serving Flask app &quot;app&quot; (lazy loading) * Environment: production WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead. * Debug mode: off * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit) The result should be visible if you visit http://localhost:5000. When you are finished press Ctrl+C in your terminal window to exit the application server. Add WSGI to the app 1. Create WSGI entry point We create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application. Create wsgi.py file in the same directory as app.py, import the Flask instance from our application and run it as follows: from app import app if __name__ == '__main__': app.run() 2. Test Gunicorn’s ability We now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above. Note: The WSGI file name is written without .py extension. So the syntax is gunicorn &amp;lt;WSGI_module&amp;gt;:&amp;lt;callable_name&amp;gt;. (env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app [2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4 [2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725) [2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync [2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728 When you visit http://localhost:5000, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint. When you are finished press Ctrl+C in your terminal window to exit the application server. 3. Create WSGI socket The communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as app.py as follows: (env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app [2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4 [2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854) [2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync [2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857 [2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858 [2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859 By adding --workers 3 we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it. If you notice, an app.sock file will be automatically created in the project folder upon execution of the above command. Configure Nginx 1. Create an Nginx configuration file Gunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file. Let the Gunicorn server run, open a new terminal and execute ls /etc/nginx/ command. In the output you would get a list Nginx configuration along with two important directories: sites-available: contains configuration files for all of your possible applications. sites-enabled: contains links to the configuration files that Nginx will actually read and run. Now, create a new server block configuration file app in /etc/nginx/sites-available/ directory. (env) $ nano /etc/nginx/sites-available/app Next, we add the following code into the configuration file and save it. server { listen 80; location / { include proxy_params; proxy_pass http://unix:/home/movieapp/app.sock; } } Here, we open up a server block and define it to listen for requests on port 80. We also add a location block that matches every request. In this block, we include proxy_params file that specifies some general proxy parameters and passes the requests to the socket we defined using the proxy_pass directive. 2. Enable Nginx server block We need to link the file to the sites-enabled directory to enable the Nginx server block. The syntax for linking the file is as follows: ln -s &amp;lt;source_file&amp;gt; &amp;lt;destination_file&amp;gt; Actual code will look like: ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/ 3. Check for errors in Nginx configuration file we can check syntax errors in Nginx configuration file by executing the nginx -t command as follows: (env) $ nginx -t nginx: the configuration file /etc/nginx/nginx.conf syntax is ok nginx: configuration file /etc/nginx/nginx.conf test is successful If there are no errors, we restart the Nginx process to read our new config file. systemctl restart nginx 4. Adjust firewall The final step we need to take care of is adjusting the firewall to allow access to the Nginx server: (env) $ sudo ufw allow 'Nginx Full' Skipping adding existing rule Skipping adding existing rule (v6) You can visit http://localhost:80 to view your running flask application.</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/faun/deploy-flask-app-with-nginx-using-gunicorn-7fda4f50066a&quot;&gt;Deploy flask app with Nginx using Gunicorn&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn. Introduction Gunicorn Gunicorn (Green Unicorn) is a Python Web Server Gateway Interface (WSGI) HTTP server. It is broadly compatible with various web frameworks. Nginx Nginx is an open-source HTTP web server, mail proxy server, and reverse proxy and load balancer for HTTP, TCP, and UDP traffic. Nginx provides high performance and stability with a simple configuration. Why use Gunicorn and Nginx with Flask? Flask is just a web framework and not a web server. Thus to serve a flask application, a web server such as Gunicorn, Nginx or Apache is required to accept HTTP requests. Now, the major advantage of using Nginx and Gunicorn together is that in addition to being a web server, Nginx can also proxy connections to Gunicorn which brings good performance benefits along with the capability to handle a large number of connections with very little CPU usage and memory cost. Build the Flask app 1. Update and install local packages First of all, update your local package index and then install the required packages as follows: # Update the local package index $ sudo apt-get update # Install dependencies $ sudo apt install python3-pip python3-dev python3-venv nginx 2. Create a virtual environment Now, we create a virtual environment env for the Python project using venv module. python3 -m venv env We activate the environment env as follows: source env/bin/activate 3. Install Python dependencies Next, we install Flask and Gunicorn. pip3 install flask gunicorn requests 4. Create the movie quotes app We create a file app.py with the following content in it: import requests from flask import Flask, render_template app = Flask(__name__) @app.route('/') def movieapp(): url = &quot;http://movie-quotes-2.herokuapp.com/api/v1/quotes/random&quot; response = requests.get(url).json() return render_template(&quot;index.html&quot;, film=response['film'], quote=response['content']) if __name__ == '__main__': app.run(debug=False, host='0.0.0.0') Now, create a templates folder with index.html file in it to be used as a template for our flask application. Below is the sample index.html file which can be modified as per your requirements. &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;style type=&quot;text/css&quot;&amp;gt; body { background: black; color: white; } div.container { max-width: 500px; margin: 100px auto; border: 20px solid white; padding: 10px; text-align: center; } h2 { text-transform: uppercase; } &amp;lt;/style&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;div class=&quot;container&quot;&amp;gt; &amp;lt;h2&amp;gt;Quote of the day&amp;lt;/h2&amp;gt; &amp;lt;hr&amp;gt; &amp;lt;h3&amp;gt;FILM: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ film }} &amp;lt;/h4&amp;gt; &amp;lt;h3&amp;gt;QUOTE: &amp;lt;/h3&amp;gt;&amp;lt;h4&amp;gt; {{ quote }} &amp;lt;/h4&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 5.Testing the app Before moving ahead, we test the flask app and make sure everything is working fine. (env) $ python3 app.py * Serving Flask app &quot;app&quot; (lazy loading) * Environment: production WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead. * Debug mode: off * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit) The result should be visible if you visit http://localhost:5000. When you are finished press Ctrl+C in your terminal window to exit the application server. Add WSGI to the app 1. Create WSGI entry point We create a Python file for WSGI that will serve as the entry point for our application. This file defines the behaviour of the Gunicorn server with our application. Create wsgi.py file in the same directory as app.py, import the Flask instance from our application and run it as follows: from app import app if __name__ == '__main__': app.run() 2. Test Gunicorn’s ability We now test the Gunicorn’s ability to serve the project by binding an address to the WSGI file we just created above. Note: The WSGI file name is written without .py extension. So the syntax is gunicorn &amp;lt;WSGI_module&amp;gt;:&amp;lt;callable_name&amp;gt;. (env) $ gunicorn --bind 0.0.0.0:5000 wsgi:app [2020-11-10 17:09:57 +0530] [725] [INFO] Starting gunicorn 20.0.4 [2020-11-10 17:09:57 +0530] [725] [INFO] Listening at: http://0.0.0.0:5000 (725) [2020-11-10 17:09:57 +0530] [725] [INFO] Using worker: sync [2020-11-10 17:09:57 +0530] [728] [INFO] Booting worker with pid: 728 When you visit http://localhost:5000, you should see the same output as seen while running the flask application. However, this time via Gunicorn’s endpoint. When you are finished press Ctrl+C in your terminal window to exit the application server. 3. Create WSGI socket The communication between Gunicorn and Nginx takes place via a socket. Thus, let’s create a Unix socket file in the same directory as app.py as follows: (env) $ gunicorn --workers 3 --bind unix:/home/movieapp/app.sock -m 777 wsgi:app [2020-11-10 18:02:36 +0530] [2854] [INFO] Starting gunicorn 20.0.4 [2020-11-10 18:02:36 +0530] [2854] [INFO] Listening at: unix:/home/movieapp/app.sock (2854) [2020-11-10 18:02:36 +0530] [2854] [INFO] Using worker: sync [2020-11-10 18:02:36 +0530] [2857] [INFO] Booting worker with pid: 2857 [2020-11-10 18:02:36 +0530] [2858] [INFO] Booting worker with pid: 2858 [2020-11-10 18:02:36 +0530] [2859] [INFO] Booting worker with pid: 2859 By adding --workers 3 we tell Gunicorn to start 3 worker processes. We bund it to the WSGI entry point file by providing the path to the project directory. We also set an unmask value while the socket file is being created so that there are no restrictions while accessing it. If you notice, an app.sock file will be automatically created in the project folder upon execution of the above command. Configure Nginx 1. Create an Nginx configuration file Gunicorn server is now up and running and it waits for requests to flow in from the socket file in the project directory. Now, we need to configure Nginx to pass web requests to that socket by making some small additions to its configuration file. Let the Gunicorn server run, open a new terminal and execute ls /etc/nginx/ command. In the output you would get a list Nginx configuration along with two important directories: sites-available: contains configuration files for all of your possible applications. sites-enabled: contains links to the configuration files that Nginx will actually read and run. Now, create a new server block configuration file app in /etc/nginx/sites-available/ directory. (env) $ nano /etc/nginx/sites-available/app Next, we add the following code into the configuration file and save it. server { listen 80; location / { include proxy_params; proxy_pass http://unix:/home/movieapp/app.sock; } } Here, we open up a server block and define it to listen for requests on port 80. We also add a location block that matches every request. In this block, we include proxy_params file that specifies some general proxy parameters and passes the requests to the socket we defined using the proxy_pass directive. 2. Enable Nginx server block We need to link the file to the sites-enabled directory to enable the Nginx server block. The syntax for linking the file is as follows: ln -s &amp;lt;source_file&amp;gt; &amp;lt;destination_file&amp;gt; Actual code will look like: ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/ 3. Check for errors in Nginx configuration file we can check syntax errors in Nginx configuration file by executing the nginx -t command as follows: (env) $ nginx -t nginx: the configuration file /etc/nginx/nginx.conf syntax is ok nginx: configuration file /etc/nginx/nginx.conf test is successful If there are no errors, we restart the Nginx process to read our new config file. systemctl restart nginx 4. Adjust firewall The final step we need to take care of is adjusting the firewall to allow access to the Nginx server: (env) $ sudo ufw allow 'Nginx Full' Skipping adding existing rule Skipping adding existing rule (v6) You can visit http://localhost:80 to view your running flask application.</summary></entry><entry><title type="html">Conda Docker tutorial</title><link href="http://localhost:4000/conda-docker-tutorial" rel="alternate" type="text/html" title="Conda Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/conda-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/conda-docker-tutorial">&lt;p&gt;Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.
+Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.&lt;/p&gt;
+
+&lt;h2 id=&quot;defining-the-conda-environment&quot;&gt;Defining the Conda environment&lt;/h2&gt;
+&lt;p&gt;Firstly, let’s create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; file to define the Conda environment.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name: env
+channels:
+   - conda-forge
+dependencies:
+   - python=3.6
+   - flask
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; is the name of our Conda environment. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda-forge&lt;/code&gt; channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; is similar to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; used by virtual environment &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;venv&lt;/code&gt; module.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-simple-python-program&quot;&gt;A simple Python program&lt;/h2&gt;
+
+&lt;p&gt;Write a simple Python program to test the Conda environment activation.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import flask
+ 
+print(&quot;Flask import successful!&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h2&gt;
+
+&lt;p&gt;Following the standard approach, our first iteration of the Dockerfile looks like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Following is the result when we try building the Docker image&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 5/9 : RUN conda activate env
+---&amp;gt; Running in e33a2dcd4d99
+ 
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+To initialize your shell, run
+ 
+   $ conda init &amp;lt;SHELL_NAME&amp;gt;
+ 
+The command '/bin/sh -c conda activate env' returned a non-zero code: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.&lt;/p&gt;
+
+&lt;h2 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h2&gt;
+
+&lt;p&gt;We can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; as a solution to the above problem. Docker by default uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/bin/sh -c &amp;lt;command&amp;gt;&lt;/code&gt; to execute instructions but we require a bash shell to run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;To tackle this, we override the default shell by adding the following to the Dockerfile:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Our updated Dockerfile should look as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Override default shell and use bash
+SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Initialize conda in the bash config files
+RUN conda init bash
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Building the Docker image again gives us the following result:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 9/11 : RUN python -c &quot;import flask&quot;
+---&amp;gt; Running in ea831eb42ff6
+Traceback (most recent call last):
+ File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+ModuleNotFoundError: No module named 'flask'
+The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So the problem is that each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; and later &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;s are new shell sessions without Conda activation.&lt;/p&gt;
+
+&lt;h2 id=&quot;third-attempt&quot;&gt;Third attempt&lt;/h2&gt;
+
+&lt;p&gt;Now, since each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction is a separate run of bash, adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda activate&lt;/code&gt; command to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.&lt;/p&gt;
+
+&lt;p&gt;This is due to the fact that we are using &lt;em&gt;exec&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction which doesn’t actually start a shell session. An alternative to this is the &lt;em&gt;shell&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT python run.py&lt;/code&gt; but this won’t work since it breaks down the container.&lt;/p&gt;
+
+&lt;p&gt;The final resort to this problem is by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda run -n env &amp;lt;command&amp;gt;&lt;/code&gt; instruction which actually runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;command&amp;gt;&lt;/code&gt; inside the conda environment.&lt;/p&gt;
+
+&lt;p&gt;So the final working Dockerfile should look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Override default shell and use bash
+SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
+ 
+# Activate Conda environment and check if it is working properly
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And the result obtained is as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build .
+Sending build context to Docker daemon  4.608kB
+Step 1/9 : FROM continuumio/miniconda3
+---&amp;gt; b4adc22212f1
+Step 2/9 : WORKDIR /app
+---&amp;gt; Using cache
+---&amp;gt; 658c526932d9
+Step 3/9 : COPY environment.yml .
+---&amp;gt; 26ff11b33587
+Step 4/9 : RUN conda env create -f environment.yml
+---&amp;gt; Running in d6729c106f2b
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+ 
+Downloading and Extracting Packages
+_libgcc_mutex-0.1    | 3 KB      | ########## | 100%
+flask-1.1.2          | 70 KB     | ########## | 100%
+zlib-1.2.11          | 106 KB    | ########## | 100%
+wheel-0.35.1         | 29 KB     | ########## | 100%
+ncurses-6.2          | 1022 KB   | ########## | 100%
+werkzeug-1.0.1       | 239 KB    | ########## | 100%
+ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%
+click-7.1.2          | 64 KB     | ########## | 100%
+markupsafe-1.1.1     | 27 KB     | ########## | 100%
+libffi-3.2.1         | 47 KB     | ########## | 100%
+openssl-1.1.1h       | 2.1 MB    | ########## | 100%
+python-3.6.11        | 34.2 MB   | ########## | 100%
+itsdangerous-1.1.0   | 16 KB     | ########## | 100%
+libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%
+xz-5.2.5             | 343 KB    | ########## | 100%
+libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%
+setuptools-49.6.0    | 947 KB    | ########## | 100%
+jinja2-2.11.2        | 93 KB     | ########## | 100%
+ca-certificates-2020 | 145 KB    | ########## | 100%
+certifi-2020.6.20    | 151 KB    | ########## | 100%
+pip-20.2.4           | 1.1 MB    | ########## | 100%
+libgomp-9.3.0        | 378 KB    | ########## | 100%
+tk-8.6.10            | 3.2 MB    | ########## | 100%
+python_abi-3.6       | 4 KB      | ########## | 100%
+_openmp_mutex-4.5    | 22 KB     | ########## | 100%
+sqlite-3.33.0        | 1.4 MB    | ########## | 100%
+readline-8.0         | 281 KB    | ########## | 100%
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+#
+# To activate this environment, use
+#
+#     $ conda activate env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+ 
+==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;==
+ current version: 4.8.2
+ latest version: 4.9.1
+ 
+Please update conda by running
+ 
+   $ conda update -n base -c defaults conda
+ 
+Removing intermediate container d6729c106f2b
+---&amp;gt; c03cbd024136
+Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
+---&amp;gt; Running in f37ed240c11e
+Removing intermediate container f37ed240c11e
+---&amp;gt; b56ab8574a14
+Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot;
+---&amp;gt; Running in 46b28807a8e2
+Making sure flask is installed correctly...
+ 
+Removing intermediate container 46b28807a8e2
+---&amp;gt; 70228fcf11ec
+Step 7/9 : RUN python -c &quot;import flask&quot;
+---&amp;gt; Running in b5a021d87998
+Removing intermediate container b5a021d87998
+---&amp;gt; 846df181bd85
+Step 8/9 : COPY run.py .
+---&amp;gt; 975a983a3504
+Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
+---&amp;gt; Running in 240d3476910c
+Removing intermediate container 240d3476910c
+---&amp;gt; 72a352583f00
+Successfully built 72a352583f00
+ 
+$ docker images
+REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
+&amp;lt;none&amp;gt;                   &amp;lt;none&amp;gt;              72a352583f00        2 minutes ago       964MB
+ 
+$ docker run 72a352583f00
+Flask import successful!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://pythonspeed.com/articles/activate-conda-dockerfile/&quot;&gt;Activating a Conda environment in your Dockerfile&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile. Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect. Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment. name: env channels: - conda-forge dependencies: - python=3.6 - flask Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask. environment.yml is similar to the requirements.txt used by virtual environment venv module. A simple Python program Write a simple Python program to test the Conda environment activation. import flask print(&quot;Flask import successful!&quot;) First attempt Following the standard approach, our first iteration of the Dockerfile looks like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Following is the result when we try building the Docker image Step 5/9 : RUN conda activate env ---&amp;gt; Running in e33a2dcd4d99 CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'. To initialize your shell, run $ conda init &amp;lt;SHELL_NAME&amp;gt; The command '/bin/sh -c conda activate env' returned a non-zero code: 1 We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method. Second attempt We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &amp;lt;command&amp;gt; to execute instructions but we require a bash shell to run the conda init bash command. To tackle this, we override the default shell by adding the following to the Dockerfile: SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] Our updated Dockerfile should look as follows: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Initialize conda in the bash config files RUN conda init bash # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Building the Docker image again gives us the following result: Step 9/11 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in ea831eb42ff6 Traceback (most recent call last): File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt; ModuleNotFoundError: No module named 'flask' The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1 So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation. Third attempt Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above. This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container. The final resort to this problem is by using conda run -n env &amp;lt;command&amp;gt; instruction which actually runs &amp;lt;command&amp;gt; inside the conda environment. So the final working Dockerfile should look like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] And the result obtained is as follows: $ docker build . Sending build context to Docker daemon 4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&amp;gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&amp;gt; Using cache ---&amp;gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&amp;gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&amp;gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done Downloading and Extracting Packages _libgcc_mutex-0.1 | 3 KB | ########## | 100% flask-1.1.2 | 70 KB | ########## | 100% zlib-1.2.11 | 106 KB | ########## | 100% wheel-0.35.1 | 29 KB | ########## | 100% ncurses-6.2 | 1022 KB | ########## | 100% werkzeug-1.0.1 | 239 KB | ########## | 100% ld_impl_linux-64-2.3 | 617 KB | ########## | 100% click-7.1.2 | 64 KB | ########## | 100% markupsafe-1.1.1 | 27 KB | ########## | 100% libffi-3.2.1 | 47 KB | ########## | 100% openssl-1.1.1h | 2.1 MB | ########## | 100% python-3.6.11 | 34.2 MB | ########## | 100% itsdangerous-1.1.0 | 16 KB | ########## | 100% libstdcxx-ng-9.3.0 | 4.0 MB | ########## | 100% xz-5.2.5 | 343 KB | ########## | 100% libgcc-ng-9.3.0 | 7.8 MB | ########## | 100% setuptools-49.6.0 | 947 KB | ########## | 100% jinja2-2.11.2 | 93 KB | ########## | 100% ca-certificates-2020 | 145 KB | ########## | 100% certifi-2020.6.20 | 151 KB | ########## | 100% pip-20.2.4 | 1.1 MB | ########## | 100% libgomp-9.3.0 | 378 KB | ########## | 100% tk-8.6.10 | 3.2 MB | ########## | 100% python_abi-3.6 | 4 KB | ########## | 100% _openmp_mutex-4.5 | 22 KB | ########## | 100% sqlite-3.33.0 | 1.4 MB | ########## | 100% readline-8.0 | 281 KB | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # # $ conda activate env # # To deactivate an active environment, use # # $ conda deactivate ==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;== current version: 4.8.2 latest version: 4.9.1 Please update conda by running $ conda update -n base -c defaults conda Removing intermediate container d6729c106f2b ---&amp;gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&amp;gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&amp;gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&amp;gt; Running in 46b28807a8e2 Making sure flask is installed correctly... Removing intermediate container 46b28807a8e2 ---&amp;gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&amp;gt; 846df181bd85 Step 8/9 : COPY run.py . ---&amp;gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&amp;gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&amp;gt; 72a352583f00 Successfully built 72a352583f00 $ docker images REPOSITORY TAG IMAGE ID CREATED SIZE &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 72a352583f00 2 minutes ago 964MB $ docker run 72a352583f00 Flask import successful! References</summary></entry><entry><title type="html">Dockerfile best practices</title><link href="http://localhost:4000/dockerfile-best-practices" rel="alternate" type="text/html" title="Dockerfile best practices" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile-best-practices</id><content type="html" xml:base="http://localhost:4000/dockerfile-best-practices">&lt;p&gt;Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.&lt;/p&gt;
+
+&lt;h2 id=&quot;minimize-the-number-of-steps-in-the-dockerfile&quot;&gt;Minimize the number of steps in the Dockerfile&lt;/h2&gt;
+
+&lt;p&gt;Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance.
+Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step.&lt;/p&gt;
+
+&lt;h2 id=&quot;start-your-dockerfile-with-the-steps-that-are-least-likely-to-change&quot;&gt;Start your Dockerfile with the steps that are least likely to change&lt;/h2&gt;
+
+&lt;p&gt;This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Install the tools needed to build your application.&lt;/li&gt;
+  &lt;li&gt;Install all the required dependencies, libraries and packages.&lt;/li&gt;
+  &lt;li&gt;Finally, build your application.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;a-fairly-straightforward-approach-to-building-dockerfiles-in-an-iterative-manner-would-be-as-follows&quot;&gt;A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows:&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-pick-the-right-base-image&quot;&gt;1. Pick the right base image&lt;/h3&gt;
+
+&lt;p&gt;Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python&lt;/code&gt; as their base image instead of selecting a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ubuntu&lt;/code&gt; base image and installing dependencies on top of it.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-go-to-the-shell-and-build-your-environment&quot;&gt;2. Go to the shell and build your environment&lt;/h3&gt;
+
+&lt;p&gt;Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode.&lt;/p&gt;
+
+&lt;p&gt;Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-add-the-steps-to-your-dockerfile-and-build-your-image&quot;&gt;3. Add the steps to your Dockerfile and build your image&lt;/h3&gt;
+
+&lt;p&gt;Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time.&lt;/p&gt;
+
+&lt;p&gt;This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps.&lt;/p&gt;
+
+&lt;h3 id=&quot;4-repeat-steps-2-and-3&quot;&gt;4. Repeat steps 2 and 3&lt;/h3&gt;
+
+&lt;p&gt;You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://docs.docker.com/engine/reference/builder/&quot;&gt;Dockerfile reference&lt;/a&gt; is a good place to look for common Dockerfile syntax, warnings and documentation.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step. Start your Dockerfile with the steps that are least likely to change This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows: Install the tools needed to build your application. Install all the required dependencies, libraries and packages. Finally, build your application. A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows: 1. Pick the right base image Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it. 2. Go to the shell and build your environment Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode. Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately. 3. Add the steps to your Dockerfile and build your image Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time. This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps. 4. Repeat steps 2 and 3 You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected. Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation. References Dockerfile tutorial by example</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
 
 &lt;h2 id=&quot;why-would-you-want-to-use-a-dockerfile&quot;&gt;Why would you want to use a Dockerfile?&lt;/h2&gt;
 
@@ -907,54 +1257,7 @@ CMD [&quot;--help&quot;]
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.</summary></entry><entry><title type="html">Dockerfile best practices</title><link href="http://localhost:4000/dockerfile-best-practices" rel="alternate" type="text/html" title="Dockerfile best practices" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile-best-practices</id><content type="html" xml:base="http://localhost:4000/dockerfile-best-practices">&lt;p&gt;Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.&lt;/p&gt;
-
-&lt;h2 id=&quot;minimize-the-number-of-steps-in-the-dockerfile&quot;&gt;Minimize the number of steps in the Dockerfile&lt;/h2&gt;
-
-&lt;p&gt;Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance.
-Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step.&lt;/p&gt;
-
-&lt;h2 id=&quot;start-your-dockerfile-with-the-steps-that-are-least-likely-to-change&quot;&gt;Start your Dockerfile with the steps that are least likely to change&lt;/h2&gt;
-
-&lt;p&gt;This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Install the tools needed to build your application.&lt;/li&gt;
-  &lt;li&gt;Install all the required dependencies, libraries and packages.&lt;/li&gt;
-  &lt;li&gt;Finally, build your application.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;a-fairly-straightforward-approach-to-building-dockerfiles-in-an-iterative-manner-would-be-as-follows&quot;&gt;A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows:&lt;/h2&gt;
-
-&lt;h3 id=&quot;1-pick-the-right-base-image&quot;&gt;1. Pick the right base image&lt;/h3&gt;
-
-&lt;p&gt;Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python&lt;/code&gt; as their base image instead of selecting a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ubuntu&lt;/code&gt; base image and installing dependencies on top of it.&lt;/p&gt;
-
-&lt;h3 id=&quot;2-go-to-the-shell-and-build-your-environment&quot;&gt;2. Go to the shell and build your environment&lt;/h3&gt;
-
-&lt;p&gt;Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode.&lt;/p&gt;
-
-&lt;p&gt;Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately.&lt;/p&gt;
-
-&lt;h3 id=&quot;3-add-the-steps-to-your-dockerfile-and-build-your-image&quot;&gt;3. Add the steps to your Dockerfile and build your image&lt;/h3&gt;
-
-&lt;p&gt;Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time.&lt;/p&gt;
-
-&lt;p&gt;This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps.&lt;/p&gt;
-
-&lt;h3 id=&quot;4-repeat-steps-2-and-3&quot;&gt;4. Repeat steps 2 and 3&lt;/h3&gt;
-
-&lt;p&gt;You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;a href=&quot;https://docs.docker.com/engine/reference/builder/&quot;&gt;Dockerfile reference&lt;/a&gt; is a good place to look for common Dockerfile syntax, warnings and documentation.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step. Start your Dockerfile with the steps that are least likely to change This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows: Install the tools needed to build your application. Install all the required dependencies, libraries and packages. Finally, build your application. A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows: 1. Pick the right base image Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it. 2. Go to the shell and build your environment Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode. Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately. 3. Add the steps to your Dockerfile and build your image Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time. This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps. 4. Repeat steps 2 and 3 You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected. Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation. References Dockerfile tutorial by example</summary></entry><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.</summary></entry><entry><title type="html">Windows Subsystem for Linux (WSL)</title><link href="http://localhost:4000/WSL" rel="alternate" type="text/html" title="Windows Subsystem for Linux (WSL)" /><published>2020-11-04T13:30:08+05:30</published><updated>2020-11-04T13:30:08+05:30</updated><id>http://localhost:4000/WSL</id><content type="html" xml:base="http://localhost:4000/WSL">&lt;p&gt;WSL is a tool that enables users to run Bash and core Linux command-line tools on Windows. Ain’t that awesome?!&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -1063,159 +1366,4 @@ Also, combining several steps into one line tends to create a single intermediar
 
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.notebookcheck.net/2020-HP-Envy-x360-13-Convertible-2-in-1-Review-Ryzen-5-Beats-a-Core-i7.477589.0.html&quot;&gt;2020 HP Envy x360 13&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.</summary></entry><entry><title type="html">Getting started with Docker</title><link href="http://localhost:4000/getting-started-with-docker" rel="alternate" type="text/html" title="Getting started with Docker" /><published>2020-11-02T18:30:08+05:30</published><updated>2020-11-02T18:30:08+05:30</updated><id>http://localhost:4000/getting-started-with-docker</id><content type="html" xml:base="http://localhost:4000/getting-started-with-docker">&lt;p&gt;&lt;img src=&quot;/assets/img/docker/docker-image.jpeg&quot; alt=&quot;Docker&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;what-is-docker&quot;&gt;What is Docker?&lt;/h2&gt;
-
-&lt;p&gt;Docker is a software tool that helps you build, distribute, deploy and run applications inside an isolated sandbox called container.&lt;/p&gt;
-
-&lt;h2 id=&quot;why-use-docker-over-vitual-machine&quot;&gt;Why use Docker over Vitual Machine?&lt;/h2&gt;
-
-&lt;p&gt;Docker uses containers for all of its operations and containers consume user space of an operating system. In simple terms, container is just a set of processes that are isolated from the rest of the system.&lt;/p&gt;
-
-&lt;p&gt;However, a Virtual Machine (VM) consumes user space as well as kernel space of an operating system for all of its operations. Each VM consists of an operating system and apps. Internally VMs use virtualized hardware, but share system hardware resources from the host operating system.&lt;/p&gt;
-
-&lt;h2 id=&quot;terminology&quot;&gt;Terminology&lt;/h2&gt;
-
-&lt;p&gt;There is a bunch of Docker-specific jargon associated with the Docker ecosystem. So let’s understand some important terms.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;Docker Image:&lt;/strong&gt; A blueprint of the application that helps us run containers.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Docker Container:&lt;/strong&gt; Created from Docker image to run applications.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Docker Daemon:&lt;/strong&gt; Background service running on host operating system that manages building, running and distribution of Docker Containers.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Docker Client:&lt;/strong&gt; A command line tool that allows user to interact with the Docker Daemon.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Docker Hub:&lt;/strong&gt; A pool of all available Docker Images where one can host their own Docker Images in the registries and pull other users’ Docker Images.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;The &lt;em&gt;getting started&lt;/em&gt; guide on Docker website has detailed instructions for setting up Docker on &lt;a href=&quot;https://docs.docker.com/docker-for-mac/install/&quot;&gt;Mac&lt;/a&gt;, &lt;a href=&quot;https://docs.docker.com/engine/install/ubuntu/&quot;&gt;Linux&lt;/a&gt; and &lt;a href=&quot;https://docs.docker.com/docker-for-windows/install/&quot;&gt;Windows&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Installation can be verified by running the following command:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker run hello-world
-Unable to find image 'hello-world:latest' locally
-latest: Pulling from library/hello-world
-0e03bdcc26d7: Pull complete 
-Digest: sha256:8c5aeeb6a5f3ba4883347d3747a7249f491766ca1caa47e5da5dfcf6b9b717c0
-Status: Downloaded newer image for hello-world:latest
-
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-
-To generate this message, Docker took the following steps:
- 1. The Docker client contacted the Docker daemon.
- 2. The Docker daemon pulled the &quot;hello-world&quot; image from the Docker Hub.
-    (amd64)
- 3. The Docker daemon created a new container from that image which runs the
-    executable that produces the output you are currently reading.
- 4. The Docker daemon streamed that output to the Docker client, which sent it
-    to your terminal.
-
-To try something more ambitious, you can run an Ubuntu container with:
- $ docker run -it ubuntu bash
-
-Share images, automate workflows, and more with a free Docker ID:
- https://hub.docker.com/
-
-For more examples and ideas, visit:
- https://docs.docker.com/get-started/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;playing-with-busybox&quot;&gt;Playing with Busybox&lt;/h2&gt;
-
-&lt;p&gt;To get our hands dirty, let’s run a &lt;a href=&quot;https://en.wikipedia.org/wiki/BusyBox&quot;&gt;Busybox&lt;/a&gt; container on our system to understand &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;p&gt;To get started, we first need to pull the busybox image from the Docker registry.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker pull busybox
-Using default tag: latest
-latest: Pulling from library/busybox
-9758c28807f2: Pull complete 
-Digest: sha256:a9286defaba7b3a519d585ba0e37d0b2cbee74ebfe590960b0b1d6a5e97d1e1d
-Status: Downloaded newer image for busybox:latest
-docker.io/library/busybox:latest
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker pull&lt;/code&gt; command fetches the required image and stores it to our system.&lt;/p&gt;
-
-&lt;p&gt;To view a list of all images on your system, use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker images&lt;/code&gt; command as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker images
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-busybox             latest              f0b02e9d092d        2 weeks ago         1.23MB
-hello-world         latest              bf756fb1ae65        10 months ago       13.3kB
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Now we can run a Docker container based on this image by executing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command in the terminal.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker run busybox
-root@Keval:/home/keval# 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;However, we see no output. Why? Well, when we perform &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command in terminal, the Docker Client finds the image (busybox in our case) loads up a container and then runs a commands in that container. While executing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command above we did not give any command and thus, in this case the container ran an empty &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;run&lt;/code&gt; command and exited.&lt;/p&gt;
-
-&lt;p&gt;We should try to echo something from the container.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker run busybox echo &quot;Busybox says hi&quot;
-Busybox says hi
-root@Keval:/home/keval# 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Okay good, we see the echo message. Now to view a list of all the running/active containers we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker ps&lt;/code&gt; command. However, we have no running containers and this command would result in a blank output. A more useful and powerful variant of this is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker ps -a&lt;/code&gt; command which shows us a list of all the containers, be it in running  or exited state.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker ps -a
-CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS                          PORTS               NAMES
-907bef05f9bd        busybox             &quot;echo 'Busybox says …&quot;   26 seconds ago       Exited (0) 24 seconds ago                           wonderful_archimedes
-1f6a478c7b38        busybox             &quot;sh&quot;                     About a minute ago   Exited (0) About a minute ago                       happy_bartik
-d45fa34b3d93        hello-world         &quot;/hello&quot;                 26 minutes ago       Exited (0) 26 minutes ago                           sad_goldstine
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;It also possible for one to execute more than one command in a container. Running the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-it&lt;/code&gt; flag provides us with an interactive tty (TeleTYpewriter) which allows us to execute as many commands we want in a container.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker run -it busybox sh
-/ # ls
-bin   dev   etc   home  proc  root  sys   tmp   usr   var
-/ # uptime
- 05:55:22 up  1:23,  0 users,  load average: 1.33, 0.81, 0.74
-/ # exit
-root@Keval:/home/keval# 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Now everytime we execute the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command, a new container is created which stays in the system storage if not removed. Thus, it is important to clean up the space by removing unwanted containers using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker rm&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker rm 78eac55cb3a3
-78eac55cb3a3
-root@Keval:/home/keval# 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Deleting containers by copypasting container IDs can be tedious at times and thus, you can delete a bunch of containers in single go by -&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker rm $(docker ps -a -q -f status=exited)
-907bef05f9bd
-1f6a478c7b38
-d45fa34b3d93
-root@Keval:/home/keval# 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-q&lt;/code&gt; flag is used to return only numeric IDs and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-f&lt;/code&gt; flag filters output based on the conditions provided (in our case containers with status equal to exited).&lt;/p&gt;
-
-&lt;p&gt;Similarly, images can also be deleted using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker rmi&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@Keval:/home/keval# docker rmi busybox
-Untagged: busybox:latest
-Untagged: busybox@sha256:a9286defaba7b3a519d585ba0e37d0b2cbee74ebfe590960b0b1d6a5e97d1e1d
-Deleted: sha256:f0b02e9d092d905d0d87a8455a1ae3e9bb47b4aa3dc125125ca5cd10d6441c9f
-Deleted: sha256:d2421964bad195c959ba147ad21626ccddc73a4f2638664ad1c07bd9df48a675
-root@Keval:/home/keval# 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;There is more to Docker than just a bunch of basic commands covered above. However, I hope this blog got you interested in the Docker.&lt;/p&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docker-curriculum.com/&quot;&gt;Docker for beginners&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html"></summary></entry></feed>
+&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">The Envy x360 13 series being a mid-range 2-in-1 convertible laptop beats most of the other laptops in the league. It is positioned above the cheaper Pavilion x360 range and below the Spectre flagship. However, it performs surprisingly close to a Spectre.</summary></entry></feed>
