@@ -1,0 +1,1063 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Transfer Learning using PyTorch - Home</title>
+<meta name="description" content="Today we learn how to perform transfer learning for image classification using PyTorch.  Introduction">
+
+
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="Transfer Learning using PyTorch">
+<meta property="og:url" content="http://localhost:4000/transfer-learning">
+
+
+  <meta property="og:description" content="Today we learn how to perform transfer learning for image classification using PyTorch.  Introduction">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-11-26T05:30:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/transfer-learning">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Transfer Learning using PyTorch">
+    <meta itemprop="description" content="Today we learn how to perform transfer learning for image classification using PyTorch.Introduction">
+    <meta itemprop="datePublished" content="2020-11-26T05:30:00+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Transfer Learning using PyTorch
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-11-26T05:30:00+05:30">November 26, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          10 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#introduction">Introduction</a>
+    <ul>
+      <li><a href="#what-is-pytorch">What is PyTorch?</a></li>
+      <li><a href="#what-is-transfer-learning">What is Transfer Learning?</a></li>
+    </ul>
+  </li>
+  <li><a href="#getting-started">Getting started</a>
+    <ul>
+      <li><a href="#import-libraries">Import Libraries</a></li>
+      <li><a href="#load-data">Load Data</a>
+        <ul>
+          <li><a href="#dataset">Dataset</a></li>
+          <li><a href="#set-data-folders">Set data folders</a></li>
+          <li><a href="#load-test-data">Load test data</a></li>
+          <li><a href="#label-mapping">Label mapping</a></li>
+          <li><a href="#transform">Transform</a></li>
+          <li><a href="#dataloader">Dataloader</a></li>
+          <li><a href="#plot-images">Plot images</a></li>
+        </ul>
+      </li>
+      <li><a href="#helper-functions">Helper functions</a></li>
+      <li><a href="#cyclic-learning-rate">Cyclic Learning Rate</a></li>
+      <li><a href="#lookahead">Lookahead</a></li>
+      <li><a href="#lr-finder">LR Finder</a></li>
+      <li><a href="#train-and-test">Train and Test</a></li>
+      <li><a href="#model-and-training">Model and Training</a>
+        <ul>
+          <li><a href="#initialize-variables">Initialize variables</a></li>
+          <li><a href="#model">Model</a></li>
+          <li><a href="#training-before-unfreezing">Training before unfreezing</a></li>
+          <li><a href="#training-after-unfreezing">Training after unfreezing</a></li>
+        </ul>
+      </li>
+      <li><a href="#testing">Testing</a></li>
+      <li><a href="#reference">Reference</a></li>
+    </ul>
+  </li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>Today we learn how to perform transfer learning for image classification using PyTorch.</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="what-is-pytorch">What is PyTorch?</h2>
+
+<blockquote>
+  <p><strong><a href="https://pytorch.org/">PyTorch</a></strong> is an open-source machine learning library based on the Torch library, used for applications such as computer vision and natural language processing, primarily developed by Facebook’s AI Research lab (FAIR).</p>
+</blockquote>
+
+<h2 id="what-is-transfer-learning">What is Transfer Learning?</h2>
+
+<blockquote>
+  <p><strong>Transfer learning (TL)</strong> is a research problem in machine learning (ML) that focuses on storing knowledge gained while solving one problem and applying it to a different but related problem.</p>
+
+  <p>For example, the knowledge gained while learning to recognize cars could apply when trying to recognize trucks.</p>
+</blockquote>
+
+<h1 id="getting-started">Getting started</h1>
+
+<p>We use a Kaggle Notebook for this task since it provides free computation services which should be sufficient for the image classification task.</p>
+
+<h2 id="import-libraries">Import Libraries</h2>
+
+<p>We import various libraries along with the submodules required for the image classification.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>%matplotlib inline
+%reload_ext autoreload
+%autoreload 2
+ 
+# Import required libraries
+import numpy as np
+import pandas as pd
+import time
+import math
+import tqdm as tqdm
+import os
+import csv
+import torch
+import torch.nn.functional as F
+import torch.optim as optim
+import torchvision.models as models
+import matplotlib.pyplot as plt
+from PIL import Image
+from torch import nn
+from torch.utils.data.dataset import Dataset
+from torch.utils.data import DataLoader
+from torchvision import transforms, datasets
+from torch.autograd import Variable
+ 
+# Check if compute other than CPU is available
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+</code></pre></div></div>
+
+<h2 id="load-data">Load Data</h2>
+
+<h3 id="dataset">Dataset</h3>
+
+<p>We use the <a href="https://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html">102 Category Flower Dataset</a> for our image classification task. This dataset contains images of flowers belonging to 102 different categories.</p>
+
+<h3 id="set-data-folders">Set data folders</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data_dir = '../input/oxford-flowers-data/flower_data'
+train_dir = data_dir + '/train'
+valid_dir = data_dir + '/valid'
+test_dir = data_dir + '/test'
+name_json = data_dir + '/cat_to_name.json'
+</code></pre></div></div>
+
+<p>Here we have three main directories <code class="language-plaintext highlighter-rouge">train_dir</code>, <code class="language-plaintext highlighter-rouge">valid_dir</code>, and <code class="language-plaintext highlighter-rouge">test_dir</code> which contain training, validation, and testing data respectively.</p>
+
+<p>We also have a <code class="language-plaintext highlighter-rouge">cat_to_name.json</code> file which contains the mapping of flower category to the name of the flower.</p>
+
+<h3 id="load-test-data">Load test data</h3>
+
+<p>The dataset at hand contains training and validation images categorized inside their respective folders, however, the test images are not categorized and are merged in a single directory.</p>
+
+<p>Thus, we need to define functions to load the test data as required by PyTorch during the training of the model.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def pil_loader(path):
+    with open(path, 'rb') as f:
+        img = Image.open(f)
+        return img.convert('RGB')
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class TestDataset(torch.utils.data.Dataset):
+    def __init__(self, path, transform=None):
+        self.path = path
+        self.files = []
+        for (dirpath, _, filenames) in os.walk(self.path):
+            for f in filenames:
+                if f.endswith('.jpg'):
+                    p = {}
+                    p['img_path'] = dirpath + '/' + f
+                    self.files.append(p)
+        self.transform = transform
+ 
+    def __len__(self):
+        return len(self.files)
+ 
+    def __getitem__(self, idx):
+        img_path = self.files[idx]['img_path']
+        img_name = img_path.split('/')[-1]
+        image = pil_loader(img_path)
+        if self.transform:
+            image = self.transform(image)
+        return image, 0, img_name
+</code></pre></div></div>
+
+<h3 id="label-mapping">Label mapping</h3>
+
+<p>We load the labels JSON file and define a function to get the class/category of a flower by passing in an index.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import json
+ 
+with open(name_json, 'r') as f:
+    cat_to_name = json.load(f)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def get_cat_name(index):
+    return cat_to_name[idx_to_class[index]]
+</code></pre></div></div>
+
+<h3 id="transform">Transform</h3>
+
+<p>Now even though we might have enough data for training but performing various transforms or operations on the images helps the model learn better and perform efficiently on unseen data.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mean = [0.485, 0.456, 0.406]
+std = [0.229, 0.224, 0.225]
+ 
+normalize = transforms.Normalize(mean=mean, std=std)
+data_transforms = transforms.Compose([
+                    transforms.Pad(4, padding_mode='reflect'),
+                    transforms.RandomRotation(10),
+                    transforms.RandomResizedCrop(224),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                    normalize
+                ])
+test_transforms = transforms.Compose([
+                    #transforms.Pad(4, padding_mode='reflect'),
+                    transforms.RandomResizedCrop(224),
+                    transforms.ToTensor(),
+                    normalize
+                ])
+</code></pre></div></div>
+
+<h3 id="dataloader">Dataloader</h3>
+
+<p>Next, we provide the image dataset directories and the respective transforms to the dataloader function which will actually load images as needed.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>train_datasets = datasets.ImageFolder(train_dir, data_transforms)
+val_datasets = datasets.ImageFolder(valid_dir, test_transforms)
+test_datasets = TestDataset(test_dir, test_transforms)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bs = 64
+ 
+trainloader = torch.utils.data.DataLoader(train_datasets, batch_size=bs, shuffle=True)
+validloader = torch.utils.data.DataLoader(val_datasets, batch_size=bs, shuffle=True)
+testloader = torch.utils.data.DataLoader(test_datasets, batch_size=1, shuffle=False)
+</code></pre></div></div>
+
+<p>Finally, we create a dictionary to get the class/category of a flower from an index.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>idx_to_class = {val:key for key, val in val_datasets.class_to_idx.items()}
+</code></pre></div></div>
+
+<h3 id="plot-images">Plot images</h3>
+
+<p>Its always a good idea to take a look at the dataset before training the model. Hence, we define a <code class="language-plaintext highlighter-rouge">plot_img</code> function to plot a grid of random dataset images.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def plot_img(preds=None, is_pred=False):        
+    fig = plt.figure(figsize=(8,8))
+    columns = 4
+    rows = 5
+ 
+    for i in range(1, columns*rows +1):
+        fig.add_subplot(rows, columns, i)
+        
+        if is_pred:
+            img_xy = np.random.randint(len(test_datasets));
+            img = test_datasets[img_xy][0].numpy()           
+        else:
+            img_xy = np.random.randint(len(train_datasets));
+            img = train_datasets[img_xy][0].numpy()
+            
+        img = img.transpose((1, 2, 0))
+        img = std * img + mean
+        
+        if is_pred:
+            plt.title(get_cat_name(preds[img_xy]) + "/" + get_cat_name(test_datasets[img_xy][1]))
+        else:
+            plt.title(str(get_cat_name(train_datasets[img_xy][1])))
+        plt.axis('off')
+        img = np.clip(img, 0, 1)
+        plt.imshow(img, interpolation='nearest')
+    plt.show()
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plot_img()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/1.png" alt="" /></p>
+
+<h2 id="helper-functions">Helper functions</h2>
+
+<p>Next, we define helper functions which will be required later while training and evaluating the model.</p>
+
+<p>A function that returns <code class="language-plaintext highlighter-rouge">accuracy</code> based on the output and target parameters.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def accuracy(output, target, is_test=False):
+    global total
+    global correct
+    batch_size = target.size(0)
+    total += batch_size    
+    _, pred = output.max(dim=1)
+    if is_test:
+        preds.extend(pred)
+    correct += torch.sum(pred == target.data)
+    return  (correct.float()/total) * 100
+</code></pre></div></div>
+
+<p>A <code class="language-plaintext highlighter-rouge">reset</code> function to reset/clear evaluation metrics.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def reset():
+    global total, correct
+    global train_loss, test_loss, best_acc
+    global trn_losses, trn_accs, val_losses, val_accs
+    total, correct = 0, 0
+    train_loss, test_loss, best_acc = 0.0, 0.0, 0.0
+    trn_losses, trn_accs, val_losses, val_accs = [], [], [], []
+</code></pre></div></div>
+
+<p>A function to record the training and testing stats used to plot graphs.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class AvgStats(object):
+    def __init__(self):
+        self.reset()
+        
+    def reset(self):
+        self.losses =[]
+        self.precs =[]
+        self.its = []
+        
+    def append(self, loss, prec, it):
+        self.losses.append(loss)
+        self.precs.append(prec)
+        self.its.append(it)
+</code></pre></div></div>
+
+<p>A function to save checkpoint if a new best score is achieved while training</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def save_checkpoint(model, is_best, filename='./checkpoint.pth.tar'):
+    if is_best:
+        torch.save(model.state_dict(), filename)  # save checkpoint
+    else:
+        print ("=&gt; Validation Accuracy did not improve")
+</code></pre></div></div>
+
+<p>A function to load a saved checkpoint.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def load_checkpoint(model, filename = './checkpoint.pth.tar'):
+    sd = torch.load(filename, map_location=lambda storage, loc: storage)
+    names = set(model.state_dict().keys())
+    for n in list(sd.keys()): 
+        if n not in names and n+'_raw' in names:
+            if n+'_raw' not in sd: sd[n+'_raw'] = sd[n]
+            del sd[n]
+    model.load_state_dict(sd)
+</code></pre></div></div>
+
+<h2 id="cyclic-learning-rate">Cyclic Learning Rate</h2>
+
+<p>This method is described in the paper <a href="https://arxiv.org/abs/1506.01186">Cyclical Learning Rates for Training Neural Networks</a> to find out the optimum learning rate.</p>
+
+<p>The learning rate is increased from a lower value to a higher per iteration for some iterations till loss starts exploding. The learning rate one power lower than the one where loss is minimum is chosen as the optimum learning rate for training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class CLR(object):
+    def __init__(self, optim, bn, base_lr=1e-7, max_lr=100):
+        self.base_lr = base_lr
+        self.max_lr = max_lr
+        self.optim = optim
+        self.bn = bn - 1
+        ratio = self.max_lr/self.base_lr
+        self.mult = ratio ** (1/self.bn)
+        self.best_loss = 1e9
+        self.iteration = 0
+        self.lrs = []
+        self.losses = []
+        
+    def calc_lr(self, loss):
+        self.iteration +=1
+        if math.isnan(loss) or loss &gt; 4 * self.best_loss:
+            return -1
+        if loss &lt; self.best_loss and self.iteration &gt; 1:
+            self.best_loss = loss
+            
+        mult = self.mult ** self.iteration
+        lr = self.base_lr * mult
+        
+        self.lrs.append(lr)
+        self.losses.append(loss)
+        
+        return lr
+        
+    def plot(self, start=10, end=-5):
+        plt.xlabel("Learning Rate")
+        plt.ylabel("Losses")
+        plt.plot(self.lrs[start:end], self.losses[start:end])
+        plt.xscale('log')
+        
+        
+    def plot_lr(self):
+        plt.xlabel("Iterations")
+        plt.ylabel("Learning Rate")
+        plt.plot(self.lrs)
+        plt.yscale('log')
+</code></pre></div></div>
+
+<h2 id="lookahead">Lookahead</h2>
+
+<p>Here we implement Lookahead optimizer. As proposed, the Lookahead optimizer goes k steps forward and 1 step backward.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from torch.optim import Optimizer
+from collections import defaultdict
+ 
+ 
+class Lookahead(Optimizer):
+    def __init__(self, optimizer, alpha=0.5, k=5):
+        assert(0.0 &lt;= alpha &lt;= 1.0)
+        assert(k &gt;= 1)
+        self.optimizer = optimizer
+        self.alpha = alpha
+        self.k = k
+        self.param_groups = self.optimizer.param_groups
+        self.state = defaultdict(dict)
+        for group in self.param_groups:
+            group['k_counter'] = 0
+        self.slow_weights = [[param.clone().detach() for param in group['params']] for group in self.param_groups]
+    
+    def step(self, closure=None):
+        loss = self.optimizer.step(closure)
+        for group, slow_Weight in zip(self.param_groups, self.slow_weights):
+            group['k_counter'] += 1
+            if group['k_counter'] == self.k:
+                for param, weight in zip(group['params'], slow_Weight):
+                    weight.data.add_(self.alpha, (param.data - weight.data))
+                    param.data.copy_(weight.data)
+                group['k_counter'] = 0
+ 
+        return loss
+ 
+    def state_dict(self):
+        fast_dict = self.optimizer.state_dict()
+        fast_state = fast_dict['state']
+        param_groups = fast_dict['param_groups']
+        slow_state = {(id(k) if isinstance(k, torch.Tensor) else k): v
+                        for k, v in self.state.items()}
+        return {
+            'fast_state': fast_state,
+            'param_groups': param_groups,
+            'slow_state': slow_state
+        }
+ 
+    def load_state_dict(self, state_dict):
+        fast_dict = {
+            'state': state_dict['fast_state'],
+            'param_groups': state_dict['param_groups']
+        }
+        slow_dict = {
+            'state': state_dict['slow_state'],
+            'param_groups': state_dict['param_groups']
+        }
+        super(Lookahead, self).load_state_dict(slow_dict)
+        self.optimizer.load_state_dict(fast_dict)
+</code></pre></div></div>
+
+<h2 id="lr-finder">LR Finder</h2>
+
+<p>Now, we define the logic to find Learning Rate (LR) using CLR.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def update_lr(optimizer, lr):
+    for g in optimizer.param_groups:
+        g['lr'] = lr
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def lr_find(clr, model, optimizer=None):
+    t = tqdm.tqdm(trainloader, leave=False, total=len(trainloader))
+    running_loss = 0.
+    avg_beta = 0.98
+    model.train()
+    for i, (input, target) in enumerate(t):
+        input, target = input.to(device), target.to(device)
+        var_ip, var_tg = Variable(input), Variable(target)
+        output = model(var_ip)
+        loss = criterion(output, var_tg)
+    
+        running_loss = avg_beta * running_loss + (1-avg_beta) *loss.item()
+        smoothed_loss = running_loss / (1 - avg_beta**(i+1))
+        t.set_postfix(loss=smoothed_loss)
+    
+        lr = clr.calc_lr(smoothed_loss)
+        if lr == -1 :
+            break
+        update_lr(optimizer, lr)   
+    
+        # compute gradient and do SGD step
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+</code></pre></div></div>
+
+<h2 id="train-and-test">Train and Test</h2>
+
+<p>We implement the train and test logic along with the fit method which will be used in the next step for model training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def train(epoch=0, model=None, optimizer=None):
+    model.train()
+    global best_acc
+    global trn_accs, trn_losses
+    is_improving = True
+    counter = 0
+    running_loss = 0.
+    avg_beta = 0.98
+    for i, (input, target) in enumerate(trainloader):
+        bt_start = time.time()
+        input, target = input.to(device), target.to(device)
+        var_ip, var_tg = Variable(input), Variable(target)
+                                    
+        output = model(var_ip)
+        loss = criterion(output, var_tg)
+            
+        running_loss = avg_beta * running_loss + (1-avg_beta) *loss.item()
+        smoothed_loss = running_loss / (1 - avg_beta**(i+1))
+        
+        trn_losses.append(smoothed_loss)
+            
+        # measure accuracy and record loss
+        prec = accuracy(output.data, target)
+        trn_accs.append(prec)
+ 
+        train_stats.append(smoothed_loss, prec, time.time()-bt_start)
+        if prec &gt; best_acc :
+            best_acc = prec
+            save_checkpoint(model, True)
+ 
+        # compute gradient and do SGD step
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def test(model=None):
+    with torch.no_grad():
+        model.eval()
+        global val_accs, val_losses
+        running_loss = 0.
+        avg_beta = 0.98
+        for i, (input, target) in enumerate(validloader):
+            bt_start = time.time()
+            input, target = input.to(device), target.to(device)
+            var_ip, var_tg = Variable(input), Variable(target)
+            output = model(var_ip)
+            loss = criterion(output, var_tg)
+        
+            running_loss = avg_beta * running_loss + (1-avg_beta) *loss.item()
+            smoothed_loss = running_loss / (1 - avg_beta**(i+1))
+ 
+            # measure accuracy and record loss
+            prec = accuracy(output.data, target, is_test=True)
+            test_stats.append(loss.item(), prec, time.time()-bt_start)
+        
+            val_losses.append(smoothed_loss)
+            val_accs.append(prec)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def fit(model=None, sched=None, optimizer=None):
+    print("Epoch\tTrn_loss\tVal_loss\tTrn_acc\t\tVal_acc")
+    for j in range(epoch):
+        train(epoch=j, model=model, optimizer=optimizer)
+        test(model)
+        if sched:
+            sched.step(j)
+        print("{}\t{:06.8f}\t{:06.8f}\t{:06.8f}\t{:06.8f}"
+              .format(j+1, trn_losses[-1], val_losses[-1], trn_accs[-1], val_accs[-1]))
+</code></pre></div></div>
+
+<h2 id="model-and-training">Model and Training</h2>
+
+<h3 id="initialize-variables">Initialize variables</h3>
+
+<p>We initialize all the variables that will be required later while training and evaluating the model.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>train_loss = 0.0
+test_loss = 0.0
+best_acc = 0.0
+trn_losses = []
+trn_accs = []
+val_losses = []
+val_accs = []
+total = 0
+correct = 0
+</code></pre></div></div>
+
+<h3 id="model">Model</h3>
+
+<p>We use a pretrained ResNet50, a variant of the ResNet model which has 48 Convolution layers along with 1 MaxPool and 1 Average Pool layer.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model = models.resnet50(pretrained=True)
+</code></pre></div></div>
+
+<p>Next, we configure the last fully connected layer of the model and save the model checkpoint.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model.fc = nn.Linear(in_features=model.fc.in_features, out_features=102)
+ 
+for param in model.parameters():
+    param.require_grad = False
+    
+for param in model.fc.parameters():
+    param.require_grad = True
+    
+model = model.to(device)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>save_checkpoint(model, True, 'before_start_resnet50.pth.tar')
+</code></pre></div></div>
+
+<p>Define loss and optimizer, find learning rate, and plot a graph.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>criterion = nn.CrossEntropyLoss()
+optim = torch.optim.SGD(model.parameters(), lr=1e-2, momentum=0.9, weight_decay=1e-4)
+optimizer = Lookahead(optim)
+ 
+clr = CLR(optim, len(trainloader))
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lr_find(clr, model, optim)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clr.plot()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/2.png" alt="" /></p>
+
+<h3 id="training-before-unfreezing">Training before unfreezing</h3>
+
+<p>Let’s load back the ResNet checkpoint that we saved earlier.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>load_checkpoint(model, 'before_start_resnet50.pth.tar')
+</code></pre></div></div>
+
+<p>Initialize parameters for the model training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>preds = []
+epoch = 30
+train_stats = AvgStats()
+test_stats = AvgStats()
+</code></pre></div></div>
+
+<p>We reset the parameters to makes sure that we record fresh results while training the model.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reset()
+</code></pre></div></div>
+
+<p>Define loss and optimizer just like before.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>criterion = nn.CrossEntropyLoss()
+optim = torch.optim.SGD(model.parameters(), lr=1e-2, momentum=0.9, weight_decay=1e-4)
+optimizer = Lookahead(optim)
+</code></pre></div></div>
+
+<p>Finally, train the model for 30 epochs.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fit(model=model, optimizer=optimizer)
+</code></pre></div></div>
+
+<p>Save the model checkpoint after training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>save_checkpoint(model, True, 'before_unfreeze_resnet50.pth.tar')
+</code></pre></div></div>
+
+<p>We plot training and validation loss as well as training and validation accuracy graphs to check the model performance.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plt.xlabel("Iterations")
+plt.ylabel("Accuracy")
+plt.plot(train_stats.precs, 'r', label='Train')
+plt.legend()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/3.png" alt="" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.plot(train_stats.losses, 'r', label='Train')
+plt.legend()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/4.png" alt="" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plt.xlabel("Iterations")
+plt.ylabel("Accuracy")
+plt.plot(test_stats.precs, 'b', label='Valid')
+plt.legend()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/5.png" alt="" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.plot(test_stats.losses, 'b', label='Valid')
+plt.legend()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/6.png" alt="" /></p>
+
+<h3 id="training-after-unfreezing">Training after unfreezing</h3>
+
+<p>Initialize parameters for the model training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>preds = []
+train_stats = AvgStats()
+test_stats = AvgStats()
+</code></pre></div></div>
+
+<p>We reset the parameters to makes sure that we record fresh results while training the model.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reset()
+</code></pre></div></div>
+
+<p>Enable differentiation tracking for each model parameter.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for param in model.parameters():
+    param.require_grad = True
+</code></pre></div></div>
+
+<p>Define the updated loss and optimizer and plot a losses vs learning rate graph.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>optim = torch.optim.SGD(model.parameters(), lr=1e-6, momentum=0.9, weight_decay=1e-4)
+clr = CLR(optim, len(trainloader), base_lr=1e-9, max_lr=10)
+lr_find(clr, model, optim)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clr.plot(start=0)
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/7.png" alt="" /></p>
+
+<p>Let’s load back the resnet checkpoint that we saved earlier.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>load_checkpoint(model, 'before_unfreeze_resnet50.pth.tar')
+</code></pre></div></div>
+
+<p>Initialize parameters for the model training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>preds = []
+epoch = 10
+train_stats = AvgStats()
+test_stats = AvgStats()
+</code></pre></div></div>
+
+<p>We reset the parameters to makes sure that we record fresh results while training the model.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reset()
+</code></pre></div></div>
+
+<p>Define the updated learning rate and optimizer for training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>optim = torch.optim.SGD(model.parameters(), lr=1e-9, momentum=0.9, weight_decay=1e-4)
+</code></pre></div></div>
+
+<p>At last, train the model for 10 epochs and save a checkpoint after training.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fit(model=model, optimizer=optimizer)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>save_checkpoint(model, True, 'after_unfreeze_resnet50.pth.tar')
+</code></pre></div></div>
+
+<p>Next, we plot training and validation loss to compare the performance of the model.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.plot(train_stats.losses, 'r', label='Train')
+plt.legend()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/8.png" alt="" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.plot(test_stats.losses, 'b', label='Valid')
+plt.legend()
+</code></pre></div></div>
+
+<p><img src="/assets/img/transfer_learning/9.png" alt="" /></p>
+
+<h2 id="testing">Testing</h2>
+
+<p>We define a <code class="language-plaintext highlighter-rouge">predict</code> method to predict labels for the test dataset.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def predict(img, model):
+    model.eval()
+    with torch.no_grad():
+        input = Variable(img)
+        input = input.to(device)
+        output = model(input)
+        _, pred = output.max(dim=1)
+        return pred[0].item()
+</code></pre></div></div>
+
+<p>Predict labels or classes for all the images in the test dataset.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>result = dict()
+for i, (input, _, path) in enumerate(testloader):
+    predicted = predict(input, model)
+    result[path[0]] = idx_to_class[predicted]
+</code></pre></div></div>
+
+<p>Save the result for future reference.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>csv_file = open('dict.csv', 'w')
+writer = csv.writer(csv_file)
+writer.writerow(['file_name','id'])
+for key, value in result.items():
+    writer.writerow([key, value])
+csv_file.close()
+</code></pre></div></div>
+
+<h2 id="reference">Reference</h2>
+
+<ol>
+  <li><a href="https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html">Deep Learning with PyTorch: A 60 Minute Blitz</a></li>
+  <li><a href="https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html">Transfer Learning for Computer Vision</a></li>
+  <li><a href="https://pytorch.org/tutorials/beginner/data_loading_tutorial.html">Writing Custom Datasets, Dataloaders, and Transforms</a></li>
+  <li><a href="https://www.kaggle.com/nachiket273/flower-classification-lookahead-radam">Flower classification lookahead sgd</a></li>
+</ol>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-26T05:30:00+05:30">November 26, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Transfer+Learning+using+PyTorch%20http%3A%2F%2Flocalhost%3A4000%2Ftransfer-learning" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Ftransfer-learning" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Ftransfer-learning" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/fastText" class="pagination--pager" title="fastText
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

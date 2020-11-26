@@ -64,4 +64,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/fastText",
         "teaser": null
+      },{
+        "title": "Transfer Learning using PyTorch",
+        "excerpt":"Today we learn how to perform transfer learning for image classification using PyTorch. Introduction What is PyTorch? PyTorch is an open-source machine learning library based on the Torch library, used for applications such as computer vision and natural language processing, primarily developed by Facebook’s AI Research lab (FAIR). What is...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/transfer-learning",
+        "teaser": null
       }]
