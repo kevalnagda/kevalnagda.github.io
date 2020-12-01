@@ -70,4 +70,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/transfer-learning",
         "teaser": null
+      },{
+        "title": "CT Windowing",
+        "excerpt":"Windowing if simply put, is an image processing task for a CT scan that helps highlighting key anatomy so that the images can be analyzed easily. In other words Windowing, also known as grey-level mapping, contrast stretching, histogram modification or contrast enhancement is the process in which CT scan greyscale...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/ct-windowing",
+        "teaser": null
       }]
