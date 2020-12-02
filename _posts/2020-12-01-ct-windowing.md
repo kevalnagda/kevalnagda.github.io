@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "CT Windowing"
-date: 2020-11-26 00:00:00 +000
+date: 2020-12-01 00:00:00 +000
 categories: jekyll update
 ---
  
