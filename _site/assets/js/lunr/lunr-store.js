@@ -72,8 +72,14 @@ var store = [{
         "teaser": null
       },{
         "title": "CT Windowing",
-        "excerpt":"Windowing if simply put, is an image processing task for a CT scan that helps highlighting key anatomy so that the images can be analyzed easily. In other words Windowing, also known as grey-level mapping, contrast stretching, histogram modification or contrast enhancement is the process in which CT scan greyscale...","categories": ["jekyll","update"],
+        "excerpt":"Windowing if simply put, is an image processing task for a CT scan that helps highlighting key anatomy so that the images can be analyzed easily. In other words, Windowing, also known as grey-level mapping, contrast stretching, histogram modification, or contrast enhancement is the process in which the CT scan...","categories": ["jekyll","update"],
         "tags": [],
         "url": "http://localhost:4000/ct-windowing",
+        "teaser": null
+      },{
+        "title": "Machine Learning Evaluation Metrics",
+        "excerpt":"Introduction Evaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score. In most cases, we use accuracy to measure the...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/evaluation-metrics",
         "teaser": null
       }]

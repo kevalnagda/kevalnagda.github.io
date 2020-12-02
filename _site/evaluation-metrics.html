@@ -1,0 +1,421 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Machine Learning Evaluation Metrics - Home</title>
+<meta name="description" content="Introduction  Evaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score.  In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available.  Confusion Matrix  Confusion Matrix is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below.    It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve.  Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN.    True Positive  Interpretation: You predicted positive and it’s true.  You predicted that a woman is pregnant and she actually is.  True Negative  Interpretation: You predicted negative and it’s true.  You predicted that a man is not pregnant and he actually is not.  False Positive (Type 1 Error)  Interpretation: You predicted positive and it’s false.  You predicted that a man is pregnant but he actually is not.  False Negative (Type 2 Error)  Interpretation: You predicted negative and it’s false.  You predicted that a woman is not pregnant but she actually is.  Positive Predictive Value (PPV) or Precision  Precision is the number of correct positive results divided by the number of positive results predicted by the classifier.    Sensitivity or Recall  Sensitivity or Recall is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model.    Accuracy  Accuracy is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100.    Specificity or True Negative Rate  Specificity is the true negative rate or the proportion of true negatives to everything that should have been classified as negative.    Dice Coefficient (F1 Score)  Dice Coefficient or F1 Score is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1].  It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances).    Average Precision (AP)  Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison.  This is where Average Precision (AP), which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels.    where, r1, r2, r3, …, rn are the recall levels at which the precision is first interpolated.  ROC Curve  The Receiver Operating Characteristic curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold.  It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values.    AUC  The Area Under the Curve (AUC), is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant).  AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example.    Youden’s index  Youden’s J statistic (also called Youden’s index) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests.  Youden’s J statistic is  J = sensitivity + specificity - 1  The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows:    Youden’s index is often used in conjunction with receiver operating characteristic (ROC) analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result.  Reference     Understanding Confusion Matrix   Youden’s J Statistic">
+
+
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="Machine Learning Evaluation Metrics">
+<meta property="og:url" content="http://localhost:4000/evaluation-metrics">
+
+
+  <meta property="og:description" content="Introduction  Evaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score.  In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available.  Confusion Matrix  Confusion Matrix is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below.    It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve.  Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN.    True Positive  Interpretation: You predicted positive and it’s true.  You predicted that a woman is pregnant and she actually is.  True Negative  Interpretation: You predicted negative and it’s true.  You predicted that a man is not pregnant and he actually is not.  False Positive (Type 1 Error)  Interpretation: You predicted positive and it’s false.  You predicted that a man is pregnant but he actually is not.  False Negative (Type 2 Error)  Interpretation: You predicted negative and it’s false.  You predicted that a woman is not pregnant but she actually is.  Positive Predictive Value (PPV) or Precision  Precision is the number of correct positive results divided by the number of positive results predicted by the classifier.    Sensitivity or Recall  Sensitivity or Recall is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model.    Accuracy  Accuracy is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100.    Specificity or True Negative Rate  Specificity is the true negative rate or the proportion of true negatives to everything that should have been classified as negative.    Dice Coefficient (F1 Score)  Dice Coefficient or F1 Score is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1].  It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances).    Average Precision (AP)  Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison.  This is where Average Precision (AP), which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels.    where, r1, r2, r3, …, rn are the recall levels at which the precision is first interpolated.  ROC Curve  The Receiver Operating Characteristic curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold.  It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values.    AUC  The Area Under the Curve (AUC), is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant).  AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example.    Youden’s index  Youden’s J statistic (also called Youden’s index) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests.  Youden’s J statistic is  J = sensitivity + specificity - 1  The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows:    Youden’s index is often used in conjunction with receiver operating characteristic (ROC) analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result.  Reference     Understanding Confusion Matrix   Youden’s J Statistic">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-02T05:30:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/evaluation-metrics">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Machine Learning Evaluation Metrics">
+    <meta itemprop="description" content="IntroductionEvaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score.In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available.Confusion MatrixConfusion Matrix is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below.It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve.Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN.True PositiveInterpretation: You predicted positive and it’s true.You predicted that a woman is pregnant and she actually is.True NegativeInterpretation: You predicted negative and it’s true.You predicted that a man is not pregnant and he actually is not.False Positive (Type 1 Error)Interpretation: You predicted positive and it’s false.You predicted that a man is pregnant but he actually is not.False Negative (Type 2 Error)Interpretation: You predicted negative and it’s false.You predicted that a woman is not pregnant but she actually is.Positive Predictive Value (PPV) or PrecisionPrecision is the number of correct positive results divided by the number of positive results predicted by the classifier.Sensitivity or RecallSensitivity or Recall is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model.AccuracyAccuracy is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100.Specificity or True Negative RateSpecificity is the true negative rate or the proportion of true negatives to everything that should have been classified as negative.Dice Coefficient (F1 Score)Dice Coefficient or F1 Score is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1].It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances).Average Precision (AP)Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison.This is where Average Precision (AP), which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels.where, r1, r2, r3, …, rn are the recall levels at which the precision is first interpolated.ROC CurveThe Receiver Operating Characteristic curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold.It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values.AUCThe Area Under the Curve (AUC), is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant).AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example.Youden’s indexYouden’s J statistic (also called Youden’s index) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests.Youden’s J statistic isJ = sensitivity + specificity - 1The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows:Youden’s index is often used in conjunction with receiver operating characteristic (ROC) analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result.Reference  Understanding Confusion Matrix  Youden’s J Statistic">
+    <meta itemprop="datePublished" content="2020-12-02T05:30:00+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Machine Learning Evaluation Metrics
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2020-12-02T05:30:00+05:30">December 2, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#confusion-matrix">Confusion Matrix</a></li>
+  <li><a href="#positive-predictive-value-ppv-or-precision">Positive Predictive Value (PPV) or Precision</a></li>
+  <li><a href="#sensitivity-or-recall">Sensitivity or Recall</a></li>
+  <li><a href="#accuracy">Accuracy</a></li>
+  <li><a href="#specificity-or-true-negative-rate">Specificity or True Negative Rate</a></li>
+  <li><a href="#dice-coefficient-f1-score">Dice Coefficient (F1 Score)</a></li>
+  <li><a href="#average-precision-ap">Average Precision (AP)</a></li>
+  <li><a href="#roc-curve">ROC Curve</a></li>
+  <li><a href="#auc">AUC</a></li>
+  <li><a href="#youdens-index">Youden’s index</a></li>
+  <li><a href="#reference">Reference</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="introduction">Introduction</h2>
+
+<p>Evaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score.</p>
+
+<p>In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available.</p>
+
+<h2 id="confusion-matrix">Confusion Matrix</h2>
+
+<p><strong>Confusion Matrix</strong> is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below.</p>
+
+<p><img src="/assets/img/metrics/1.png" alt="Confusion Matrix" /></p>
+
+<p>It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve.</p>
+
+<p>Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN.</p>
+
+<p><img src="/assets/img/metrics/2.png" alt="Example" /></p>
+
+<p><strong>True Positive</strong></p>
+
+<p>Interpretation: You predicted positive and it’s true.</p>
+
+<p>You predicted that a woman is pregnant and she actually is.</p>
+
+<p><strong>True Negative</strong></p>
+
+<p>Interpretation: You predicted negative and it’s true.</p>
+
+<p>You predicted that a man is not pregnant and he actually is not.</p>
+
+<p><strong>False Positive (Type 1 Error)</strong></p>
+
+<p>Interpretation: You predicted positive and it’s false.</p>
+
+<p>You predicted that a man is pregnant but he actually is not.</p>
+
+<p><strong>False Negative (Type 2 Error)</strong></p>
+
+<p>Interpretation: You predicted negative and it’s false.</p>
+
+<p>You predicted that a woman is not pregnant but she actually is.</p>
+
+<h2 id="positive-predictive-value-ppv-or-precision">Positive Predictive Value (PPV) or Precision</h2>
+
+<p><strong>Precision</strong> is the number of correct positive results divided by the number of positive results predicted by the classifier.</p>
+
+<p><img src="/assets/img/metrics/3.png" alt="Precision" /></p>
+
+<h2 id="sensitivity-or-recall">Sensitivity or Recall</h2>
+
+<p><strong>Sensitivity</strong> or <strong>Recall</strong> is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model.</p>
+
+<p><img src="/assets/img/metrics/4.png" alt="Recall" /></p>
+
+<h2 id="accuracy">Accuracy</h2>
+
+<p><strong>Accuracy</strong> is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100.</p>
+
+<p><img src="/assets/img/metrics/5.png" alt="Accuracy" /></p>
+
+<h2 id="specificity-or-true-negative-rate">Specificity or True Negative Rate</h2>
+
+<p><strong>Specificity</strong> is the true negative rate or the proportion of true negatives to everything that should have been classified as negative.</p>
+
+<p><img src="/assets/img/metrics/6.jpg" alt="Specificity" /></p>
+
+<h2 id="dice-coefficient-f1-score">Dice Coefficient (F1 Score)</h2>
+
+<p><strong>Dice Coefficient</strong> or <strong>F1 Score</strong> is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1].</p>
+
+<p>It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances).</p>
+
+<p><img src="/assets/img/metrics/6.png" alt="F1 Score" /></p>
+
+<h2 id="average-precision-ap">Average Precision (AP)</h2>
+
+<p>Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison.</p>
+
+<p>This is where <strong>Average Precision (AP)</strong>, which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels.</p>
+
+<p><img src="/assets/img/metrics/7.png" alt="Average Precision" /></p>
+
+<p>where, <em>r<sub>1</sub>, r<sub>2</sub>, r<sub>3</sub>, …, r<sub>n</sub></em> are the recall levels at which the precision is first interpolated.</p>
+
+<h2 id="roc-curve">ROC Curve</h2>
+
+<p>The <strong>Receiver Operating Characteristic</strong> curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold.</p>
+
+<p>It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values.</p>
+
+<p><img src="/assets/img/metrics/8.png" alt="ROC Curve" /></p>
+
+<h2 id="auc">AUC</h2>
+
+<p>The <strong>Area Under the Curve (AUC)</strong>, is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant).</p>
+
+<p>AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example.</p>
+
+<p><img src="/assets/img/metrics/9.png" alt="AUC" /></p>
+
+<h2 id="youdens-index">Youden’s index</h2>
+
+<p><strong>Youden’s <em>J</em> statistic</strong> (also called <strong>Youden’s index</strong>) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests.</p>
+
+<p><strong>Youden’s <em>J</em> statistic</strong> is</p>
+
+<p><code class="language-plaintext highlighter-rouge">J = sensitivity + specificity - 1</code></p>
+
+<p>The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows:</p>
+
+<p><img src="/assets/img/metrics/10.png" alt="Youden" /></p>
+
+<p>Youden’s index is often used in conjunction with <strong>receiver operating characteristic (ROC)</strong> analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result.</p>
+
+<h2 id="reference">Reference</h2>
+
+<ol>
+  <li><a href="https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62">Understanding Confusion Matrix</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Youden%27s_J_statistic">Youden’s J Statistic</a></li>
+</ol>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-02T05:30:00+05:30">December 2, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Machine+Learning+Evaluation+Metrics%20http%3A%2F%2Flocalhost%3A4000%2Fevaluation-metrics" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fevaluation-metrics" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fevaluation-metrics" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/ct-windowing" class="pagination--pager" title="CT Windowing
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

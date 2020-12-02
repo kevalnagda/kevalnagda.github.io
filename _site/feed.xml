@@ -1,4 +1,123 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-01T18:44:30+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">Transfer Learning using PyTorch</title><link href="http://localhost:4000/transfer-learning" rel="alternate" type="text/html" title="Transfer Learning using PyTorch" /><published>2020-11-26T05:30:00+05:30</published><updated>2020-11-26T05:30:00+05:30</updated><id>http://localhost:4000/transfer-learning</id><content type="html" xml:base="http://localhost:4000/transfer-learning">&lt;p&gt;Today we learn how to perform transfer learning for image classification using PyTorch.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-02T18:53:21+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Home</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><author><name>Keval Nagda</name></author><entry><title type="html">Machine Learning Evaluation Metrics</title><link href="http://localhost:4000/evaluation-metrics" rel="alternate" type="text/html" title="Machine Learning Evaluation Metrics" /><published>2020-12-02T05:30:00+05:30</published><updated>2020-12-02T05:30:00+05:30</updated><id>http://localhost:4000/evaluation-metrics</id><content type="html" xml:base="http://localhost:4000/evaluation-metrics">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Evaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score.&lt;/p&gt;
+
+&lt;p&gt;In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available.&lt;/p&gt;
+
+&lt;h2 id=&quot;confusion-matrix&quot;&gt;Confusion Matrix&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Confusion Matrix&lt;/strong&gt; is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/1.png&quot; alt=&quot;Confusion Matrix&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve.&lt;/p&gt;
+
+&lt;p&gt;Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/2.png&quot; alt=&quot;Example&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;True Positive&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Interpretation: You predicted positive and it’s true.&lt;/p&gt;
+
+&lt;p&gt;You predicted that a woman is pregnant and she actually is.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;True Negative&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Interpretation: You predicted negative and it’s true.&lt;/p&gt;
+
+&lt;p&gt;You predicted that a man is not pregnant and he actually is not.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;False Positive (Type 1 Error)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Interpretation: You predicted positive and it’s false.&lt;/p&gt;
+
+&lt;p&gt;You predicted that a man is pregnant but he actually is not.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;False Negative (Type 2 Error)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Interpretation: You predicted negative and it’s false.&lt;/p&gt;
+
+&lt;p&gt;You predicted that a woman is not pregnant but she actually is.&lt;/p&gt;
+
+&lt;h2 id=&quot;positive-predictive-value-ppv-or-precision&quot;&gt;Positive Predictive Value (PPV) or Precision&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Precision&lt;/strong&gt; is the number of correct positive results divided by the number of positive results predicted by the classifier.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/3.png&quot; alt=&quot;Precision&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;sensitivity-or-recall&quot;&gt;Sensitivity or Recall&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Sensitivity&lt;/strong&gt; or &lt;strong&gt;Recall&lt;/strong&gt; is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/4.png&quot; alt=&quot;Recall&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;accuracy&quot;&gt;Accuracy&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Accuracy&lt;/strong&gt; is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/5.png&quot; alt=&quot;Accuracy&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;specificity-or-true-negative-rate&quot;&gt;Specificity or True Negative Rate&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Specificity&lt;/strong&gt; is the true negative rate or the proportion of true negatives to everything that should have been classified as negative.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/6.jpg&quot; alt=&quot;Specificity&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;dice-coefficient-f1-score&quot;&gt;Dice Coefficient (F1 Score)&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Dice Coefficient&lt;/strong&gt; or &lt;strong&gt;F1 Score&lt;/strong&gt; is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1].&lt;/p&gt;
+
+&lt;p&gt;It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/6.png&quot; alt=&quot;F1 Score&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;average-precision-ap&quot;&gt;Average Precision (AP)&lt;/h2&gt;
+
+&lt;p&gt;Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison.&lt;/p&gt;
+
+&lt;p&gt;This is where &lt;strong&gt;Average Precision (AP)&lt;/strong&gt;, which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/7.png&quot; alt=&quot;Average Precision&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;where, &lt;em&gt;r&lt;sub&gt;1&lt;/sub&gt;, r&lt;sub&gt;2&lt;/sub&gt;, r&lt;sub&gt;3&lt;/sub&gt;, …, r&lt;sub&gt;n&lt;/sub&gt;&lt;/em&gt; are the recall levels at which the precision is first interpolated.&lt;/p&gt;
+
+&lt;h2 id=&quot;roc-curve&quot;&gt;ROC Curve&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;Receiver Operating Characteristic&lt;/strong&gt; curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold.&lt;/p&gt;
+
+&lt;p&gt;It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/8.png&quot; alt=&quot;ROC Curve&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;auc&quot;&gt;AUC&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;Area Under the Curve (AUC)&lt;/strong&gt;, is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant).&lt;/p&gt;
+
+&lt;p&gt;AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/9.png&quot; alt=&quot;AUC&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;youdens-index&quot;&gt;Youden’s index&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Youden’s &lt;em&gt;J&lt;/em&gt; statistic&lt;/strong&gt; (also called &lt;strong&gt;Youden’s index&lt;/strong&gt;) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Youden’s &lt;em&gt;J&lt;/em&gt; statistic&lt;/strong&gt; is&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;J = sensitivity + specificity - 1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/metrics/10.png&quot; alt=&quot;Youden&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Youden’s index is often used in conjunction with &lt;strong&gt;receiver operating characteristic (ROC)&lt;/strong&gt; analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62&quot;&gt;Understanding Confusion Matrix&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Youden%27s_J_statistic&quot;&gt;Youden’s J Statistic&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Introduction Evaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score. In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available. Confusion Matrix Confusion Matrix is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below. It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve. Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN. True Positive Interpretation: You predicted positive and it’s true. You predicted that a woman is pregnant and she actually is. True Negative Interpretation: You predicted negative and it’s true. You predicted that a man is not pregnant and he actually is not. False Positive (Type 1 Error) Interpretation: You predicted positive and it’s false. You predicted that a man is pregnant but he actually is not. False Negative (Type 2 Error) Interpretation: You predicted negative and it’s false. You predicted that a woman is not pregnant but she actually is. Positive Predictive Value (PPV) or Precision Precision is the number of correct positive results divided by the number of positive results predicted by the classifier. Sensitivity or Recall Sensitivity or Recall is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model. Accuracy Accuracy is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100. Specificity or True Negative Rate Specificity is the true negative rate or the proportion of true negatives to everything that should have been classified as negative. Dice Coefficient (F1 Score) Dice Coefficient or F1 Score is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1]. It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances). Average Precision (AP) Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison. This is where Average Precision (AP), which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels. where, r1, r2, r3, …, rn are the recall levels at which the precision is first interpolated. ROC Curve The Receiver Operating Characteristic curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold. It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values. AUC The Area Under the Curve (AUC), is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant). AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example. Youden’s index Youden’s J statistic (also called Youden’s index) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests. Youden’s J statistic is J = sensitivity + specificity - 1 The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows: Youden’s index is often used in conjunction with receiver operating characteristic (ROC) analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result. Reference Understanding Confusion Matrix Youden’s J Statistic</summary></entry><entry><title type="html">Transfer Learning using PyTorch</title><link href="http://localhost:4000/transfer-learning" rel="alternate" type="text/html" title="Transfer Learning using PyTorch" /><published>2020-11-26T05:30:00+05:30</published><updated>2020-11-26T05:30:00+05:30</updated><id>http://localhost:4000/transfer-learning</id><content type="html" xml:base="http://localhost:4000/transfer-learning">&lt;p&gt;Today we learn how to perform transfer learning for image classification using PyTorch.&lt;/p&gt;
 
 &lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
 
@@ -736,7 +855,7 @@ csv_file.close()
   &lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/nachiket273/flower-classification-lookahead-radam&quot;&gt;Flower classification lookahead sgd&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Today we learn how to perform transfer learning for image classification using PyTorch. Introduction</summary></entry><entry><title type="html">CT Windowing</title><link href="http://localhost:4000/ct-windowing" rel="alternate" type="text/html" title="CT Windowing" /><published>2020-11-26T05:30:00+05:30</published><updated>2020-11-26T05:30:00+05:30</updated><id>http://localhost:4000/ct-windowing</id><content type="html" xml:base="http://localhost:4000/ct-windowing">&lt;p&gt;&lt;strong&gt;Windowing&lt;/strong&gt; if simply put, is an image processing task for a CT scan that helps highlighting key anatomy so that the images can be analyzed easily.&lt;/p&gt;
 
-&lt;p&gt;In other words Windowing, also known as &lt;strong&gt;grey-level mapping&lt;/strong&gt;, &lt;strong&gt;contrast stretching&lt;/strong&gt;, &lt;strong&gt;histogram modification&lt;/strong&gt; or &lt;strong&gt;contrast enhancement&lt;/strong&gt; is the process in which CT scan greyscale component of an image is manipulated via the CT numbers (Hounsfield Units).&lt;/p&gt;
+&lt;p&gt;In other words, Windowing, also known as &lt;strong&gt;grey-level mapping&lt;/strong&gt;, &lt;strong&gt;contrast stretching&lt;/strong&gt;, &lt;strong&gt;histogram modification&lt;/strong&gt;, or &lt;strong&gt;contrast enhancement&lt;/strong&gt; is the process in which the CT scan greyscale component of an image is manipulated via the CT numbers (Hounsfield Units).&lt;/p&gt;
 
 &lt;p&gt;Changing windowing settings helps us modify/enhance the appearance of the CT image and highlight particular features in it.&lt;/p&gt;
 
@@ -749,7 +868,7 @@ csv_file.close()
   &lt;p&gt;&lt;strong&gt;Hounsfield Units (HU)&lt;/strong&gt; are a dimensionless unit universally used in computed tomography (CT) scanning to express CT numbers in a standardized and convenient form.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Well Hounsfield Units is related to the composition and nature of a tissue and thus, represent the density of various tissues. Note that higher the HU value the more dense a material is and vice-versa.&lt;/p&gt;
+&lt;p&gt;Well, Hounsfield Units is related to the composition and nature of the tissue and thus, represent the density of various tissues. Note that the higher the HU value the more dense a material is and vice-versa.&lt;/p&gt;
 
 &lt;p&gt;Below are a few values on the HU Scale that are important to keep in mind while analyzing CT images.&lt;/p&gt;
 
@@ -760,7 +879,7 @@ csv_file.close()
 &lt;h3 id=&quot;window-width-ww&quot;&gt;Window Width (WW)&lt;/h3&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;The &lt;strong&gt;window Width (WW)&lt;/strong&gt; as the name suggests is the measure of the range of CT numbers that an CT image contains.&lt;/p&gt;
+  &lt;p&gt;The &lt;strong&gt;window Width (WW)&lt;/strong&gt; as the name suggests is the measure of the range of CT numbers that a CT image contains.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Window width refers to the number of different HU units that will be represented by different shades of gray.&lt;/p&gt;
@@ -783,7 +902,7 @@ csv_file.close()
 
 &lt;h3 id=&quot;adjusting-the-window-width&quot;&gt;Adjusting the Window Width&lt;/h3&gt;
 
-&lt;p&gt;As the width of the window increases a larger change in density will be required to change the shade of grey that represents a a certain HU unit. This results in a loss of contrast as more structures will appear similar (despite having different densities) as there is an increase in the range of CT numbers.&lt;/p&gt;
+&lt;p&gt;As the width of the window increases a larger change in density will be required to change the shade of grey that represents a certain HU unit. This results in a loss of contrast as more structures will appear similar (despite having different densities) as there is an increase in the range of CT numbers.&lt;/p&gt;
 
 &lt;p&gt;Hence, &lt;strong&gt;increasing the window width&lt;/strong&gt; will &lt;strong&gt;decrease the contrast&lt;/strong&gt; of the image.&lt;/p&gt;
 
@@ -798,13 +917,13 @@ csv_file.close()
 
 &lt;h3 id=&quot;adjusting-the-window-level&quot;&gt;Adjusting the Window Level&lt;/h3&gt;
 
-&lt;p&gt;As the window level is increased, the image will get darker. This is because as the level is increased, higher HU values will be required to in order for a density to be represented as white and many lower values will be ignored (considered as black).&lt;/p&gt;
+&lt;p&gt;As the window level is increased, the image will get darker. This is because as the level is increased, higher HU values will be required in order for a density to be represented as white and many lower values will be ignored (considered as black).&lt;/p&gt;
 
 &lt;p&gt;Hence, &lt;strong&gt;increasing the window level&lt;/strong&gt; will &lt;strong&gt;decrease the brightness&lt;/strong&gt; of the image.&lt;/p&gt;
 
 &lt;h3 id=&quot;adjusting-the-window-level-1&quot;&gt;Adjusting the Window Level&lt;/h3&gt;
 
-&lt;p&gt;Now, as the window level is increased, the image will get darker. This is because as the level is decreased, lower HU values will be required to in order for a density to be represented as white and thus, more white values will be allowed to pass which makes the image brighter.&lt;/p&gt;
+&lt;p&gt;Now, as the window level is increased, the image will get darker. This is because as the level is decreased, lower HU values will be required in order for a density to be represented as white, and thus, more white values will be allowed to pass which makes the image brighter.&lt;/p&gt;
 
 &lt;p&gt;Hence, &lt;strong&gt;decreasing the window level&lt;/strong&gt; will &lt;strong&gt;increase the brightness&lt;/strong&gt; of the image.&lt;/p&gt;
 
@@ -813,15 +932,15 @@ csv_file.close()
 
 &lt;h2 id=&quot;typical-window-settings&quot;&gt;Typical window settings&lt;/h2&gt;
 
-&lt;p&gt;Below is a list of various window settings which may somewhat vary from institution to institution. However, they are generally fairly similar.&lt;/p&gt;
+&lt;p&gt;Below is a list of various window settings that may somewhat vary from institution to institution. However, they are generally fairly similar.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/windowing/6.jpg&quot; alt=&quot;List of various window settings&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Here, the numbers shown in the figure represent two different values, first being the window width (ww) and the second being window level (wl).&lt;/p&gt;
+&lt;p&gt;Here, the numbers shown in the figure represent two different values, the first being the window width (WW) and the second being window level (wl).&lt;/p&gt;
 
 &lt;h3 id=&quot;bone-window&quot;&gt;Bone Window&lt;/h3&gt;
 
-&lt;p&gt;As the name suggests, bone window is useful for viewing the bones. A high window level near the density of bone (given its density the level is &lt;strong&gt;high&lt;/strong&gt;) is used with a wide window to give good resolution.&lt;/p&gt;
+&lt;p&gt;As the name suggests, a bone window is useful for viewing the bones. A high window level near the density of bone (given its density the level is &lt;strong&gt;high&lt;/strong&gt;) is used with a wide window to give a good resolution.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Window settings:&lt;/strong&gt; (W:2000, L:500)  or (W:3000, L:1000)&lt;/p&gt;
 
@@ -829,7 +948,7 @@ csv_file.close()
 
 &lt;h3 id=&quot;lung-window&quot;&gt;Lung Window&lt;/h3&gt;
 
-&lt;p&gt;This window is used to evaluate the lungs. A high window level near the density of lung tissue (given its low density the level is &lt;strong&gt;low&lt;/strong&gt;) and is used with a wide window to give good resolution and to visualzie a wide variety of densities in the chest such as the lung parenchyma as well as adjacent blood vessels.&lt;/p&gt;
+&lt;p&gt;This window is used to evaluate the lungs. A high window level near the density of lung tissue (given its low density the level is &lt;strong&gt;low&lt;/strong&gt;) and is used with a wide window to give good resolution and to visualize a wide variety of densities in the chest such as the lung parenchyma as well as adjacent blood vessels.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Window settings:&lt;/strong&gt; (W:1600, L:-600) or (W:1500, L:-500)&lt;/p&gt;
 
@@ -837,7 +956,7 @@ csv_file.close()
 
 &lt;h3 id=&quot;abdomen-window&quot;&gt;Abdomen Window&lt;/h3&gt;
 
-&lt;p&gt;The abdomen window is used to evaluate the abdominal cavity and its contents. A window level close to fluid or soft tissue is used with a medium sized window that gives a moderate amount of contrast.&lt;/p&gt;
+&lt;p&gt;The abdomen window is used to evaluate the abdominal cavity and its contents. A window level close to fluid or soft tissue is used with a medium-sized window that gives a moderate amount of contrast.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Window settings:&lt;/strong&gt; (W:400, L:40)&lt;/p&gt;
 
@@ -845,7 +964,7 @@ csv_file.close()
 
 &lt;h3 id=&quot;brain-window&quot;&gt;Brain Window&lt;/h3&gt;
 
-&lt;p&gt;As the name suggests, brain window is designed to evaluate the brain parenchyma (typically on a non-contrast scan) and is especially sensitive at picking up intracranial hemorrhage with a narrow window and a level close to the density of expected hemorrhage in the brain.&lt;/p&gt;
+&lt;p&gt;As the name suggests, the brain window is designed to evaluate the brain parenchyma (typically on a non-contrast scan) and is especially sensitive at picking up intracranial hemorrhage with a narrow window and a level close to the density of expected hemorrhage in the brain.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Window settings:&lt;/strong&gt; (W:70, L:30) or (W:70, L:35)&lt;/p&gt;
 
@@ -853,7 +972,7 @@ csv_file.close()
 
 &lt;h3 id=&quot;soft-tissue-window&quot;&gt;Soft Tissue Window&lt;/h3&gt;
 
-&lt;p&gt;As the name suggests, this window is used to evaluate soft tissues. The window level is set at the density of soft tissues (50 HU) and a moderate sized window is used to give a balance between contrast and resolution.&lt;/p&gt;
+&lt;p&gt;As the name suggests, this window is used to evaluate soft tissues. The window level is set at the density of soft tissues (50 HU) and a moderate-sized window is used to give a balance between contrast and resolution.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Window settings:&lt;/strong&gt; (W:350, L:50)&lt;/p&gt;
 
@@ -861,7 +980,7 @@ csv_file.close()
 
 &lt;h3 id=&quot;liver-window&quot;&gt;Liver Window&lt;/h3&gt;
 
-&lt;p&gt;This window is similar to the abdominal window however utilizes a narrower window to increase the the contrast in the liver parenchyma (in order to make finding hepatic lesions a bit easier).&lt;/p&gt;
+&lt;p&gt;This window is similar to the abdominal window however utilizes a narrower window to increase the contrast in the liver parenchyma (in order to make finding hepatic lesions a bit easier).&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Window settings:&lt;/strong&gt; (W:160, L:60)&lt;/p&gt;
 
@@ -871,7 +990,7 @@ csv_file.close()
 
 &lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.stepwards.com/?page_id=21646&quot;&gt;Fundamentals Of Computed Tomography Studies: Windowing&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Windowing if simply put, is an image processing task for a CT scan that helps highlighting key anatomy so that the images can be analyzed easily.</summary></entry><entry><title type="html">fastText</title><link href="http://localhost:4000/fastText" rel="alternate" type="text/html" title="fastText" /><published>2020-11-19T12:00:00+05:30</published><updated>2020-11-19T12:00:00+05:30</updated><id>http://localhost:4000/fastText</id><content type="html" xml:base="http://localhost:4000/fastText">&lt;p&gt;FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers.&lt;/p&gt;
+&lt;/ol&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Windowing if simply put, is an image processing task for a CT scan that helps highlighting key anatomy so that the images can be analyzed easily. In other words, Windowing, also known as grey-level mapping, contrast stretching, histogram modification, or contrast enhancement is the process in which the CT scan greyscale component of an image is manipulated via the CT numbers (Hounsfield Units). Changing windowing settings helps us modify/enhance the appearance of the CT image and highlight particular features in it. Impact of Windowing on the appearnace of a CT scan. Hounsfield Unit (HU) Hounsfield Units (HU) are a dimensionless unit universally used in computed tomography (CT) scanning to express CT numbers in a standardized and convenient form. Well, Hounsfield Units is related to the composition and nature of the tissue and thus, represent the density of various tissues. Note that the higher the HU value the more dense a material is and vice-versa. Below are a few values on the HU Scale that are important to keep in mind while analyzing CT images. Window Width and Window Level Window Width (WW) The window Width (WW) as the name suggests is the measure of the range of CT numbers that a CT image contains. Window width refers to the number of different HU units that will be represented by different shades of gray. Any HU value that falls below the lower value of the window width will show up as black on the scan while any HU value that is above the upper value of the window width will be white. Window Level (WL) The Window Level (WL) refers to the window centre or midpoint HU value that is represented on the window setting. The lower the window level is set for an image, the brighter the entire image will become. Windowing settings Understanding the difference between window width and window level is not enough and thus, let’s look at how changing these values can have a significant impact on image interpretation. Adjusting the Window Width As the width of the window increases a larger change in density will be required to change the shade of grey that represents a certain HU unit. This results in a loss of contrast as more structures will appear similar (despite having different densities) as there is an increase in the range of CT numbers. Hence, increasing the window width will decrease the contrast of the image. Adjusting the Window Width Now, as the width of the window decreases, a smaller change in density will result in a change in color on the study images. This will give increased contrast as structures that are close in density will have different shades of grey or white or black assigned to them. Hence, decreasing the window width will increase the contrast of the image. Impact of window width on the appearnace of a CT scan. Adjusting the Window Level As the window level is increased, the image will get darker. This is because as the level is increased, higher HU values will be required in order for a density to be represented as white and many lower values will be ignored (considered as black). Hence, increasing the window level will decrease the brightness of the image. Adjusting the Window Level Now, as the window level is increased, the image will get darker. This is because as the level is decreased, lower HU values will be required in order for a density to be represented as white, and thus, more white values will be allowed to pass which makes the image brighter. Hence, decreasing the window level will increase the brightness of the image. Impact of window level on the appearnace of a CT scan. Typical window settings Below is a list of various window settings that may somewhat vary from institution to institution. However, they are generally fairly similar. Here, the numbers shown in the figure represent two different values, the first being the window width (WW) and the second being window level (wl). Bone Window As the name suggests, a bone window is useful for viewing the bones. A high window level near the density of bone (given its density the level is high) is used with a wide window to give a good resolution. Window settings: (W:2000, L:500) or (W:3000, L:1000) Lung Window This window is used to evaluate the lungs. A high window level near the density of lung tissue (given its low density the level is low) and is used with a wide window to give good resolution and to visualize a wide variety of densities in the chest such as the lung parenchyma as well as adjacent blood vessels. Window settings: (W:1600, L:-600) or (W:1500, L:-500) Abdomen Window The abdomen window is used to evaluate the abdominal cavity and its contents. A window level close to fluid or soft tissue is used with a medium-sized window that gives a moderate amount of contrast. Window settings: (W:400, L:40) Brain Window As the name suggests, the brain window is designed to evaluate the brain parenchyma (typically on a non-contrast scan) and is especially sensitive at picking up intracranial hemorrhage with a narrow window and a level close to the density of expected hemorrhage in the brain. Window settings: (W:70, L:30) or (W:70, L:35) Soft Tissue Window As the name suggests, this window is used to evaluate soft tissues. The window level is set at the density of soft tissues (50 HU) and a moderate-sized window is used to give a balance between contrast and resolution. Window settings: (W:350, L:50) Liver Window This window is similar to the abdominal window however utilizes a narrower window to increase the contrast in the liver parenchyma (in order to make finding hepatic lesions a bit easier). Window settings: (W:160, L:60) Reference Fundamentals Of Computed Tomography Studies: Windowing</summary></entry><entry><title type="html">fastText</title><link href="http://localhost:4000/fastText" rel="alternate" type="text/html" title="fastText" /><published>2020-11-19T12:00:00+05:30</published><updated>2020-11-19T12:00:00+05:30</updated><id>http://localhost:4000/fastText</id><content type="html" xml:base="http://localhost:4000/fastText">&lt;p&gt;FastText is an open-source, free, lightweight library that allows users to learn text/word representations and text classifiers.&lt;/p&gt;
 
 &lt;p&gt;The major benefits of using fastText are that it works on standard, generic hardware and the models can later be reduced in size to even fit on mobile devices.&lt;/p&gt;
 
@@ -1370,254 +1489,7 @@ volumes:
 
 &lt;h2 id=&quot;threadripper&quot;&gt;Threadripper&lt;/h2&gt;
 
-&lt;p&gt;The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">AMD’s mainstream Ryzen chips are highly disruptive which include several families of various levels of potency. Ryzen chips introduce a completely new motherboard platform, and the processors require different memory and coolers than their predecessors. Below is a quick breakdown of the different AMD Ryzen processor brackets: Ryzen 3: Up to 4-core processors. Ryzen 5: Up to 8-core processors. Ryzen 7: Up to 16-core processors. Ryzen 9: Up to 32-core processors. Threadripper: Up to 64-core processors. Within each bracket, the processors are named by model number - the higher the model number the more powerful the CPU. Ryzen CPUs that start with the number two are Zen+ processors, released in 2018 while the third generation CPUs using Zen 2 were released in 2019. Now, AMD also has CPUs with G as a suffix for graphics which include Vega video processing which means that you can run a system without a dedicated video card. Coming to socket type, all AMD processors use the same AM4 socket with a few exceptions like Generation 1 and 2 Threadrippers using a TR4 socket and Generation 3 Threadrippers using a TRX4 socket. Ryzen 3 The Ryzen 3 processors are built for budget-friendly PCs and consumers who don’t use PCs for intensive tasks. All processors in this family i.e. 1000, 2000, and 3000 Series are quad-core with decent game handling capability. The latest generation chips in this family come with a rocking boost clock speed of 4.0GHz, allowing you to get good performance at the same affordable price. Ryzen 5 The Ryzen 5 processors are incredible for gaming and are priced aggressively to take on the popular Intel Core i5 family. These processors contain a mix of quadcore and hexacore processors, packed with enough power for intensive applications and tasks like video editing. Ryzen 7 The Ryzen 7 processors fall in line with Intel Core i7 processors and may be overkill for most people who don’t perform high computation tasks. However, these processors are extremely good for advanced computing in a somewhat affordable price range. All processors in this family have 8/16 core/thread configuration and the latest generation chips come with massive L3 cache, high clock speeds and great overclock support. Ryzen 9 The Ryzen 9 processors are the latest batch of processors that are magically packed with 12/24 to 16/32 core/thread configuration. These chips are amazing and lie in the middle-ground between Ryzen 7 and Threadripper. These processors challenge Intel’s Core i9 processor range and are optimal for gamers, streamers, and content creators. Threadripper The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.</summary></entry><entry><title type="html">Conda Docker tutorial</title><link href="http://localhost:4000/conda-docker-tutorial" rel="alternate" type="text/html" title="Conda Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/conda-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/conda-docker-tutorial">&lt;p&gt;Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.
-Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.&lt;/p&gt;
-
-&lt;h2 id=&quot;defining-the-conda-environment&quot;&gt;Defining the Conda environment&lt;/h2&gt;
-&lt;p&gt;Firstly, let’s create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; file to define the Conda environment.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name: env
-channels:
-   - conda-forge
-dependencies:
-   - python=3.6
-   - flask
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Here &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; is the name of our Conda environment. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda-forge&lt;/code&gt; channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; is similar to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; used by virtual environment &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;venv&lt;/code&gt; module.&lt;/p&gt;
-
-&lt;h2 id=&quot;a-simple-python-program&quot;&gt;A simple Python program&lt;/h2&gt;
-
-&lt;p&gt;Write a simple Python program to test the Conda environment activation.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import flask
- 
-print(&quot;Flask import successful!&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h2&gt;
-
-&lt;p&gt;Following the standard approach, our first iteration of the Dockerfile looks like:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Activate Conda environment and check if it is working properly
-RUN conda activate env
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Following is the result when we try building the Docker image&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 5/9 : RUN conda activate env
----&amp;gt; Running in e33a2dcd4d99
- 
-CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
-To initialize your shell, run
- 
-   $ conda init &amp;lt;SHELL_NAME&amp;gt;
- 
-The command '/bin/sh -c conda activate env' returned a non-zero code: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.&lt;/p&gt;
-
-&lt;h2 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h2&gt;
-
-&lt;p&gt;We can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; as a solution to the above problem. Docker by default uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/bin/sh -c &amp;lt;command&amp;gt;&lt;/code&gt; to execute instructions but we require a bash shell to run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;p&gt;To tackle this, we override the default shell by adding the following to the Dockerfile:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Our updated Dockerfile should look as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Override default shell and use bash
-SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Initialize conda in the bash config files
-RUN conda init bash
- 
-# Activate Conda environment and check if it is working properly
-RUN conda activate env
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Building the Docker image again gives us the following result:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 9/11 : RUN python -c &quot;import flask&quot;
----&amp;gt; Running in ea831eb42ff6
-Traceback (most recent call last):
- File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
-ModuleNotFoundError: No module named 'flask'
-The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;So the problem is that each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; and later &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;s are new shell sessions without Conda activation.&lt;/p&gt;
-
-&lt;h2 id=&quot;third-attempt&quot;&gt;Third attempt&lt;/h2&gt;
-
-&lt;p&gt;Now, since each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction is a separate run of bash, adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda activate&lt;/code&gt; command to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.&lt;/p&gt;
-
-&lt;p&gt;This is due to the fact that we are using &lt;em&gt;exec&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction which doesn’t actually start a shell session. An alternative to this is the &lt;em&gt;shell&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT python run.py&lt;/code&gt; but this won’t work since it breaks down the container.&lt;/p&gt;
-
-&lt;p&gt;The final resort to this problem is by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda run -n env &amp;lt;command&amp;gt;&lt;/code&gt; instruction which actually runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;command&amp;gt;&lt;/code&gt; inside the conda environment.&lt;/p&gt;
-
-&lt;p&gt;So the final working Dockerfile should look like:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
-FROM continuumio/miniconda3
- 
-# Set working directory for the project
-WORKDIR /app
- 
-# Create Conda environment from the YAML file
-COPY environment.yml .
-RUN conda env create -f environment.yml
- 
-# Override default shell and use bash
-SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
- 
-# Activate Conda environment and check if it is working properly
-RUN echo &quot;Making sure flask is installed correctly...&quot;
-RUN python -c &quot;import flask&quot;
- 
-# Python program to run in the container
-COPY run.py .
-ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;And the result obtained is as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build .
-Sending build context to Docker daemon  4.608kB
-Step 1/9 : FROM continuumio/miniconda3
----&amp;gt; b4adc22212f1
-Step 2/9 : WORKDIR /app
----&amp;gt; Using cache
----&amp;gt; 658c526932d9
-Step 3/9 : COPY environment.yml .
----&amp;gt; 26ff11b33587
-Step 4/9 : RUN conda env create -f environment.yml
----&amp;gt; Running in d6729c106f2b
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done
- 
-Downloading and Extracting Packages
-_libgcc_mutex-0.1    | 3 KB      | ########## | 100%
-flask-1.1.2          | 70 KB     | ########## | 100%
-zlib-1.2.11          | 106 KB    | ########## | 100%
-wheel-0.35.1         | 29 KB     | ########## | 100%
-ncurses-6.2          | 1022 KB   | ########## | 100%
-werkzeug-1.0.1       | 239 KB    | ########## | 100%
-ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%
-click-7.1.2          | 64 KB     | ########## | 100%
-markupsafe-1.1.1     | 27 KB     | ########## | 100%
-libffi-3.2.1         | 47 KB     | ########## | 100%
-openssl-1.1.1h       | 2.1 MB    | ########## | 100%
-python-3.6.11        | 34.2 MB   | ########## | 100%
-itsdangerous-1.1.0   | 16 KB     | ########## | 100%
-libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%
-xz-5.2.5             | 343 KB    | ########## | 100%
-libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%
-setuptools-49.6.0    | 947 KB    | ########## | 100%
-jinja2-2.11.2        | 93 KB     | ########## | 100%
-ca-certificates-2020 | 145 KB    | ########## | 100%
-certifi-2020.6.20    | 151 KB    | ########## | 100%
-pip-20.2.4           | 1.1 MB    | ########## | 100%
-libgomp-9.3.0        | 378 KB    | ########## | 100%
-tk-8.6.10            | 3.2 MB    | ########## | 100%
-python_abi-3.6       | 4 KB      | ########## | 100%
-_openmp_mutex-4.5    | 22 KB     | ########## | 100%
-sqlite-3.33.0        | 1.4 MB    | ########## | 100%
-readline-8.0         | 281 KB    | ########## | 100%
-Preparing transaction: ...working... done
-Verifying transaction: ...working... done
-Executing transaction: ...working... done
-#
-# To activate this environment, use
-#
-#     $ conda activate env
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
- 
-==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;==
- current version: 4.8.2
- latest version: 4.9.1
- 
-Please update conda by running
- 
-   $ conda update -n base -c defaults conda
- 
-Removing intermediate container d6729c106f2b
----&amp;gt; c03cbd024136
-Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
----&amp;gt; Running in f37ed240c11e
-Removing intermediate container f37ed240c11e
----&amp;gt; b56ab8574a14
-Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot;
----&amp;gt; Running in 46b28807a8e2
-Making sure flask is installed correctly...
- 
-Removing intermediate container 46b28807a8e2
----&amp;gt; 70228fcf11ec
-Step 7/9 : RUN python -c &quot;import flask&quot;
----&amp;gt; Running in b5a021d87998
-Removing intermediate container b5a021d87998
----&amp;gt; 846df181bd85
-Step 8/9 : COPY run.py .
----&amp;gt; 975a983a3504
-Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
----&amp;gt; Running in 240d3476910c
-Removing intermediate container 240d3476910c
----&amp;gt; 72a352583f00
-Successfully built 72a352583f00
- 
-$ docker images
-REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
-&amp;lt;none&amp;gt;                   &amp;lt;none&amp;gt;              72a352583f00        2 minutes ago       964MB
- 
-$ docker run 72a352583f00
-Flask import successful!
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://pythonspeed.com/articles/activate-conda-dockerfile/&quot;&gt;Activating a Conda environment in your Dockerfile&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile. Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect. Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment. name: env channels: - conda-forge dependencies: - python=3.6 - flask Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask. environment.yml is similar to the requirements.txt used by virtual environment venv module. A simple Python program Write a simple Python program to test the Conda environment activation. import flask print(&quot;Flask import successful!&quot;) First attempt Following the standard approach, our first iteration of the Dockerfile looks like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Following is the result when we try building the Docker image Step 5/9 : RUN conda activate env ---&amp;gt; Running in e33a2dcd4d99 CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'. To initialize your shell, run $ conda init &amp;lt;SHELL_NAME&amp;gt; The command '/bin/sh -c conda activate env' returned a non-zero code: 1 We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method. Second attempt We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &amp;lt;command&amp;gt; to execute instructions but we require a bash shell to run the conda init bash command. To tackle this, we override the default shell by adding the following to the Dockerfile: SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] Our updated Dockerfile should look as follows: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Initialize conda in the bash config files RUN conda init bash # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Building the Docker image again gives us the following result: Step 9/11 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in ea831eb42ff6 Traceback (most recent call last): File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt; ModuleNotFoundError: No module named 'flask' The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1 So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation. Third attempt Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above. This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container. The final resort to this problem is by using conda run -n env &amp;lt;command&amp;gt; instruction which actually runs &amp;lt;command&amp;gt; inside the conda environment. So the final working Dockerfile should look like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] And the result obtained is as follows: $ docker build . Sending build context to Docker daemon 4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&amp;gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&amp;gt; Using cache ---&amp;gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&amp;gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&amp;gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done Downloading and Extracting Packages _libgcc_mutex-0.1 | 3 KB | ########## | 100% flask-1.1.2 | 70 KB | ########## | 100% zlib-1.2.11 | 106 KB | ########## | 100% wheel-0.35.1 | 29 KB | ########## | 100% ncurses-6.2 | 1022 KB | ########## | 100% werkzeug-1.0.1 | 239 KB | ########## | 100% ld_impl_linux-64-2.3 | 617 KB | ########## | 100% click-7.1.2 | 64 KB | ########## | 100% markupsafe-1.1.1 | 27 KB | ########## | 100% libffi-3.2.1 | 47 KB | ########## | 100% openssl-1.1.1h | 2.1 MB | ########## | 100% python-3.6.11 | 34.2 MB | ########## | 100% itsdangerous-1.1.0 | 16 KB | ########## | 100% libstdcxx-ng-9.3.0 | 4.0 MB | ########## | 100% xz-5.2.5 | 343 KB | ########## | 100% libgcc-ng-9.3.0 | 7.8 MB | ########## | 100% setuptools-49.6.0 | 947 KB | ########## | 100% jinja2-2.11.2 | 93 KB | ########## | 100% ca-certificates-2020 | 145 KB | ########## | 100% certifi-2020.6.20 | 151 KB | ########## | 100% pip-20.2.4 | 1.1 MB | ########## | 100% libgomp-9.3.0 | 378 KB | ########## | 100% tk-8.6.10 | 3.2 MB | ########## | 100% python_abi-3.6 | 4 KB | ########## | 100% _openmp_mutex-4.5 | 22 KB | ########## | 100% sqlite-3.33.0 | 1.4 MB | ########## | 100% readline-8.0 | 281 KB | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # # $ conda activate env # # To deactivate an active environment, use # # $ conda deactivate ==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;== current version: 4.8.2 latest version: 4.9.1 Please update conda by running $ conda update -n base -c defaults conda Removing intermediate container d6729c106f2b ---&amp;gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&amp;gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&amp;gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&amp;gt; Running in 46b28807a8e2 Making sure flask is installed correctly... Removing intermediate container 46b28807a8e2 ---&amp;gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&amp;gt; 846df181bd85 Step 8/9 : COPY run.py . ---&amp;gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&amp;gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&amp;gt; 72a352583f00 Successfully built 72a352583f00 $ docker images REPOSITORY TAG IMAGE ID CREATED SIZE &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 72a352583f00 2 minutes ago 964MB $ docker run 72a352583f00 Flask import successful! References</summary></entry><entry><title type="html">How to build a Flask app with WSGI and Nginx</title><link href="http://localhost:4000/flask-app-with-wsgi-and-nginx" rel="alternate" type="text/html" title="How to build a Flask app with WSGI and Nginx" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/flask-app-with-wsgi-and-nginx</id><content type="html" xml:base="http://localhost:4000/flask-app-with-wsgi-and-nginx">&lt;p&gt;In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.&lt;/p&gt;
+&lt;p&gt;The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">AMD’s mainstream Ryzen chips are highly disruptive which include several families of various levels of potency. Ryzen chips introduce a completely new motherboard platform, and the processors require different memory and coolers than their predecessors. Below is a quick breakdown of the different AMD Ryzen processor brackets: Ryzen 3: Up to 4-core processors. Ryzen 5: Up to 8-core processors. Ryzen 7: Up to 16-core processors. Ryzen 9: Up to 32-core processors. Threadripper: Up to 64-core processors. Within each bracket, the processors are named by model number - the higher the model number the more powerful the CPU. Ryzen CPUs that start with the number two are Zen+ processors, released in 2018 while the third generation CPUs using Zen 2 were released in 2019. Now, AMD also has CPUs with G as a suffix for graphics which include Vega video processing which means that you can run a system without a dedicated video card. Coming to socket type, all AMD processors use the same AM4 socket with a few exceptions like Generation 1 and 2 Threadrippers using a TR4 socket and Generation 3 Threadrippers using a TRX4 socket. Ryzen 3 The Ryzen 3 processors are built for budget-friendly PCs and consumers who don’t use PCs for intensive tasks. All processors in this family i.e. 1000, 2000, and 3000 Series are quad-core with decent game handling capability. The latest generation chips in this family come with a rocking boost clock speed of 4.0GHz, allowing you to get good performance at the same affordable price. Ryzen 5 The Ryzen 5 processors are incredible for gaming and are priced aggressively to take on the popular Intel Core i5 family. These processors contain a mix of quadcore and hexacore processors, packed with enough power for intensive applications and tasks like video editing. Ryzen 7 The Ryzen 7 processors fall in line with Intel Core i7 processors and may be overkill for most people who don’t perform high computation tasks. However, these processors are extremely good for advanced computing in a somewhat affordable price range. All processors in this family have 8/16 core/thread configuration and the latest generation chips come with massive L3 cache, high clock speeds and great overclock support. Ryzen 9 The Ryzen 9 processors are the latest batch of processors that are magically packed with 12/24 to 16/32 core/thread configuration. These chips are amazing and lie in the middle-ground between Ryzen 7 and Threadripper. These processors challenge Intel’s Core i9 processor range and are optimal for gamers, streamers, and content creators. Threadripper The Threadripper family is the ultimate CPU one can have which comes with upto 64 cores and 128 threads that allow advanced users to push their systems beyond the limit.</summary></entry><entry><title type="html">How to build a Flask app with WSGI and Nginx</title><link href="http://localhost:4000/flask-app-with-wsgi-and-nginx" rel="alternate" type="text/html" title="How to build a Flask app with WSGI and Nginx" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/flask-app-with-wsgi-and-nginx</id><content type="html" xml:base="http://localhost:4000/flask-app-with-wsgi-and-nginx">&lt;p&gt;In this blog, we learn how to build a movie quote generator flask application with Nginx using Gunicorn.&lt;/p&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
@@ -1928,7 +1800,254 @@ Skipping adding existing rule (v6)
 
 &lt;p&gt;&lt;img src=&quot;/assets/img/jenkins/4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Congratulations! You just set up the Jenkins server inside a Docker container.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to run Jenkins in a Docker container. What is Jenkins? Jenkins is a self-contained, open-source automation server that can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with a Java Runtime Environment (JRE) installed. Step 1: Pull Jenkins Docker image We pull the [Jenkins Docker image] from the Docker Hub repository. docker pull jenkins/jenkins Step 2: Run a Docker container We can run a docker container based on the Docker image we just pulled. docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:latest where we expose port 8080 on the host and docker server to access Jenkins dashboard and port 50000 for the Jenkins API. This command will create and run a Docker container for you, however, it won’t save any data created when the container is exited or shutdown. We can have persistent storage for Jenkins by executing the following command: docker run -p 8080:8080 -p 50000:50000 -v /home/projects/Jenkins_Home:/var/jenkins_home jenkins/jenkins:latest Here, /home/projects/Jenkins_Home can be replaced by the path where you wish to store your Jenkins data. However, I would recommend using a Docker volume to avoid permission issues while accessing the directory and let Docker handle the storage functionality. To use a Docker volume for Jenkins data, simply just create a volume as follows: docker volume create myjenkins Now, to use this volume to store Jenkins data execute the following command: docker run -p 8080:8080 -p 50000:50000 -v myjenkins:/var/jenkins_home jenkins/jenkins:latest Step 3: Set up Jenkins Once Jenkins files have been extracted, the Jenkins server will be fully up and running at http://localhost:8080. You can find the initial admin password at /var/jenkins_home/secrets/initialAdminPassword as mentioned on the login page. Next, we can install plugins as per our requirement. It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user. Congratulations! You just set up the Jenkins server inside a Docker container.</summary></entry><entry><title type="html">Dockerfile best practices</title><link href="http://localhost:4000/dockerfile-best-practices" rel="alternate" type="text/html" title="Dockerfile best practices" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile-best-practices</id><content type="html" xml:base="http://localhost:4000/dockerfile-best-practices">&lt;p&gt;Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.&lt;/p&gt;
+&lt;p&gt;Congratulations! You just set up the Jenkins server inside a Docker container.&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">In this blog, we learn how to run Jenkins in a Docker container. What is Jenkins? Jenkins is a self-contained, open-source automation server that can be used to automate all sorts of tasks related to building, testing, and delivering or deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with a Java Runtime Environment (JRE) installed. Step 1: Pull Jenkins Docker image We pull the [Jenkins Docker image] from the Docker Hub repository. docker pull jenkins/jenkins Step 2: Run a Docker container We can run a docker container based on the Docker image we just pulled. docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:latest where we expose port 8080 on the host and docker server to access Jenkins dashboard and port 50000 for the Jenkins API. This command will create and run a Docker container for you, however, it won’t save any data created when the container is exited or shutdown. We can have persistent storage for Jenkins by executing the following command: docker run -p 8080:8080 -p 50000:50000 -v /home/projects/Jenkins_Home:/var/jenkins_home jenkins/jenkins:latest Here, /home/projects/Jenkins_Home can be replaced by the path where you wish to store your Jenkins data. However, I would recommend using a Docker volume to avoid permission issues while accessing the directory and let Docker handle the storage functionality. To use a Docker volume for Jenkins data, simply just create a volume as follows: docker volume create myjenkins Now, to use this volume to store Jenkins data execute the following command: docker run -p 8080:8080 -p 50000:50000 -v myjenkins:/var/jenkins_home jenkins/jenkins:latest Step 3: Set up Jenkins Once Jenkins files have been extracted, the Jenkins server will be fully up and running at http://localhost:8080. You can find the initial admin password at /var/jenkins_home/secrets/initialAdminPassword as mentioned on the login page. Next, we can install plugins as per our requirement. It may take some time depending upon the number of plugins you choose to install. Once the plugins are installed, you will be prompted to create a first admin user which you can skip if you wish to continue as an admin user. Congratulations! You just set up the Jenkins server inside a Docker container.</summary></entry><entry><title type="html">Conda Docker tutorial</title><link href="http://localhost:4000/conda-docker-tutorial" rel="alternate" type="text/html" title="Conda Docker tutorial" /><published>2020-11-10T12:00:00+05:30</published><updated>2020-11-10T12:00:00+05:30</updated><id>http://localhost:4000/conda-docker-tutorial</id><content type="html" xml:base="http://localhost:4000/conda-docker-tutorial">&lt;p&gt;Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system.
+Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect.&lt;/p&gt;
+
+&lt;h2 id=&quot;defining-the-conda-environment&quot;&gt;Defining the Conda environment&lt;/h2&gt;
+&lt;p&gt;Firstly, let’s create an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; file to define the Conda environment.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;name: env
+channels:
+   - conda-forge
+dependencies:
+   - python=3.6
+   - flask
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;env&lt;/code&gt; is the name of our Conda environment. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda-forge&lt;/code&gt; channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;environment.yml&lt;/code&gt; is similar to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; used by virtual environment &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;venv&lt;/code&gt; module.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-simple-python-program&quot;&gt;A simple Python program&lt;/h2&gt;
+
+&lt;p&gt;Write a simple Python program to test the Conda environment activation.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import flask
+ 
+print(&quot;Flask import successful!&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;first-attempt&quot;&gt;First attempt&lt;/h2&gt;
+
+&lt;p&gt;Following the standard approach, our first iteration of the Dockerfile looks like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Following is the result when we try building the Docker image&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 5/9 : RUN conda activate env
+---&amp;gt; Running in e33a2dcd4d99
+ 
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+To initialize your shell, run
+ 
+   $ conda init &amp;lt;SHELL_NAME&amp;gt;
+ 
+The command '/bin/sh -c conda activate env' returned a non-zero code: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method.&lt;/p&gt;
+
+&lt;h2 id=&quot;second-attempt&quot;&gt;Second attempt&lt;/h2&gt;
+
+&lt;p&gt;We can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; as a solution to the above problem. Docker by default uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/bin/sh -c &amp;lt;command&amp;gt;&lt;/code&gt; to execute instructions but we require a bash shell to run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda init bash&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;To tackle this, we override the default shell by adding the following to the Dockerfile:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Our updated Dockerfile should look as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Override default shell and use bash
+SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;]
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Initialize conda in the bash config files
+RUN conda init bash
+ 
+# Activate Conda environment and check if it is working properly
+RUN conda activate env
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Building the Docker image again gives us the following result:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Step 9/11 : RUN python -c &quot;import flask&quot;
+---&amp;gt; Running in ea831eb42ff6
+Traceback (most recent call last):
+ File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+ModuleNotFoundError: No module named 'flask'
+The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So the problem is that each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; and later &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;s are new shell sessions without Conda activation.&lt;/p&gt;
+
+&lt;h2 id=&quot;third-attempt&quot;&gt;Third attempt&lt;/h2&gt;
+
+&lt;p&gt;Now, since each &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction is a separate run of bash, adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda activate&lt;/code&gt; command to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above.&lt;/p&gt;
+
+&lt;p&gt;This is due to the fact that we are using &lt;em&gt;exec&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction which doesn’t actually start a shell session. An alternative to this is the &lt;em&gt;shell&lt;/em&gt; form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; i.e. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT python run.py&lt;/code&gt; but this won’t work since it breaks down the container.&lt;/p&gt;
+
+&lt;p&gt;The final resort to this problem is by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;conda run -n env &amp;lt;command&amp;gt;&lt;/code&gt; instruction which actually runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;command&amp;gt;&lt;/code&gt; inside the conda environment.&lt;/p&gt;
+
+&lt;p&gt;So the final working Dockerfile should look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define base image
+FROM continuumio/miniconda3
+ 
+# Set working directory for the project
+WORKDIR /app
+ 
+# Create Conda environment from the YAML file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+ 
+# Override default shell and use bash
+SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
+ 
+# Activate Conda environment and check if it is working properly
+RUN echo &quot;Making sure flask is installed correctly...&quot;
+RUN python -c &quot;import flask&quot;
+ 
+# Python program to run in the container
+COPY run.py .
+ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And the result obtained is as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build .
+Sending build context to Docker daemon  4.608kB
+Step 1/9 : FROM continuumio/miniconda3
+---&amp;gt; b4adc22212f1
+Step 2/9 : WORKDIR /app
+---&amp;gt; Using cache
+---&amp;gt; 658c526932d9
+Step 3/9 : COPY environment.yml .
+---&amp;gt; 26ff11b33587
+Step 4/9 : RUN conda env create -f environment.yml
+---&amp;gt; Running in d6729c106f2b
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+ 
+Downloading and Extracting Packages
+_libgcc_mutex-0.1    | 3 KB      | ########## | 100%
+flask-1.1.2          | 70 KB     | ########## | 100%
+zlib-1.2.11          | 106 KB    | ########## | 100%
+wheel-0.35.1         | 29 KB     | ########## | 100%
+ncurses-6.2          | 1022 KB   | ########## | 100%
+werkzeug-1.0.1       | 239 KB    | ########## | 100%
+ld_impl_linux-64-2.3 | 617 KB    | ########## | 100%
+click-7.1.2          | 64 KB     | ########## | 100%
+markupsafe-1.1.1     | 27 KB     | ########## | 100%
+libffi-3.2.1         | 47 KB     | ########## | 100%
+openssl-1.1.1h       | 2.1 MB    | ########## | 100%
+python-3.6.11        | 34.2 MB   | ########## | 100%
+itsdangerous-1.1.0   | 16 KB     | ########## | 100%
+libstdcxx-ng-9.3.0   | 4.0 MB    | ########## | 100%
+xz-5.2.5             | 343 KB    | ########## | 100%
+libgcc-ng-9.3.0      | 7.8 MB    | ########## | 100%
+setuptools-49.6.0    | 947 KB    | ########## | 100%
+jinja2-2.11.2        | 93 KB     | ########## | 100%
+ca-certificates-2020 | 145 KB    | ########## | 100%
+certifi-2020.6.20    | 151 KB    | ########## | 100%
+pip-20.2.4           | 1.1 MB    | ########## | 100%
+libgomp-9.3.0        | 378 KB    | ########## | 100%
+tk-8.6.10            | 3.2 MB    | ########## | 100%
+python_abi-3.6       | 4 KB      | ########## | 100%
+_openmp_mutex-4.5    | 22 KB     | ########## | 100%
+sqlite-3.33.0        | 1.4 MB    | ########## | 100%
+readline-8.0         | 281 KB    | ########## | 100%
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+#
+# To activate this environment, use
+#
+#     $ conda activate env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+ 
+==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;==
+ current version: 4.8.2
+ latest version: 4.9.1
+ 
+Please update conda by running
+ 
+   $ conda update -n base -c defaults conda
+ 
+Removing intermediate container d6729c106f2b
+---&amp;gt; c03cbd024136
+Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;]
+---&amp;gt; Running in f37ed240c11e
+Removing intermediate container f37ed240c11e
+---&amp;gt; b56ab8574a14
+Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot;
+---&amp;gt; Running in 46b28807a8e2
+Making sure flask is installed correctly...
+ 
+Removing intermediate container 46b28807a8e2
+---&amp;gt; 70228fcf11ec
+Step 7/9 : RUN python -c &quot;import flask&quot;
+---&amp;gt; Running in b5a021d87998
+Removing intermediate container b5a021d87998
+---&amp;gt; 846df181bd85
+Step 8/9 : COPY run.py .
+---&amp;gt; 975a983a3504
+Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;]
+---&amp;gt; Running in 240d3476910c
+Removing intermediate container 240d3476910c
+---&amp;gt; 72a352583f00
+Successfully built 72a352583f00
+ 
+$ docker images
+REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE
+&amp;lt;none&amp;gt;                   &amp;lt;none&amp;gt;              72a352583f00        2 minutes ago       964MB
+ 
+$ docker run 72a352583f00
+Flask import successful!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://pythonspeed.com/articles/activate-conda-dockerfile/&quot;&gt;Activating a Conda environment in your Dockerfile&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Conda is an open-source package manager that helps you quickly install, run and update packages and their dependencies. It helps you easily create, save, load and switch between different environments on your system. Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image. And in order to build a Conda-based application, you’ll need to activate a Conda environment in the Dockerfile. Unfortunately, the approach of activating Conda environments in a Dockerfile is a bit different than you would expect. Defining the Conda environment Firstly, let’s create an environment.yml file to define the Conda environment. name: env channels: - conda-forge dependencies: - python=3.6 - flask Here env is the name of our Conda environment. We use conda-forge channel to utilize Conda package provided by the conda-forge community and install two dependencies: python and flask. environment.yml is similar to the requirements.txt used by virtual environment venv module. A simple Python program Write a simple Python program to test the Conda environment activation. import flask print(&quot;Flask import successful!&quot;) First attempt Following the standard approach, our first iteration of the Dockerfile looks like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Following is the result when we try building the Docker image Step 5/9 : RUN conda activate env ---&amp;gt; Running in e33a2dcd4d99 CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'. To initialize your shell, run $ conda init &amp;lt;SHELL_NAME&amp;gt; The command '/bin/sh -c conda activate env' returned a non-zero code: 1 We notice that we can’t just emulate the Conda environment and we need to use Conda’s own activation method. Second attempt We can use conda init bash as a solution to the above problem. Docker by default uses /bin/sh -c &amp;lt;command&amp;gt; to execute instructions but we require a bash shell to run the conda init bash command. To tackle this, we override the default shell by adding the following to the Dockerfile: SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] Our updated Dockerfile should look as follows: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Override default shell and use bash SHELL [&quot;/bin/bash&quot;, &quot;--login&quot;, &quot;-c&quot;] # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Initialize conda in the bash config files RUN conda init bash # Activate Conda environment and check if it is working properly RUN conda activate env RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;python&quot;, &quot;run.py&quot;] Building the Docker image again gives us the following result: Step 9/11 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in ea831eb42ff6 Traceback (most recent call last): File &quot;&amp;lt;string&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt; ModuleNotFoundError: No module named 'flask' The command '/bin/bash --login -c python -c &quot;import flask&quot;' returned a non-zero code: 1 So the problem is that each RUN instruction in a Dockerfile executes in a separate run of bash. Thus, in the above example Conda environment is activated in the first RUN and later RUNs are new shell sessions without Conda activation. Third attempt Now, since each RUN instruction is a separate run of bash, adding conda activate command to the ~/.bashrc of the current user should work. It will work perfectly fine and you will be able to build a Docker image, however, when you run a container based on that image, it will result in the same error as above. This is due to the fact that we are using exec form of ENTRYPOINT instruction which doesn’t actually start a shell session. An alternative to this is the shell form of ENTRYPOINT i.e. ENTRYPOINT python run.py but this won’t work since it breaks down the container. The final resort to this problem is by using conda run -n env &amp;lt;command&amp;gt; instruction which actually runs &amp;lt;command&amp;gt; inside the conda environment. So the final working Dockerfile should look like: # Define base image FROM continuumio/miniconda3 # Set working directory for the project WORKDIR /app # Create Conda environment from the YAML file COPY environment.yml . RUN conda env create -f environment.yml # Override default shell and use bash SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] # Activate Conda environment and check if it is working properly RUN echo &quot;Making sure flask is installed correctly...&quot; RUN python -c &quot;import flask&quot; # Python program to run in the container COPY run.py . ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] And the result obtained is as follows: $ docker build . Sending build context to Docker daemon 4.608kB Step 1/9 : FROM continuumio/miniconda3 ---&amp;gt; b4adc22212f1 Step 2/9 : WORKDIR /app ---&amp;gt; Using cache ---&amp;gt; 658c526932d9 Step 3/9 : COPY environment.yml . ---&amp;gt; 26ff11b33587 Step 4/9 : RUN conda env create -f environment.yml ---&amp;gt; Running in d6729c106f2b Collecting package metadata (repodata.json): ...working... done Solving environment: ...working... done Downloading and Extracting Packages _libgcc_mutex-0.1 | 3 KB | ########## | 100% flask-1.1.2 | 70 KB | ########## | 100% zlib-1.2.11 | 106 KB | ########## | 100% wheel-0.35.1 | 29 KB | ########## | 100% ncurses-6.2 | 1022 KB | ########## | 100% werkzeug-1.0.1 | 239 KB | ########## | 100% ld_impl_linux-64-2.3 | 617 KB | ########## | 100% click-7.1.2 | 64 KB | ########## | 100% markupsafe-1.1.1 | 27 KB | ########## | 100% libffi-3.2.1 | 47 KB | ########## | 100% openssl-1.1.1h | 2.1 MB | ########## | 100% python-3.6.11 | 34.2 MB | ########## | 100% itsdangerous-1.1.0 | 16 KB | ########## | 100% libstdcxx-ng-9.3.0 | 4.0 MB | ########## | 100% xz-5.2.5 | 343 KB | ########## | 100% libgcc-ng-9.3.0 | 7.8 MB | ########## | 100% setuptools-49.6.0 | 947 KB | ########## | 100% jinja2-2.11.2 | 93 KB | ########## | 100% ca-certificates-2020 | 145 KB | ########## | 100% certifi-2020.6.20 | 151 KB | ########## | 100% pip-20.2.4 | 1.1 MB | ########## | 100% libgomp-9.3.0 | 378 KB | ########## | 100% tk-8.6.10 | 3.2 MB | ########## | 100% python_abi-3.6 | 4 KB | ########## | 100% _openmp_mutex-4.5 | 22 KB | ########## | 100% sqlite-3.33.0 | 1.4 MB | ########## | 100% readline-8.0 | 281 KB | ########## | 100% Preparing transaction: ...working... done Verifying transaction: ...working... done Executing transaction: ...working... done # # To activate this environment, use # # $ conda activate env # # To deactivate an active environment, use # # $ conda deactivate ==&amp;gt; WARNING: A newer version of conda exists. &amp;lt;== current version: 4.8.2 latest version: 4.9.1 Please update conda by running $ conda update -n base -c defaults conda Removing intermediate container d6729c106f2b ---&amp;gt; c03cbd024136 Step 5/9 : SHELL [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;/bin/bash&quot;, &quot;-c&quot;] ---&amp;gt; Running in f37ed240c11e Removing intermediate container f37ed240c11e ---&amp;gt; b56ab8574a14 Step 6/9 : RUN echo &quot;Making sure flask is installed correctly...&quot; ---&amp;gt; Running in 46b28807a8e2 Making sure flask is installed correctly... Removing intermediate container 46b28807a8e2 ---&amp;gt; 70228fcf11ec Step 7/9 : RUN python -c &quot;import flask&quot; ---&amp;gt; Running in b5a021d87998 Removing intermediate container b5a021d87998 ---&amp;gt; 846df181bd85 Step 8/9 : COPY run.py . ---&amp;gt; 975a983a3504 Step 9/9 : ENTRYPOINT [&quot;conda&quot;, &quot;run&quot;, &quot;-n&quot;, &quot;env&quot;, &quot;python&quot;, &quot;run.py&quot;] ---&amp;gt; Running in 240d3476910c Removing intermediate container 240d3476910c ---&amp;gt; 72a352583f00 Successfully built 72a352583f00 $ docker images REPOSITORY TAG IMAGE ID CREATED SIZE &amp;lt;none&amp;gt; &amp;lt;none&amp;gt; 72a352583f00 2 minutes ago 964MB $ docker run 72a352583f00 Flask import successful! References</summary></entry><entry><title type="html">Dockerfile best practices</title><link href="http://localhost:4000/dockerfile-best-practices" rel="alternate" type="text/html" title="Dockerfile best practices" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile-best-practices</id><content type="html" xml:base="http://localhost:4000/dockerfile-best-practices">&lt;p&gt;Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.&lt;/p&gt;
 
 &lt;h2 id=&quot;minimize-the-number-of-steps-in-the-dockerfile&quot;&gt;Minimize the number of steps in the Dockerfile&lt;/h2&gt;
 
@@ -1975,159 +2094,4 @@ Also, combining several steps into one line tends to create a single intermediar
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step. Start your Dockerfile with the steps that are least likely to change This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows: Install the tools needed to build your application. Install all the required dependencies, libraries and packages. Finally, build your application. A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows: 1. Pick the right base image Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it. 2. Go to the shell and build your environment Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode. Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately. 3. Add the steps to your Dockerfile and build your image Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time. This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps. 4. Repeat steps 2 and 3 You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected. Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation. References Dockerfile tutorial by example</summary></entry><entry><title type="html">Dockerfile tutorial</title><link href="http://localhost:4000/dockerfile" rel="alternate" type="text/html" title="Dockerfile tutorial" /><published>2020-11-09T13:30:08+05:30</published><updated>2020-11-09T13:30:08+05:30</updated><id>http://localhost:4000/dockerfile</id><content type="html" xml:base="http://localhost:4000/dockerfile">&lt;p&gt;Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.&lt;/p&gt;
-
-&lt;h2 id=&quot;why-would-you-want-to-use-a-dockerfile&quot;&gt;Why would you want to use a Dockerfile?&lt;/h2&gt;
-
-&lt;p&gt;Well, there are times when existing docker images don’t satisfy your project needs and you want to do things differently. Docker helps you achieve this in an easy way, by just writing a Dockerfile!&lt;/p&gt;
-
-&lt;h2 id=&quot;lets-dive-in&quot;&gt;Let’s dive in&lt;/h2&gt;
-
-&lt;p&gt;We are aware that the available alpine image does not contain git, curl and vim installed by default. Thus, for learning purposes we create a new custom image based on alpine which contains git, curl and vim.&lt;/p&gt;
-
-&lt;h3 id=&quot;1-create-a-dockerfile&quot;&gt;1. Create a Dockerfile&lt;/h3&gt;
-
-&lt;p&gt;First of all, create an empty directory and an empty file inside that directory with the file name &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;touch Dockerfile
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;2-define-a-base-image&quot;&gt;2. Define a base image&lt;/h3&gt;
-
-&lt;p&gt;Every Dockerfile must start with a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM&lt;/code&gt; command. You can create an image from scratch, however there are a bunch of base images available which you can directly use by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM alpine:3.4
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;3-add-instructions-to-install-packages&quot;&gt;3. Add instructions to install packages&lt;/h3&gt;
-
-&lt;p&gt;Here we use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction in Dockerfile to execute commands and install required packages.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RUN apk update
-RUN apk add git
-RUN apk add vim
-RUN apk add curl
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; It is ideal to execute multiple commands in a single &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; command as each instruction in Dockerfile creates an intermediary container.&lt;/p&gt;
-
-&lt;p&gt;An efficient approach to the example would be as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RUN apk update &amp;amp;&amp;amp; \
-    apk add git &amp;amp;&amp;amp; \
-    apk add vim &amp;amp;&amp;amp; \
-    apk add curl
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;4-building-the-image&quot;&gt;4. Building the image&lt;/h3&gt;
-
-&lt;p&gt;You can build an image with the help of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command which automatically builds an image with nametag provided after &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-t&lt;/code&gt; flag as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;user_name&amp;gt;/&amp;lt;image_name&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build -t kevalnagda/apline-smart:1.0 .
-Sending build context to Docker daemon  2.048kB
-Step 1/5 : FROM alpine:3.4
-3.4: Pulling from library/alpine
-c1e54eec4b57: Pull complete 
-Digest: sha256:b733d4a32c4da6a00a84df2ca32791bb03df95400243648d8c539e7b4cce329c
-Status: Downloaded newer image for alpine:3.4
- ---&amp;gt; b7c5ffe56db7
-Step 2/5 : RUN apk update
- ---&amp;gt; Running in 42d39c87ae89
-fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/main/x86_64/APKINDEX.tar.gz
-fetch http://dl-cdn.alpinelinux.org/alpine/v3.4/community/x86_64/APKINDEX.tar.gz
-v3.4.6-316-g63ea6d0 [http://dl-cdn.alpinelinux.org/alpine/v3.4/main]
-v3.4.6-160-g14ad2a3 [http://dl-cdn.alpinelinux.org/alpine/v3.4/community]
-OK: 5973 distinct packages available
-Removing intermediate container 42d39c87ae89
- ---&amp;gt; e5872a7d6fe7
-Step 3/5 : RUN apk add git
- ---&amp;gt; Running in 335a8120b6b8
-(1/6) Installing ca-certificates (20161130-r0)
-(2/6) Installing libssh2 (1.7.0-r0)
-(3/6) Installing libcurl (7.60.0-r1)
-(4/6) Installing expat (2.2.0-r1)
-(5/6) Installing pcre (8.38-r1)
-(6/6) Installing git (2.8.6-r0)
-Executing busybox-1.24.2-r14.trigger
-Executing ca-certificates-20161130-r0.trigger
-OK: 22 MiB in 17 packages
-Removing intermediate container 335a8120b6b8
- ---&amp;gt; ef8d1eda0212
-Step 4/5 : RUN apk add vim
- ---&amp;gt; Running in 48948ba27f5e
-(1/5) Installing lua5.2-libs (5.2.4-r2)
-(2/5) Installing ncurses-terminfo-base (6.0_p20171125-r0)
-(3/5) Installing ncurses-terminfo (6.0_p20171125-r0)
-(4/5) Installing ncurses-libs (6.0_p20171125-r0)
-(5/5) Installing vim (7.4.1831-r3)
-Executing busybox-1.24.2-r14.trigger
-OK: 54 MiB in 22 packages
-Removing intermediate container 48948ba27f5e
- ---&amp;gt; 614ca6706e18
-Step 5/5 : RUN apk add curl
- ---&amp;gt; Running in cccca59dceac
-(1/1) Installing curl (7.60.0-r1)
-Executing busybox-1.24.2-r14.trigger
-OK: 54 MiB in 23 packages
-Removing intermediate container cccca59dceac
- ---&amp;gt; 7f6efe76a85e
-Successfully built 7f6efe76a85e
-Successfully tagged kevalnagda/apline-smart:1.0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We can check the new image by executing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker images&lt;/code&gt; command as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker images
-REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
-kevalnagda/apline-smart   1.0                 7f6efe76a85e        4 minutes ago       48.7MB
-alpine                    3.4                 b7c5ffe56db7        21 months ago       4.82MB
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;If you look at the output of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command, you would notice that there are 5 steps, namely Step 1/5, Step 2/5, Step 3/5 and so on…&lt;/p&gt;
-
-&lt;p&gt;The reason for this is that docker builds images by executing the instructions mentioned in the Dockerfile one at a time. Another thing to note here is that with every step in the build process, Docker will create an intermediary image for that particular step. This is called image layering and its main advantage lies in image caching.&lt;/p&gt;
-
-&lt;p&gt;If you were to rebuild the image, you would notice that the build was faster as compared to the build before that since the build was done from the cache. This behaviour makes our life a lot easier.&lt;/p&gt;
-
-&lt;h2 id=&quot;dockerfile-instructions&quot;&gt;Dockerfile instructions&lt;/h2&gt;
-
-&lt;h3 id=&quot;1-from&quot;&gt;1. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;Let’s set a base image in the Dockerfile. The instruction is in the form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FROM &amp;lt;base_image&amp;gt;[:tag]&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;2-run&quot;&gt;2. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;Let’s you run commands and it’s one of the most used instructions in Dockerfile.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN&lt;/code&gt; instruction has two forms, where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN &amp;lt;command&amp;gt;&lt;/code&gt; is called the shell form and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RUN [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]&lt;/code&gt; is called the exec form.&lt;/p&gt;
-
-&lt;h3 id=&quot;3-copy&quot;&gt;3. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COPY&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;Helps you copy files and directories to your Docker image. The instruction is in the form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COPY &amp;lt;src&amp;gt; &amp;lt;dest&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;4-add&quot;&gt;4. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;Helps you add files and directories to your Docker image. The instruction is in the form of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD &amp;lt;src&amp;gt; &amp;lt;dest&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; The main difference between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ADD&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COPY&lt;/code&gt; command is that the former one is more advanced and has additional features like pulling files from url sources, recognizing and handling a lot more file formats than the later one.&lt;/p&gt;
-
-&lt;h3 id=&quot;5-env&quot;&gt;5. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENV&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;Let’s you define environment variables in Dockerfile.&lt;/p&gt;
-
-&lt;h3 id=&quot;6-workdir&quot;&gt;6. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WORKDIR&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;A way to define the working directory for your project.&lt;/p&gt;
-
-&lt;h3 id=&quot;7-expose&quot;&gt;7. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EXPOSE&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;It informs you about the exposed ports your application is listening on.&lt;/p&gt;
-
-&lt;h3 id=&quot;8-cmd&quot;&gt;8. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;It lets you specify which component is to be run by your image on execution of the container. The format is given as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;, ...]&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;One important thing to note here is that there should only be &lt;strong&gt;one &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt; instruction&lt;/strong&gt; in a Dockerfile. If more than one &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt; instruction is present then only the last one will be used during execution.&lt;/p&gt;
-
-&lt;h3 id=&quot;9-entrypoint&quot;&gt;9. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt;:&lt;/h3&gt;
-&lt;p&gt;When the main executable is used in this instruction then the parameters provided in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CMD&lt;/code&gt; instruction will be added as parameters to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENTRYPOINT&lt;/code&gt; instruction. Example:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ENTRYPOINT [&quot;git&quot;]
-CMD [&quot;--help&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Dockerfile is a text file that defines a set of commands or operations which aid you to build your own custom Docker image.</summary></entry></feed>
+&lt;p&gt;&lt;a href=&quot;https://takacsmark.com/dockerfile-tutorial-by-example-dockerfile-best-practices-2018/&quot;&gt;Dockerfile tutorial by example&lt;/a&gt;&lt;/p&gt;</content><author><name>Keval Nagda</name></author><category term="jekyll" /><category term="update" /><summary type="html">Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images. Minimize the number of steps in the Dockerfile Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step. Start your Dockerfile with the steps that are least likely to change This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows: Install the tools needed to build your application. Install all the required dependencies, libraries and packages. Finally, build your application. A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows: 1. Pick the right base image Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it. 2. Go to the shell and build your environment Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode. Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately. 3. Add the steps to your Dockerfile and build your image Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time. This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps. 4. Repeat steps 2 and 3 You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected. Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation. References Dockerfile tutorial by example</summary></entry></feed>
