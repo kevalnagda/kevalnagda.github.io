@@ -5,15 +5,19 @@ date: 2020-12-04 00:00:00 +000
 categories: jekyll update
 ---
  
-*[Self Host a Wiki or Knowledge Base for Your Team]* walks us through the process of self-hosting the [Outline] wiki on our laptop or server easily. The outline also offers various other features along with the feature of login via email and sending invites via email. But in order to do that we require an **SMTP (Simple Mail Transfer Protocol) Server** which takes care of the whole email delivery process for us.
+*[Self Host a Wiki or Knowledge Base for Your Team]* walks us through the process of self-hosting the [Outline wiki] on our laptop or server easily. 
+
+The outline also offers various other features along with the feature of login via email and sending invites via email. But in order to do that we require an **SMTP (Simple Mail Transfer Protocol) Server** which takes care of the whole email delivery process for us.
  
-Now the standard SMTP protocol comes with no security features making it vulnerable to hijacking and other forms of attacks. Thus, to tackle this there exist two majorly used cryptographic protocols: SSL (Secure Socket Layer) and TLS (Transport Layer Security). We will use SSL and discuss the reason behind it in a while.
+Now the standard SMTP protocol comes with no security features making it vulnerable to hijacking and other forms of attacks. Thus, to tackle this there exist two majorly used cryptographic protocols: **SSL (Secure Socket Layer)** and **TLS (Transport Layer Security)**. 
+
+We will use SSL and discuss the reason behind it in a while.
  
 ## SSL vs TLS
  
 First of all, let's understand the difference between SSL and TLS.
  
-SSL was originally developed in 1995 and was popularly implemented in email clients. TLS is a successor of SSL which was introduced four years later and it offered a more reliable security profile than SSL.
+So SSL was originally developed in 1995 and was popularly implemented in email clients. TLS is a successor of SSL which was introduced four years later and it offered a more reliable security profile than SSL.
  
 SSL has since been deprecated, however is still widely used. As a matter of fact, both names are used interchangeably nowadays.
  
@@ -21,9 +25,9 @@ SSL has since been deprecated, however is still widely used. As a matter of fact
  
 Coming back to the point that why do we use SSL, first is that the Outline is configured to use SSL when it is running in production mode.
  
-Second, our custom domain name `qure.ai` being set up on Microsoft 365. Mircosoft 365 has support for TLS or StartTLS protocols as mentioned [here] but unfortunately does not support SSL protocol which is the preferred protocol in the Outline.
+Second, our custom domain name `qure.ai` being set up on Microsoft 365. Mircosoft 365 has support for TLS or StartTLS protocols as mentioned **[here]** but unfortunately does not support SSL protocol which is the preferred protocol in the Outline.
  
-One possible solution to this problem is to add legacy TLS support in the `mailer.js` configuration in the Outline. Now, this may seem easy but turns into a hectic task every time there is a version update.
+One possible solution to this problem is to add legacy TLS support in the `mailer.js` configuration in the Outline. This may seem easy but turns into a hectic task every time there is a version update.
  
 Our final resort is to instead go ahead with SSL and a mailing service like Gmail which supports SSL.
  
@@ -31,7 +35,7 @@ Our final resort is to instead go ahead with SSL and a mailing service like Gmai
  
 Since we do not have our own SMTP server for email delivery, we use [SendGrid]'s free SMTP Service. 
  
-Get started by signing up and logging in at SendGrid to create a new *Sender* from `Sender Management` as follows:
+To get started, sign up and log in at SendGrid to create a new *Sender* from `Sender Management` as follows:
  
 ![Create New Sender](/assets/img/smtp/1.png)
  
@@ -65,7 +69,10 @@ Once the integration is successfully verified, our SMTP Server is ready for use.
  
 ## Reference
  
-1. [Self Host a Wiki or Knowledge Base for Your Team]: https://chsasank.github.io/outline-self-hosted-wiki.html
-2. [Outline]: https://github.com/outline/outline
-3. [here]: https://kstate.service-now.com/kb_view.do?sys_kb_id=2b1c4c7de5fc294c2cae49399a7dc6a7
-4. [SendGrid]: https://sendgrid.com/
+1. [Self Host a Wiki or Knowledge Base for Your Team]
+2. [Outline wiki]
+
+[Self Host a Wiki or Knowledge Base for Your Team]: https://chsasank.github.io/outline-self-hosted-wiki.html
+[Outline wiki]: https://github.com/outline/outline
+[here]: https://kstate.service-now.com/kb_view.do?sys_kb_id=2b1c4c7de5fc294c2cae49399a7dc6a7
+[SendGrid]: https://sendgrid.com/
