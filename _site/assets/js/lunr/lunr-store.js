@@ -82,4 +82,16 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/evaluation-metrics",
         "teaser": null
+      },{
+        "title": "Configure SendGrid with Outline for email delivery",
+        "excerpt":"Self Host a Wiki or Knowledge Base for Your Team walks us through the process of self-hosting the Outline wiki on our laptop or server easily. The outline also offers various other features along with the feature of login via email and sending invites via email. But in order to...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/sendgrid-with-outline",
+        "teaser": null
+      },{
+        "title": "Configure NGINX and Keycloak to enable SSO for proxied applications",
+        "excerpt":"The article explains how to configure single sign-on (SSO) for applications proxied behind NGINX. We use OpenID Connect (OIDC) authentication mechanism which is a thin layer that sits on top of OAuth 2.0, with Keycloak as the identity provider (IdP), and OpenResty as the relying entity. Background There are many...","categories": ["jekyll","update"],
+        "tags": [],
+        "url": "http://localhost:4000/configure-nginx-and-keycloak-to-enable-sso-for-proxied-applications",
+        "teaser": null
       }]

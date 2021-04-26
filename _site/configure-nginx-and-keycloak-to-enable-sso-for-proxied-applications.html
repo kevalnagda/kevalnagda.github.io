@@ -1,0 +1,550 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Configure NGINX and Keycloak to enable SSO for proxied applications - Home</title>
+<meta name="description" content="The article explains how to configure single sign-on (SSO) for applications proxied behind NGINX. We use OpenID Connect (OIDC) authentication mechanism which is a thin layer that sits on top of OAuth 2.0, with Keycloak as the identity provider (IdP), and OpenResty as the relying entity.  Background  There are many options for authenticating API calls, however, OAuth 2.0 authentication mechanism is the one being majorly used. Here, OAuth 2.0 access tokens are the authentication credentials passed from client to API server and typically carried as an HTTP header.  Keycloak supports OIDC (an extension to OAuth 2.0) and works as an IdP while authenticating a client.  The standard method for validating access tokens with an IdP is called token introspection. Nginx acts as an OAuth 2.0 Relying Party, sending access tokens to the IdP for validation i.e. token introspection, and only proxying requests that pass the validation process.    Nginx performing token validation as a reverse proxy.  Why perform token validation at Nginx?  Performing validation at each backend service or application results in a lot of duplicate code and unnecessary processing. Various error conditions and edge cases need to be accounted for, and doing so in each backend service is a recipe for inconsistency in implementation and consequently an unpredictable user experience.    Backend applications performing token validation.  To avoid code duplication and the resulting problems, we can use Nginx to validate access tokens on behalf of backend services.  Custom NGINX  To integrate Nginx with Keycloak, we need Lua dependency. Instead of adding dependencies to Nginx, we use Openresty which is a web server built on top of Nginx.  Below is the Dockerfile used to build Nginx image required.  FROM openresty/openresty:alpine-fat   RUN mkdir /var/log/nginx   RUN apk add --no-cache openssl-dev RUN apk add --no-cache git RUN apk add --no-cache gcc RUN luarocks install lua-resty-openidc   ENTRYPOINT [&quot;/usr/local/openresty/nginx/sbin/nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;] EXPOSE 80   In the nginx.conf configuration file below, we protect two backend applications.  upstream app_a {     server app_1:80; }   upstream app_b {     server app_2:80; }   server {        listen   3002;        root     /opt/nginx/html;        resolver 127.0.0.11  valid=1s    ipv6=off;                access_by_lua &#39;          local opts = {            redirect_uri_path = &quot;/redirect_uri&quot;,            accept_none_alg = true,            discovery = &quot;http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration&quot;,            client_id = &quot;nginx&quot;,            client_secret = &quot;2b1abac6-e3b0-4bec-aae7-0dff3607cf4c&quot;,            redirect_uri_scheme = &quot;http&quot;,            logout_path = &quot;/logout&quot;,            redirect_after_logout_uri = &quot;http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/&quot;,            redirect_after_logout_with_id_token_hint = false,            session_contents = {id_token=true}          }          -- call introspect for OAuth 2.0 Bearer Access Token validation          local res, err = require(&quot;resty.openidc&quot;).authenticate(opts)          if err then            ngx.status = 403            ngx.say(err)            ngx.exit(ngx.HTTP_FORBIDDEN)          end       &#39;;         # I disabled caching so the browser won&#39;t cache the site.       expires           0;       add_header        Cache-Control private;             location / {           proxy_pass      http://app_a;           proxy_set_header    X-Forwarded-For         $remote_addr;       }                  # redirect server error pages to the static page /40x.html       #       error_page 404 /404.html;           location = /40x.html {       }         # redirect server error pages to the static page /50x.html       #       error_page 500 502 503 504 /50x.html;           location = /50x.html {             root /usr/share/nginx/html;       } }   server {        listen   4090;        root     /opt/nginx/html;        resolver 127.0.0.11  valid=1s    ipv6=off;                access_by_lua &#39;          local opts = {            redirect_uri_path = &quot;/redirect_uri&quot;,            accept_none_alg = true,            discovery = &quot;http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration&quot;,            client_id = &quot;nginx2&quot;,            client_secret = &quot;a9d487b6-587d-4577-a47f-7e505cce5dab&quot;,            redirect_uri_scheme = &quot;http&quot;,            logout_path = &quot;/logout&quot;,            redirect_after_logout_uri = &quot;http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/&quot;,            redirect_after_logout_with_id_token_hint = false,            session_contents = {id_token=true}          }          -- call introspect for OAuth 2.0 Bearer Access Token validation          local res, err = require(&quot;resty.openidc&quot;).authenticate(opts)          if err then            ngx.status = 403            ngx.say(err)            ngx.exit(ngx.HTTP_FORBIDDEN)          end       &#39;;         # I disabled caching so the browser won&#39;t cache the site.       expires           0;       add_header        Cache-Control private;              location / {           proxy_pass    http://app_b;           proxy_set_header    X-Forwarded-For         $remote_addr;       }              # redirect server error pages to the static page /40x.html       #       error_page 404 /404.html;           location = /40x.html {       }         # redirect server error pages to the static page /50x.html       #       error_page 500 502 503 504 /50x.html;           location = /50x.html {             root /usr/share/nginx/html;       } }   Keycloak  On spinning up Docker containers, we can access the Keycloak admin portal at http://localhost:3333. After logging in, we create a new realm myrealm in order to add our clients.    Creating a new realm.  Next, we add new clients, configure settings as per requirement, and add Valid Redirect URIs.    Creating a new client.  Also, we need to add a secret key from the Credentials tab to the Nginx configuration file.    Client secret.  Add user details into Users required for authentication when a user tries to access any application.    Add user details.    Add user password.  Docker-compose  We use Postgres as the backend database for keycloak to store client settings. Nginx containers are used to represent demo applications, app_1 and app_2.  version: &quot;3&quot;   networks:     mynetwork:         name: mynetwork   volumes:     postgres_data:   services:     postgres:         image: postgres         volumes:             - postgres_data:/var/lib/postgresql/data         environment:              POSTGRES_DB: keycloak             POSTGRES_USER: keycloak             POSTGRES_PASSWORD: password         ports:             - 5432:5432         networks:              - mynetwork     keycloak:         image: jboss/keycloak         environment:             DB_VENDOR: POSTGRES             DB_ADDR: postgres             DB_DATABSE: keycloak             DB_USER: keycloak             DB_SCHEMA: public             DB_PASSWORD: password             KEYCLOAK_USER: admin             KEYCLOAK_PASSWORD: password                     ports:             - 3333:8080         depends_on:             - postgres         networks:             - mynetwork     app_1:         image: nginx         networks:             - mynetwork     app_2:         image: nginx         networks:             - mynetwork     nginx:         build:             context: .nginx/         ports:             - 3002:3002             - 4090:4090                     networks:             - mynetwork         volumes:              - .nginx/nginx.conf:/etc/nginx/conf.d/default.conf   Once everything is up and running, any attempt to access the applications on ports 3002 and 4090 should be protected and the user will be redirected to the login page by Keycloak. On successful login, the user will be able to access the resource requested.  Reference     Keycloak integration with NGINX   Validating OAuth 2.0 Access Tokens with NGINX">
+
+
+  <meta name="author" content="Keval Nagda">
+  
+  <meta property="article:author" content="Keval Nagda">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Home">
+<meta property="og:title" content="Configure NGINX and Keycloak to enable SSO for proxied applications">
+<meta property="og:url" content="http://localhost:4000/configure-nginx-and-keycloak-to-enable-sso-for-proxied-applications">
+
+
+  <meta property="og:description" content="The article explains how to configure single sign-on (SSO) for applications proxied behind NGINX. We use OpenID Connect (OIDC) authentication mechanism which is a thin layer that sits on top of OAuth 2.0, with Keycloak as the identity provider (IdP), and OpenResty as the relying entity.  Background  There are many options for authenticating API calls, however, OAuth 2.0 authentication mechanism is the one being majorly used. Here, OAuth 2.0 access tokens are the authentication credentials passed from client to API server and typically carried as an HTTP header.  Keycloak supports OIDC (an extension to OAuth 2.0) and works as an IdP while authenticating a client.  The standard method for validating access tokens with an IdP is called token introspection. Nginx acts as an OAuth 2.0 Relying Party, sending access tokens to the IdP for validation i.e. token introspection, and only proxying requests that pass the validation process.    Nginx performing token validation as a reverse proxy.  Why perform token validation at Nginx?  Performing validation at each backend service or application results in a lot of duplicate code and unnecessary processing. Various error conditions and edge cases need to be accounted for, and doing so in each backend service is a recipe for inconsistency in implementation and consequently an unpredictable user experience.    Backend applications performing token validation.  To avoid code duplication and the resulting problems, we can use Nginx to validate access tokens on behalf of backend services.  Custom NGINX  To integrate Nginx with Keycloak, we need Lua dependency. Instead of adding dependencies to Nginx, we use Openresty which is a web server built on top of Nginx.  Below is the Dockerfile used to build Nginx image required.  FROM openresty/openresty:alpine-fat   RUN mkdir /var/log/nginx   RUN apk add --no-cache openssl-dev RUN apk add --no-cache git RUN apk add --no-cache gcc RUN luarocks install lua-resty-openidc   ENTRYPOINT [&quot;/usr/local/openresty/nginx/sbin/nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;] EXPOSE 80   In the nginx.conf configuration file below, we protect two backend applications.  upstream app_a {     server app_1:80; }   upstream app_b {     server app_2:80; }   server {        listen   3002;        root     /opt/nginx/html;        resolver 127.0.0.11  valid=1s    ipv6=off;                access_by_lua &#39;          local opts = {            redirect_uri_path = &quot;/redirect_uri&quot;,            accept_none_alg = true,            discovery = &quot;http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration&quot;,            client_id = &quot;nginx&quot;,            client_secret = &quot;2b1abac6-e3b0-4bec-aae7-0dff3607cf4c&quot;,            redirect_uri_scheme = &quot;http&quot;,            logout_path = &quot;/logout&quot;,            redirect_after_logout_uri = &quot;http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/&quot;,            redirect_after_logout_with_id_token_hint = false,            session_contents = {id_token=true}          }          -- call introspect for OAuth 2.0 Bearer Access Token validation          local res, err = require(&quot;resty.openidc&quot;).authenticate(opts)          if err then            ngx.status = 403            ngx.say(err)            ngx.exit(ngx.HTTP_FORBIDDEN)          end       &#39;;         # I disabled caching so the browser won&#39;t cache the site.       expires           0;       add_header        Cache-Control private;             location / {           proxy_pass      http://app_a;           proxy_set_header    X-Forwarded-For         $remote_addr;       }                  # redirect server error pages to the static page /40x.html       #       error_page 404 /404.html;           location = /40x.html {       }         # redirect server error pages to the static page /50x.html       #       error_page 500 502 503 504 /50x.html;           location = /50x.html {             root /usr/share/nginx/html;       } }   server {        listen   4090;        root     /opt/nginx/html;        resolver 127.0.0.11  valid=1s    ipv6=off;                access_by_lua &#39;          local opts = {            redirect_uri_path = &quot;/redirect_uri&quot;,            accept_none_alg = true,            discovery = &quot;http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration&quot;,            client_id = &quot;nginx2&quot;,            client_secret = &quot;a9d487b6-587d-4577-a47f-7e505cce5dab&quot;,            redirect_uri_scheme = &quot;http&quot;,            logout_path = &quot;/logout&quot;,            redirect_after_logout_uri = &quot;http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/&quot;,            redirect_after_logout_with_id_token_hint = false,            session_contents = {id_token=true}          }          -- call introspect for OAuth 2.0 Bearer Access Token validation          local res, err = require(&quot;resty.openidc&quot;).authenticate(opts)          if err then            ngx.status = 403            ngx.say(err)            ngx.exit(ngx.HTTP_FORBIDDEN)          end       &#39;;         # I disabled caching so the browser won&#39;t cache the site.       expires           0;       add_header        Cache-Control private;              location / {           proxy_pass    http://app_b;           proxy_set_header    X-Forwarded-For         $remote_addr;       }              # redirect server error pages to the static page /40x.html       #       error_page 404 /404.html;           location = /40x.html {       }         # redirect server error pages to the static page /50x.html       #       error_page 500 502 503 504 /50x.html;           location = /50x.html {             root /usr/share/nginx/html;       } }   Keycloak  On spinning up Docker containers, we can access the Keycloak admin portal at http://localhost:3333. After logging in, we create a new realm myrealm in order to add our clients.    Creating a new realm.  Next, we add new clients, configure settings as per requirement, and add Valid Redirect URIs.    Creating a new client.  Also, we need to add a secret key from the Credentials tab to the Nginx configuration file.    Client secret.  Add user details into Users required for authentication when a user tries to access any application.    Add user details.    Add user password.  Docker-compose  We use Postgres as the backend database for keycloak to store client settings. Nginx containers are used to represent demo applications, app_1 and app_2.  version: &quot;3&quot;   networks:     mynetwork:         name: mynetwork   volumes:     postgres_data:   services:     postgres:         image: postgres         volumes:             - postgres_data:/var/lib/postgresql/data         environment:              POSTGRES_DB: keycloak             POSTGRES_USER: keycloak             POSTGRES_PASSWORD: password         ports:             - 5432:5432         networks:              - mynetwork     keycloak:         image: jboss/keycloak         environment:             DB_VENDOR: POSTGRES             DB_ADDR: postgres             DB_DATABSE: keycloak             DB_USER: keycloak             DB_SCHEMA: public             DB_PASSWORD: password             KEYCLOAK_USER: admin             KEYCLOAK_PASSWORD: password                     ports:             - 3333:8080         depends_on:             - postgres         networks:             - mynetwork     app_1:         image: nginx         networks:             - mynetwork     app_2:         image: nginx         networks:             - mynetwork     nginx:         build:             context: .nginx/         ports:             - 3002:3002             - 4090:4090                     networks:             - mynetwork         volumes:              - .nginx/nginx.conf:/etc/nginx/conf.d/default.conf   Once everything is up and running, any attempt to access the applications on ports 3002 and 4090 should be protected and the user will be redirected to the login page by Keycloak. On successful login, the user will be able to access the resource requested.  Reference     Keycloak integration with NGINX   Validating OAuth 2.0 Access Tokens with NGINX">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-04-26T05:30:00+05:30">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/configure-nginx-and-keycloak-to-enable-sso-for-proxied-applications">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Configure NGINX and Keycloak to enable SSO for proxied applications">
+    <meta itemprop="description" content="The article explains how to configure single sign-on (SSO) for applications proxied behind NGINX. We use OpenID Connect (OIDC) authentication mechanism which is a thin layer that sits on top of OAuth 2.0, with Keycloak as the identity provider (IdP), and OpenResty as the relying entity.BackgroundThere are many options for authenticating API calls, however, OAuth 2.0 authentication mechanism is the one being majorly used. Here, OAuth 2.0 access tokens are the authentication credentials passed from client to API server and typically carried as an HTTP header.Keycloak supports OIDC (an extension to OAuth 2.0) and works as an IdP while authenticating a client.The standard method for validating access tokens with an IdP is called token introspection. Nginx acts as an OAuth 2.0 Relying Party, sending access tokens to the IdP for validation i.e. token introspection, and only proxying requests that pass the validation process.Nginx performing token validation as a reverse proxy.Why perform token validation at Nginx?Performing validation at each backend service or application results in a lot of duplicate code and unnecessary processing. Various error conditions and edge cases need to be accounted for, and doing so in each backend service is a recipe for inconsistency in implementation and consequently an unpredictable user experience.Backend applications performing token validation.To avoid code duplication and the resulting problems, we can use Nginx to validate access tokens on behalf of backend services.Custom NGINXTo integrate Nginx with Keycloak, we need Lua dependency. Instead of adding dependencies to Nginx, we use Openresty which is a web server built on top of Nginx.Below is the Dockerfile used to build Nginx image required.FROM openresty/openresty:alpine-fat RUN mkdir /var/log/nginx RUN apk add --no-cache openssl-devRUN apk add --no-cache gitRUN apk add --no-cache gccRUN luarocks install lua-resty-openidc ENTRYPOINT [&quot;/usr/local/openresty/nginx/sbin/nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]EXPOSE 80In the nginx.conf configuration file below, we protect two backend applications.upstream app_a {    server app_1:80;} upstream app_b {    server app_2:80;} server {       listen   3002;       root     /opt/nginx/html;       resolver 127.0.0.11  valid=1s    ipv6=off;              access_by_lua &#39;         local opts = {           redirect_uri_path = &quot;/redirect_uri&quot;,           accept_none_alg = true,           discovery = &quot;http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration&quot;,           client_id = &quot;nginx&quot;,           client_secret = &quot;2b1abac6-e3b0-4bec-aae7-0dff3607cf4c&quot;,           redirect_uri_scheme = &quot;http&quot;,           logout_path = &quot;/logout&quot;,           redirect_after_logout_uri = &quot;http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/&quot;,           redirect_after_logout_with_id_token_hint = false,           session_contents = {id_token=true}         }         -- call introspect for OAuth 2.0 Bearer Access Token validation         local res, err = require(&quot;resty.openidc&quot;).authenticate(opts)         if err then           ngx.status = 403           ngx.say(err)           ngx.exit(ngx.HTTP_FORBIDDEN)         end      &#39;;       # I disabled caching so the browser won&#39;t cache the site.      expires           0;      add_header        Cache-Control private;           location / {          proxy_pass      http://app_a;          proxy_set_header    X-Forwarded-For         $remote_addr;      }                # redirect server error pages to the static page /40x.html      #      error_page 404 /404.html;          location = /40x.html {      }       # redirect server error pages to the static page /50x.html      #      error_page 500 502 503 504 /50x.html;          location = /50x.html {            root /usr/share/nginx/html;      }} server {       listen   4090;       root     /opt/nginx/html;       resolver 127.0.0.11  valid=1s    ipv6=off;              access_by_lua &#39;         local opts = {           redirect_uri_path = &quot;/redirect_uri&quot;,           accept_none_alg = true,           discovery = &quot;http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration&quot;,           client_id = &quot;nginx2&quot;,           client_secret = &quot;a9d487b6-587d-4577-a47f-7e505cce5dab&quot;,           redirect_uri_scheme = &quot;http&quot;,           logout_path = &quot;/logout&quot;,           redirect_after_logout_uri = &quot;http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/&quot;,           redirect_after_logout_with_id_token_hint = false,           session_contents = {id_token=true}         }         -- call introspect for OAuth 2.0 Bearer Access Token validation         local res, err = require(&quot;resty.openidc&quot;).authenticate(opts)         if err then           ngx.status = 403           ngx.say(err)           ngx.exit(ngx.HTTP_FORBIDDEN)         end      &#39;;       # I disabled caching so the browser won&#39;t cache the site.      expires           0;      add_header        Cache-Control private;            location / {          proxy_pass    http://app_b;          proxy_set_header    X-Forwarded-For         $remote_addr;      }            # redirect server error pages to the static page /40x.html      #      error_page 404 /404.html;          location = /40x.html {      }       # redirect server error pages to the static page /50x.html      #      error_page 500 502 503 504 /50x.html;          location = /50x.html {            root /usr/share/nginx/html;      }}KeycloakOn spinning up Docker containers, we can access the Keycloak admin portal at http://localhost:3333. After logging in, we create a new realm myrealm in order to add our clients.Creating a new realm.Next, we add new clients, configure settings as per requirement, and add Valid Redirect URIs.Creating a new client.Also, we need to add a secret key from the Credentials tab to the Nginx configuration file.Client secret.Add user details into Users required for authentication when a user tries to access any application.Add user details.Add user password.Docker-composeWe use Postgres as the backend database for keycloak to store client settings. Nginx containers are used to represent demo applications, app_1 and app_2.version: &quot;3&quot; networks:    mynetwork:        name: mynetwork volumes:    postgres_data: services:    postgres:        image: postgres        volumes:            - postgres_data:/var/lib/postgresql/data        environment:             POSTGRES_DB: keycloak            POSTGRES_USER: keycloak            POSTGRES_PASSWORD: password        ports:            - 5432:5432        networks:             - mynetwork    keycloak:        image: jboss/keycloak        environment:            DB_VENDOR: POSTGRES            DB_ADDR: postgres            DB_DATABSE: keycloak            DB_USER: keycloak            DB_SCHEMA: public            DB_PASSWORD: password            KEYCLOAK_USER: admin            KEYCLOAK_PASSWORD: password                    ports:            - 3333:8080        depends_on:            - postgres        networks:            - mynetwork    app_1:        image: nginx        networks:            - mynetwork    app_2:        image: nginx        networks:            - mynetwork    nginx:        build:            context: .nginx/        ports:            - 3002:3002            - 4090:4090                    networks:            - mynetwork        volumes:             - .nginx/nginx.conf:/etc/nginx/conf.d/default.confOnce everything is up and running, any attempt to access the applications on ports 3002 and 4090 should be protected and the user will be redirected to the login page by Keycloak. On successful login, the user will be able to access the resource requested.Reference  Keycloak integration with NGINX  Validating OAuth 2.0 Access Tokens with NGINX">
+    <meta itemprop="datePublished" content="2021-04-26T05:30:00+05:30">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Configure NGINX and Keycloak to enable SSO for proxied applications
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        <time datetime="2021-04-26T05:30:00+05:30">April 26, 2021</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#background">Background</a></li>
+  <li><a href="#why-perform-token-validation-at-nginx">Why perform token validation at Nginx?</a></li>
+  <li><a href="#custom-nginx">Custom NGINX</a></li>
+  <li><a href="#keycloak">Keycloak</a></li>
+  <li><a href="#docker-compose">Docker-compose</a></li>
+  <li><a href="#reference">Reference</a></li>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p>The article explains how to configure single sign-on (SSO) for applications proxied behind NGINX. We use <strong><a href="https://openid.net/connect/">OpenID Connect</a> (OIDC)</strong> authentication mechanism which is a thin layer that sits on top of OAuth 2.0, with <strong><a href="https://www.keycloak.org/">Keycloak</a></strong> as the identity provider (IdP), and <strong><a href="https://openresty.org/en/">OpenResty</a></strong> as the relying entity.</p>
+
+<h2 id="background">Background</h2>
+
+<p>There are many options for authenticating API calls, however, OAuth 2.0 authentication mechanism is the one being majorly used. Here, OAuth 2.0 access tokens are the authentication credentials passed from client to API server and typically carried as an HTTP header.</p>
+
+<p>Keycloak supports OIDC (an extension to OAuth 2.0) and works as an IdP while authenticating a client.</p>
+
+<p>The standard method for validating access tokens with an IdP is called <em>token introspection</em>. Nginx acts as an OAuth 2.0 <a href="https://en.wikipedia.org/wiki/Relying_party">Relying Party</a>, sending access tokens to the IdP for validation i.e. token introspection, and only proxying requests that pass the validation process.</p>
+
+<p><img src="/assets/img/keycloak/1.png" alt="Nginx performing token validation as a reverse proxy" class="align-center" /></p>
+
+<p class="text-center"><em>Nginx performing token validation as a reverse proxy.</em></p>
+
+<h2 id="why-perform-token-validation-at-nginx">Why perform token validation at Nginx?</h2>
+
+<p>Performing validation at each backend service or application results in a lot of duplicate code and unnecessary processing. Various error conditions and edge cases need to be accounted for, and doing so in each backend service is a recipe for inconsistency in implementation and consequently an unpredictable user experience.</p>
+
+<p><img src="/assets/img/keycloak/2.png" alt="Backend applications performing token validation" class="align-center" /></p>
+
+<p class="text-center"><em>Backend applications performing token validation.</em></p>
+
+<p>To avoid code duplication and the resulting problems, we can use Nginx to validate access tokens on behalf of backend services.</p>
+
+<h2 id="custom-nginx">Custom NGINX</h2>
+
+<p>To integrate Nginx with Keycloak, we need Lua dependency. Instead of adding dependencies to Nginx, we use Openresty which is a web server built on top of Nginx.</p>
+
+<p>Below is the <code class="language-plaintext highlighter-rouge">Dockerfile</code> used to build Nginx image required.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM openresty/openresty:alpine-fat
+ 
+RUN mkdir /var/log/nginx
+ 
+RUN apk add --no-cache openssl-dev
+RUN apk add --no-cache git
+RUN apk add --no-cache gcc
+RUN luarocks install lua-resty-openidc
+ 
+ENTRYPOINT ["/usr/local/openresty/nginx/sbin/nginx", "-g", "daemon off;"]
+EXPOSE 80
+</code></pre></div></div>
+
+<p>In the <code class="language-plaintext highlighter-rouge">nginx.conf</code> configuration file below, we protect two backend applications.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>upstream app_a {
+    server app_1:80;
+}
+ 
+upstream app_b {
+    server app_2:80;
+}
+ 
+server {
+       listen   3002;
+       root     /opt/nginx/html;
+       resolver 127.0.0.11  valid=1s    ipv6=off;
+       
+       access_by_lua '
+         local opts = {
+           redirect_uri_path = "/redirect_uri",
+           accept_none_alg = true,
+           discovery = "http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration",
+           client_id = "nginx",
+           client_secret = "2b1abac6-e3b0-4bec-aae7-0dff3607cf4c",
+           redirect_uri_scheme = "http",
+           logout_path = "/logout",
+           redirect_after_logout_uri = "http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/",
+           redirect_after_logout_with_id_token_hint = false,
+           session_contents = {id_token=true}
+         }
+         -- call introspect for OAuth 2.0 Bearer Access Token validation
+         local res, err = require("resty.openidc").authenticate(opts)
+         if err then
+           ngx.status = 403
+           ngx.say(err)
+           ngx.exit(ngx.HTTP_FORBIDDEN)
+         end
+      ';
+ 
+      # I disabled caching so the browser won't cache the site.
+      expires           0;
+      add_header        Cache-Control private;    
+ 
+      location / {
+          proxy_pass      http://app_a;
+          proxy_set_header    X-Forwarded-For         $remote_addr;
+      }    
+      
+      # redirect server error pages to the static page /40x.html
+      #
+      error_page 404 /404.html;
+          location = /40x.html {
+      }
+ 
+      # redirect server error pages to the static page /50x.html
+      #
+      error_page 500 502 503 504 /50x.html;
+          location = /50x.html {
+            root /usr/share/nginx/html;
+      }
+}
+ 
+server {
+       listen   4090;
+       root     /opt/nginx/html;
+       resolver 127.0.0.11  valid=1s    ipv6=off;
+       
+       access_by_lua '
+         local opts = {
+           redirect_uri_path = "/redirect_uri",
+           accept_none_alg = true,
+           discovery = "http://host.docker.internal:3333/auth/realms/myrealm/.well-known/openid-configuration",
+           client_id = "nginx2",
+           client_secret = "a9d487b6-587d-4577-a47f-7e505cce5dab",
+           redirect_uri_scheme = "http",
+           logout_path = "/logout",
+           redirect_after_logout_uri = "http://host.docker.internal:3333/auth/realms/myrealm/protocol/openid-connect/logout?redirect_uri=http://localhost/",
+           redirect_after_logout_with_id_token_hint = false,
+           session_contents = {id_token=true}
+         }
+         -- call introspect for OAuth 2.0 Bearer Access Token validation
+         local res, err = require("resty.openidc").authenticate(opts)
+         if err then
+           ngx.status = 403
+           ngx.say(err)
+           ngx.exit(ngx.HTTP_FORBIDDEN)
+         end
+      ';
+ 
+      # I disabled caching so the browser won't cache the site.
+      expires           0;
+      add_header        Cache-Control private;
+      
+      location / {
+          proxy_pass    http://app_b;
+          proxy_set_header    X-Forwarded-For         $remote_addr;
+      }
+      
+      # redirect server error pages to the static page /40x.html
+      #
+      error_page 404 /404.html;
+          location = /40x.html {
+      }
+ 
+      # redirect server error pages to the static page /50x.html
+      #
+      error_page 500 502 503 504 /50x.html;
+          location = /50x.html {
+            root /usr/share/nginx/html;
+      }
+}
+</code></pre></div></div>
+
+<h2 id="keycloak">Keycloak</h2>
+
+<p>On spinning up Docker containers, we can access the Keycloak admin portal at <code class="language-plaintext highlighter-rouge">http://localhost:3333</code>. After logging in, we create a new realm <code class="language-plaintext highlighter-rouge">myrealm</code> in order to add our clients.</p>
+
+<p><img src="/assets/img/keycloak/3.png" alt="Creating a new realm" class="align-center" /></p>
+
+<p class="text-center"><em>Creating a new realm.</em></p>
+
+<p>Next, we add new clients, configure settings as per requirement, and add <code class="language-plaintext highlighter-rouge">Valid Redirect URIs</code>.</p>
+
+<p><img src="/assets/img/keycloak/4.png" alt="Creating a new client" class="align-center" /></p>
+
+<p class="text-center"><em>Creating a new client.</em></p>
+
+<p>Also, we need to add a secret key from the <code class="language-plaintext highlighter-rouge">Credentials</code> tab to the Nginx configuration file.</p>
+
+<p><img src="/assets/img/keycloak/5.png" alt="Client secret" class="align-center" /></p>
+
+<p class="text-center"><em>Client secret.</em></p>
+
+<p>Add user details into <code class="language-plaintext highlighter-rouge">Users</code> required for authentication when a user tries to access any application.</p>
+
+<p><img src="/assets/img/keycloak/6.png" alt="Add user detials" class="align-center" /></p>
+
+<p class="text-center"><em>Add user details.</em></p>
+
+<p><img src="/assets/img/keycloak/7.png" alt="Add user password" class="align-center" /></p>
+
+<p class="text-center"><em>Add user password.</em></p>
+
+<h2 id="docker-compose">Docker-compose</h2>
+
+<p>We use Postgres as the backend database for keycloak to store client settings. Nginx containers are used to represent demo applications, <code class="language-plaintext highlighter-rouge">app_1</code> and <code class="language-plaintext highlighter-rouge">app_2</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: "3"
+ 
+networks:
+    mynetwork:
+        name: mynetwork
+ 
+volumes:
+    postgres_data:
+ 
+services:
+    postgres:
+        image: postgres
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        environment: 
+            POSTGRES_DB: keycloak
+            POSTGRES_USER: keycloak
+            POSTGRES_PASSWORD: password
+        ports:
+            - 5432:5432
+        networks: 
+            - mynetwork
+    keycloak:
+        image: jboss/keycloak
+        environment:
+            DB_VENDOR: POSTGRES
+            DB_ADDR: postgres
+            DB_DATABSE: keycloak
+            DB_USER: keycloak
+            DB_SCHEMA: public
+            DB_PASSWORD: password
+            KEYCLOAK_USER: admin
+            KEYCLOAK_PASSWORD: password            
+        ports:
+            - 3333:8080
+        depends_on:
+            - postgres
+        networks:
+            - mynetwork
+    app_1:
+        image: nginx
+        networks:
+            - mynetwork
+    app_2:
+        image: nginx
+        networks:
+            - mynetwork
+    nginx:
+        build:
+            context: .nginx/
+        ports:
+            - 3002:3002
+            - 4090:4090            
+        networks:
+            - mynetwork
+        volumes: 
+            - .nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+</code></pre></div></div>
+
+<p>Once everything is up and running, any attempt to access the applications on ports <code class="language-plaintext highlighter-rouge">3002</code> and <code class="language-plaintext highlighter-rouge">4090</code> should be protected and the user will be redirected to the login page by Keycloak. On successful login, the user will be able to access the resource requested.</p>
+
+<h2 id="reference">Reference</h2>
+
+<ol>
+  <li><a href="https://sairamkrish.medium.com/keycloak-integration-part-4-integration-with-nginx-based-on-docker-ba1783fa0329">Keycloak integration with NGINX</a></li>
+  <li><a href="https://www.nginx.com/blog/validating-oauth-2-0-access-tokens-nginx/">Validating OAuth 2.0 Access Tokens with NGINX</a></li>
+</ol>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-04-26T05:30:00+05:30">April 26, 2021</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Configure+NGINX+and+Keycloak+to+enable+SSO+for+proxied+applications%20http%3A%2F%2Flocalhost%3A4000%2Fconfigure-nginx-and-keycloak-to-enable-sso-for-proxied-applications" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fconfigure-nginx-and-keycloak-to-enable-sso-for-proxied-applications" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fconfigure-nginx-and-keycloak-to-enable-sso-for-proxied-applications" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/sendgrid-with-outline" class="pagination--pager" title="Configure SendGrid with Outline for email delivery
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
