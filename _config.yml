@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Home
+title: ""
 email: knagda.edu@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
@@ -33,7 +33,16 @@ minimal_mistakes_skin: "dirt"
 
 author:
   name: "Keval Nagda"
-  bio: "My website"
+  avatar: "/assets/img/bio/bio-photo.jpg"
+  bio: "MS, CSE | UC Santa Cruz"
+  location: "Santa Cruz, CA"
+  links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/kevalnagda98"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/kevalnagda"
 
 # Build settings
 remote_theme: "mmistakes/minimal-mistakes@4.21.0"
@@ -49,7 +58,7 @@ defaults:
     values:
       layout: single
       show_date: true
-      author_profile: false
+      author_profile: true
       read_time: true
       comments: true
       share: true

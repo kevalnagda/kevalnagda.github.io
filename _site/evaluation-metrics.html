@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Machine Learning Evaluation Metrics - Home</title>
+<!-- begin _includes/seo.html --><title>Machine Learning Evaluation Metrics -</title>
 <meta name="description" content="Introduction  Evaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score.  In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available.  Confusion Matrix  Confusion Matrix is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below.    It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve.  Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN.    True Positive  Interpretation: You predicted positive and it’s true.  You predicted that a woman is pregnant and she actually is.  True Negative  Interpretation: You predicted negative and it’s true.  You predicted that a man is not pregnant and he actually is not.  False Positive (Type 1 Error)  Interpretation: You predicted positive and it’s false.  You predicted that a man is pregnant but he actually is not.  False Negative (Type 2 Error)  Interpretation: You predicted negative and it’s false.  You predicted that a woman is not pregnant but she actually is.  Positive Predictive Value (PPV) or Precision  Precision is the number of correct positive results divided by the number of positive results predicted by the classifier.    Sensitivity or Recall  Sensitivity or Recall is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model.    Accuracy  Accuracy is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100.    Specificity or True Negative Rate  Specificity is the true negative rate or the proportion of true negatives to everything that should have been classified as negative.    Dice Coefficient (F1 Score)  Dice Coefficient or F1 Score is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1].  It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances).    Average Precision (AP)  Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison.  This is where Average Precision (AP), which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels.    where, r1, r2, r3, …, rn are the recall levels at which the precision is first interpolated.  ROC Curve  The Receiver Operating Characteristic curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold.  It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values.    AUC  The Area Under the Curve (AUC), is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant).  AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example.    Youden’s index  Youden’s J statistic (also called Youden’s index) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests.  Youden’s J statistic is  J = sensitivity + specificity - 1  The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows:    Youden’s index is often used in conjunction with receiver operating characteristic (ROC) analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result.  Reference     Understanding Confusion Matrix   Youden’s J Statistic">
 
 
@@ -21,7 +21,7 @@
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
-<meta property="og:site_name" content="Home">
+<meta property="og:site_name" content="">
 <meta property="og:title" content="Machine Learning Evaluation Metrics">
 <meta property="og:url" content="http://localhost:4000/evaluation-metrics">
 
@@ -34,7 +34,7 @@
 
 
 
-  <meta property="article:published_time" content="2020-12-02T05:30:00+05:30">
+  <meta property="article:published_time" content="2020-12-01T16:00:00-08:00">
 
 
 
@@ -65,7 +65,7 @@
 <!-- end _includes/seo.html -->
 
 
-<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -125,10 +125,14 @@
       <nav id="site-nav" class="greedy-nav">
         
         <a class="site-title" href="/">
-          Home
+          
           
         </a>
-        <ul class="visible-links"></ul>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
         
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">Toggle menu</span>
@@ -148,12 +152,128 @@
 
 <div id="main" role="main">
   
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/img/bio/bio-photo.jpg" alt="Keval Nagda" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Keval Nagda</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <table>
+  <tbody>
+    <tr>
+      <td>MS, CSE</td>
+      <td>UC Santa Cruz</td>
+    </tr>
+  </tbody>
+</table>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Santa Cruz, CA</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/kevalnagda98" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/kevalnagda" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Machine Learning Evaluation Metrics">
     <meta itemprop="description" content="IntroductionEvaluating your machine learning model is a crucial part of any project. Your model may give satisfactory results when evaluated using metrics such as accuracy but may perform poorly when evaluated against other metrics such as loss or F1 score.In most cases, we use accuracy to measure the model performance, however, it is not enough to truly judge our model. Thus, let’s take a look at different evaluation metrics available.Confusion MatrixConfusion Matrix is a performance measurement for a machine learning classification problem where output can be two or more classes. It is a table with 4 different combinations of predicted and actual values as shown below.It is very useful for measuring other evaluation metrics such as Recall, Precision, Specificity, Accuracy, and most importantly AUC-ROC Curve.Following is an example in terms of pregnancy analogy to help you better understand TP, TN, FP, and FN.True PositiveInterpretation: You predicted positive and it’s true.You predicted that a woman is pregnant and she actually is.True NegativeInterpretation: You predicted negative and it’s true.You predicted that a man is not pregnant and he actually is not.False Positive (Type 1 Error)Interpretation: You predicted positive and it’s false.You predicted that a man is pregnant but he actually is not.False Negative (Type 2 Error)Interpretation: You predicted negative and it’s false.You predicted that a woman is not pregnant but she actually is.Positive Predictive Value (PPV) or PrecisionPrecision is the number of correct positive results divided by the number of positive results predicted by the classifier.Sensitivity or RecallSensitivity or Recall is another important metric, which is defined as the fraction of samples from a class that is correctly predicted by the model.AccuracyAccuracy is perhaps the simplest metrics one can imagine and is defined as the number of correct predictions divided by the total number of predictions, multiplied by 100.Specificity or True Negative RateSpecificity is the true negative rate or the proportion of true negatives to everything that should have been classified as negative.Dice Coefficient (F1 Score)Dice Coefficient or F1 Score is the Harmonic Mean between precision and recall. The range for the F1 Score is [0, 1].It tells you how precise your classifier is (how many instances it classifies correctly), as well as how robust it is (it does not miss a significant number of instances).Average Precision (AP)Although the precision-recall curve can be used to evaluate the performance of a detector, it is not easy to compare among different detectors when the curves intersect with each other. It would be better if we have a numerical metric that can be used directly for the comparison.This is where Average Precision (AP), which is based on the precision-recall curve, comes into play. In essence, AP is the precision averaged across all unique recall levels.where, r1, r2, r3, …, rn are the recall levels at which the precision is first interpolated.ROC CurveThe Receiver Operating Characteristic curve is a plot that shows the performance of a binary classifier as a function of its cut-off threshold.It essentially shows the True Positive Rate (TPR) against the False Positive Rate (FPR) for various threshold values.AUCThe Area Under the Curve (AUC), is an aggregated measure of performance of a binary classifier on all possible threshold values (and therefore it is threshold invariant).AUC calculates the area under the ROC curve, and therefore it is between 0 and 1. One way of interpreting AUC is the probability that the model ranks a random positive example more highly than a random negative example.Youden’s indexYouden’s J statistic (also called Youden’s index) is a single statistic that captures the performance of a dichotomous (A partition of a whole into two) diagnostic tests.Youden’s J statistic isJ = sensitivity + specificity - 1The right-hand two quantities are sensitivity and specificity and thus, the expanded formula is as follows:Youden’s index is often used in conjunction with receiver operating characteristic (ROC) analysis. The index is defined for all points of a ROC curve, and the maximum value of the index may be used as a criterion for selecting the optimum cut-off point when a diagnostic test gives a numeric rather than a dichotomous result.Reference  Understanding Confusion Matrix  Youden’s J Statistic">
-    <meta itemprop="datePublished" content="2020-12-02T05:30:00+05:30">
+    <meta itemprop="datePublished" content="2020-12-01T16:00:00-08:00">
     
 
     <div class="page__inner-wrap">
@@ -168,7 +288,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-12-02T05:30:00+05:30">December 2, 2020</time>
+        <time datetime="2020-12-01T16:00:00-08:00">December 1, 2020</time>
       </span>
     
 
@@ -345,7 +465,7 @@
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-02T05:30:00+05:30">December 2, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-01T16:00:00-08:00">December 1, 2020</time></p>
 
 
       </footer>
@@ -401,7 +521,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2021 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2021 . Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>

@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Dockerfile best practices - Home</title>
+<!-- begin _includes/seo.html --><title>Dockerfile best practices -</title>
 <meta name="description" content="Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.  Minimize the number of steps in the Dockerfile  Minimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance. Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step.  Start your Dockerfile with the steps that are least likely to change  This is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows:     Install the tools needed to build your application.   Install all the required dependencies, libraries and packages.   Finally, build your application.   A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows:  1. Pick the right base image  Picking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it.  2. Go to the shell and build your environment  Building a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode.  Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately.  3. Add the steps to your Dockerfile and build your image  Stopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time.  This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps.  4. Repeat steps 2 and 3  You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected.       Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation.   References  Dockerfile tutorial by example">
 
 
@@ -21,7 +21,7 @@
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
-<meta property="og:site_name" content="Home">
+<meta property="og:site_name" content="">
 <meta property="og:title" content="Dockerfile best practices">
 <meta property="og:url" content="http://localhost:4000/dockerfile-best-practices">
 
@@ -34,7 +34,7 @@
 
 
 
-  <meta property="article:published_time" content="2020-11-09T13:30:08+05:30">
+  <meta property="article:published_time" content="2020-11-09T00:00:08-08:00">
 
 
 
@@ -65,7 +65,7 @@
 <!-- end _includes/seo.html -->
 
 
-<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Home Feed">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
 
 <!-- https://t.co/dKP3o1e -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -125,10 +125,14 @@
       <nav id="site-nav" class="greedy-nav">
         
         <a class="site-title" href="/">
-          Home
+          
           
         </a>
-        <ul class="visible-links"></ul>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
         
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">Toggle menu</span>
@@ -148,12 +152,128 @@
 
 <div id="main" role="main">
   
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/img/bio/bio-photo.jpg" alt="Keval Nagda" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Keval Nagda</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <table>
+  <tbody>
+    <tr>
+      <td>MS, CSE</td>
+      <td>UC Santa Cruz</td>
+    </tr>
+  </tbody>
+</table>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Santa Cruz, CA</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://twitter.com/kevalnagda98" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/kevalnagda" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Dockerfile best practices">
     <meta itemprop="description" content="Learning Docker and building Docker images from Dockerfile can be daunting at times, especially when you are a beginner. Following are a few important points to remember while dealing with Dockerfile and Docker images.Minimize the number of steps in the DockerfileMinimizing the number of steps in the Dockerfile not only helps you to improve the build but also significantly improves the pull performance.Also, combining several steps into one line tends to create a single intermediary image instead of several i.e. each for one step.Start your Dockerfile with the steps that are least likely to changeThis is the best advice one can get while learning to build a Docker image from Dockerfile. Usually, the best practice is to structure your Dockerfile as follows:  Install the tools needed to build your application.  Install all the required dependencies, libraries and packages.  Finally, build your application.A fairly straightforward approach to building Dockerfiles in an iterative manner would be as follows:1. Pick the right base imagePicking the right image can be confusing at times. Thus, you should experiment with the one that best suits your requirements. For example to build a simple python application, one can select python as their base image instead of selecting a ubuntu base image and installing dependencies on top of it.2. Go to the shell and build your environmentBuilding a docker image every time you make changes to your Dockerfile can be a hectic and time-consuming process. An alternative and efficient solution to this is to pull the preferred image locally and start a container in an interactive shell mode.Once the steps execute in the container perfectly as needed, you can add those instructions to the Dockerfile immediately.3. Add the steps to your Dockerfile and build your imageStopping in middle, building and testing the docker image from the Dockerfile is also a crucial step. This step makes sure that you get the same desired results every time.This newly built image can then be used to instantiate a new container with an interactive shell mode to proceed with installation and set-up steps.4. Repeat steps 2 and 3You might need to repeat steps 2 and 3 several times in order to thoroughly build a failproof Docker image and make sure that everything works fine as expected.  Dockerfile reference is a good place to look for common Dockerfile syntax, warnings and documentation.ReferencesDockerfile tutorial by example">
-    <meta itemprop="datePublished" content="2020-11-09T13:30:08+05:30">
+    <meta itemprop="datePublished" content="2020-11-09T00:00:08-08:00">
     
 
     <div class="page__inner-wrap">
@@ -168,7 +288,7 @@
       
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        <time datetime="2020-11-09T13:30:08+05:30">November 9, 2020</time>
+        <time datetime="2020-11-09T00:00:08-08:00">November 9, 2020</time>
       </span>
     
 
@@ -272,7 +392,7 @@ Also, combining several steps into one line tends to create a single intermediar
 
 
         
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-09T13:30:08+05:30">November 9, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-11-09T00:00:08-08:00">November 9, 2020</time></p>
 
 
       </footer>
@@ -328,7 +448,7 @@ Also, combining several steps into one line tends to create a single intermediar
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2021 Home. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2021 . Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>
